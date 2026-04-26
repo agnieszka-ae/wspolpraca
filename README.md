@@ -1,2 +1,0 @@
-# wspolpraca
-Prototyp Współpracy (niepełny)
