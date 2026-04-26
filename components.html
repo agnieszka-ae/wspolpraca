@@ -1,0 +1,2216 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alloweat — Design Components</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Figtree', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+      },
+      colors: {
+        brand: { DEFAULT: '#7448D0', dark: '#5915B2', darker: '#3D0A8F', 50: '#FBFAFC', 100: '#FAF7FF', 200: '#F7F5FF', 300: '#F6F1FF', 400: '#F5F1FE', 500: '#9B7DE0' },
+        ink: { 900: '#141414', 800: '#333333', 700: '#727272', 600: '#4D516E', 500: '#B4B4B4', 400: '#D0D0D0', 300: '#E5E5E5', 200: '#F1F1F1', 100: '#FFFFFF' },
+        dark: { bg: '#0B080F', surface: '#1F1C22', elevated: '#2C292F', surfaceTint: '#1C1532', border: '#323036', borderLight: '#3A3749', text: '#EDECFF', textBright: '#F7F5FF', textMuted: '#D4CCE8', textDim: '#8B8B9E', accent: '#A67EEA', accentBright: '#DBDBFF' },
+        graphite: '#31314D',
+        deepviolet: '#2D1D51',
+        success: { dark: '#2A856C', DEFAULT: '#3AB795', light: '#EFF9F7', bright: '#4ECBA6' },
+        warning: { dark: '#BF8000', DEFAULT: '#E5A117', light: '#FFF6ED', bright: '#FAB569' },
+        error:   { dark: '#B53A45', DEFAULT: '#D44450', light: '#FEF0F1', bright: '#EC407A' },
+        info:    { dark: '#4242B8', DEFAULT: '#5252E5', light: '#F2F2FF', bright: '#8C8CFA' },
+      },
+      borderRadius: { 'xs': '4px', 'sm': '8px', 'md': '12px', 'lg': '16px', 'xl': '20px' },
+      boxShadow: {
+        'e1': '0 1px 2px 0 rgba(20, 20, 20, 0.04), 0 1px 3px 0 rgba(20, 20, 20, 0.05)',
+        'e2': '0 2px 4px -1px rgba(20, 20, 20, 0.04), 0 4px 8px -2px rgba(20, 20, 20, 0.06)',
+        'e3': '0 8px 16px -4px rgba(20, 20, 20, 0.08), 0 12px 32px -6px rgba(45, 29, 81, 0.12)',
+        'e4': '0 20px 40px -8px rgba(45, 29, 81, 0.2), 0 12px 24px -6px rgba(20, 20, 20, 0.08)',
+        'brand-sm': '0 1px 2px 0 rgba(116, 72, 208, 0.1), 0 2px 4px 0 rgba(116, 72, 208, 0.15)',
+        'brand-md': '0 4px 8px -1px rgba(116, 72, 208, 0.2), 0 2px 4px -1px rgba(116, 72, 208, 0.12)',
+      },
+      backgroundImage: {
+        'gradient-brand': 'linear-gradient(135deg, #7448D0 0%, #5915B2 100%)',
+      },
+    }
+  }
+}
+</script>
+<style>
+  body { font-family: 'Figtree', system-ui, sans-serif; }
+  .mono, code { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.95em; }
+  .anchor { scroll-margin-top: 80px; }
+
+  /* Card layout */
+  .component-card { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  @media (max-width: 900px) { .component-card { grid-template-columns: 1fr; } }
+  .component-card > div { padding: 20px; }
+  .component-card > div:first-child { border-right: 1px solid var(--col-border); }
+  @media (max-width: 900px) { .component-card > div:first-child { border-right: none; border-bottom: 1px solid var(--col-border); } }
+  :root { --col-border: #F1F1F1; }
+  .dark { --col-border: #323036; }
+
+  /* Spec table */
+  .specs { font-size: 11px; line-height: 1.45; }
+  .specs > div { display: grid; grid-template-columns: 90px 1fr; gap: 12px; padding: 6px 0; border-bottom: 1px solid rgba(20,20,20,0.06); }
+  .specs > div:last-child { border-bottom: none; }
+  .dark .specs > div { border-color: rgba(255,255,255,0.06); }
+  .specs > div > strong { font-weight: 600; color: #4D516E; }
+  .dark .specs > div > strong { color: #D4CCE8; }
+  .specs code { background: rgba(116,72,208,0.08); color: #5915B2; padding: 1px 4px; border-radius: 3px; }
+  .dark .specs code { background: rgba(116,72,208,0.15); color: #DBDBFF; }
+
+  /* Preview grid — pokazuje wszystkie stany komponentu naraz */
+  .preview-grid { display: flex; flex-direction: column; gap: 12px; }
+  .preview-row { display: flex; flex-direction: column; gap: 6px; }
+  .preview-label { font-size: 10px; font-weight: 600; color: #727272; text-transform: uppercase; letter-spacing: 0.05em; }
+  .dark .preview-label { color: #8B8B9E; }
+  .preview-content { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+  /* Subtle frame for previews */
+  .preview-frame {
+    background-image:
+      linear-gradient(45deg, rgba(0,0,0,0.025) 25%, transparent 25%),
+      linear-gradient(-45deg, rgba(0,0,0,0.025) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, rgba(0,0,0,0.025) 75%),
+      linear-gradient(-45deg, transparent 75%, rgba(0,0,0,0.025) 75%);
+    background-size: 14px 14px;
+    background-position: 0 0, 0 7px, 7px -7px, -7px 0;
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .dark .preview-frame {
+    background-image:
+      linear-gradient(45deg, rgba(255,255,255,0.025) 25%, transparent 25%),
+      linear-gradient(-45deg, rgba(255,255,255,0.025) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.025) 75%),
+      linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.025) 75%);
+  }
+
+  /* Buttons replikowane z prototypu */
+  .btn-primary {
+    background: linear-gradient(135deg, #7448D0 0%, #5915B2 100%);
+    box-shadow: 0 1px 2px 0 rgba(116, 72, 208, 0.1), 0 2px 4px 0 rgba(116, 72, 208, 0.15);
+  }
+
+  /* Animacja spinner dla loading state */
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spin { animation: spin 1s linear infinite; }
+
+  /* Sticky group label */
+  .group-label { position: sticky; top: 56px; background: inherit; z-index: 5; }
+</style>
+</head>
+<body class="bg-ink-100 dark:bg-dark-bg text-ink-900 dark:text-dark-text antialiased">
+
+<!-- Sticky top nav -->
+<nav class="sticky top-0 z-40 bg-white/95 dark:bg-dark-surface/95 backdrop-blur border-b border-ink-200 dark:border-dark-border">
+  <div class="max-w-[1200px] mx-auto px-6 h-14 flex items-center gap-6">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-md bg-gradient-brand text-white flex items-center justify-center font-semibold text-sm">A</div>
+      <div>
+        <div class="text-[13px] font-semibold leading-tight">Components</div>
+        <div class="text-[10px] text-ink-700 dark:text-dark-textMuted leading-tight">Alloweat · v30</div>
+      </div>
+    </div>
+    <div class="flex-1 hidden md:flex items-center gap-1 text-[12px]">
+      <a href="#atoms" class="px-3 py-1.5 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated text-ink-700 dark:text-dark-textMuted transition-colors">Atoms</a>
+      <a href="#molecules" class="px-3 py-1.5 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated text-ink-700 dark:text-dark-textMuted transition-colors">Molecules</a>
+      <a href="#organisms" class="px-3 py-1.5 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated text-ink-700 dark:text-dark-textMuted transition-colors">Organisms</a>
+      <a href="#patterns" class="px-3 py-1.5 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated text-ink-700 dark:text-dark-textMuted transition-colors">Patterns</a>
+    </div>
+    <button onclick="document.documentElement.classList.toggle('dark')" class="text-[11px] px-3 h-8 rounded-md border border-ink-200 dark:border-dark-border hover:border-brand transition-colors text-ink-700 dark:text-dark-textMuted">
+      Toggle theme
+    </button>
+  </div>
+</nav>
+
+<main class="max-w-[1100px] mx-auto px-6 py-10">
+
+  <!-- Intro -->
+  <section class="mb-12">
+    <h1 class="text-[32px] font-bold tracking-tight mb-3">Komponenty UI — Alloweat</h1>
+    <p class="text-[15px] text-ink-700 dark:text-dark-textMuted leading-relaxed mb-6 max-w-[760px]">
+      Komponenty wycięte z prototypu autogeneracji v30. Pogrupowane w 4 warstwy (Atoms → Molecules → Organisms → Patterns). Każdy komponent: anatomia, variants, states, sizes, tokeny, statyczny podgląd wszystkich stanów. Tokeny mają wartości w nawiasach żebyś nie musiała otwierać <span class="mono">tokens.json</span>.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+      <div class="p-4 rounded-lg bg-info-light/40 dark:bg-info/5 border border-info/20">
+        <div class="text-[10px] font-semibold uppercase tracking-wider text-info-dark dark:text-info-bright mb-1">Jak czytać kartę komponentu</div>
+        <ul class="text-[12px] text-ink-800 dark:text-dark-text space-y-1">
+          <li><strong>Anatomia</strong> — co składa się na komponent (slots)</li>
+          <li><strong>Variants</strong> — różne typy/style (np. primary/secondary)</li>
+          <li><strong>States</strong> — stany interaktywne (hover/active/disabled)</li>
+          <li><strong>Sizes</strong> — wysokości/wielkości</li>
+          <li><strong>Tokeny</strong> — design tokens używane przez komponent</li>
+          <li><strong>Notatki</strong> — uwagi implementacyjne, edge cases</li>
+        </ul>
+      </div>
+      <div class="p-4 rounded-lg bg-warning-light/40 dark:bg-warning/5 border border-warning/20">
+        <div class="text-[10px] font-semibold uppercase tracking-wider text-warning-dark dark:text-warning-bright mb-1">Co tu nie ma</div>
+        <ul class="text-[12px] text-ink-800 dark:text-dark-text space-y-1">
+          <li>Specyficzne komponenty produktowe (np. cały modal "Autogeneruj") — patrz handoff doc</li>
+          <li>Layout (grid system, page templates) — design system to zdefiniuje</li>
+          <li>Komponenty których nie używamy w autogeneracji (np. tabela, datepicker)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- TOC -->
+    <details class="rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface" open>
+      <summary class="px-4 py-3 cursor-pointer text-[13px] font-semibold flex items-center justify-between list-none">
+        <span>Spis komponentów (27)</span>
+        <svg class="w-4 h-4 text-ink-600 dark:text-dark-textMuted transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="px-4 pb-4 grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-1 text-[12px]">
+        <div>
+          <div class="text-[10px] font-semibold uppercase tracking-wider text-brand mb-1.5 mt-2">Atoms</div>
+          <a href="#c-button" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">Button</a>
+          <a href="#c-input" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">Input</a>
+          <a href="#c-checkbox" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">Checkbox / Radio / Toggle</a>
+          <a href="#c-chip" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">Chip</a>
+          <a href="#c-badge" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">Badge / Status pill</a>
+          <a href="#c-icon" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">Icon</a>
+          <a href="#c-avatar" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">Avatar</a>
+        </div>
+        <div>
+          <div class="text-[10px] font-semibold uppercase tracking-wider text-brand mb-1.5 mt-2">Molecules</div>
+          <a href="#c-button-group" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">Button group</a>
+          <a href="#c-tabs" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">Tabs</a>
+          <a href="#c-accordion" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">Accordion</a>
+          <a href="#c-counter" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">Counter input</a>
+          <a href="#c-search" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">Search bar &amp; filters</a>
+          <a href="#c-day-dots" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">Day pattern dots</a>
+        </div>
+        <div>
+          <div class="text-[10px] font-semibold uppercase tracking-wider text-brand mb-1.5 mt-2">Organisms</div>
+          <a href="#c-modal-shell" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">ModalShell</a>
+          <a href="#c-side-panel" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">SidePanel</a>
+          <a href="#c-meal-row" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">MealRow</a>
+          <a href="#c-preset-card" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">PresetCard</a>
+          <a href="#c-source-selector" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">SourceSelector</a>
+          <a href="#c-margins-table" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">MarginsTable</a>
+          <a href="#c-loading-state" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">LoadingState</a>
+          <a href="#c-empty-state" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">EmptyStateCard</a>
+        </div>
+        <div>
+          <div class="text-[10px] font-semibold uppercase tracking-wider text-brand mb-1.5 mt-2">Patterns</div>
+          <a href="#p-profile" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">"Z profilu klienta" baner</a>
+          <a href="#p-source" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">"Skąd brać przepisy" trio</a>
+          <a href="#p-dish-types" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">"Lubi rodzaje potraw" lista</a>
+          <a href="#p-repeat-scheme" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">"Schemat powtarzania" karty</a>
+          <a href="#p-recipe-card" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">Recipe card (sidepanel)</a>
+          <a href="#p-meal-list-empty" class="block py-0.5 hover:text-brand text-ink-800 dark:text-dark-textMuted">Empty state per posiłek</a>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- ATOMS                                                         -->
+  <!-- ============================================================ -->
+
+  <section id="atoms" class="anchor mb-16">
+    <div class="group-label flex items-baseline gap-3 mb-6 pb-2 border-b border-ink-200 dark:border-dark-border bg-ink-100 dark:bg-dark-bg pt-2">
+      <h2 class="text-[24px] font-bold tracking-tight">Atoms</h2>
+      <span class="text-[12px] text-ink-700 dark:text-dark-textMuted">— najmniejsze niedzielne klocki UI</span>
+    </div>
+
+    <!-- BUTTON -->
+    <article id="c-button" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">Button</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Akcja użytkownika · trigger CTA, navigation, command</p>
+        </div>
+        <code class="text-[10px] text-ink-700 dark:text-dark-textMuted">4 variants · 5 states · 4 sizes</code>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd — wszystkie stany</div>
+          <div class="preview-frame">
+            <div class="preview-grid">
+              <div class="preview-row">
+                <div class="preview-label">Primary · default · hover · active · disabled</div>
+                <div class="preview-content">
+                  <button class="btn-primary h-9 px-5 rounded-md text-white font-medium text-[13px] flex items-center gap-2"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3L14.5 9L21 10L16 14.5L17.5 21L12 17.5L6.5 21L8 14.5L3 10L9.5 9L12 3Z"/></svg>Generuj jadłospis</button>
+                  <button class="btn-primary h-9 px-5 rounded-md text-white font-medium text-[13px]" style="box-shadow: 0 4px 8px -1px rgba(116,72,208,0.3); transform: translateY(-1px);">Hover</button>
+                  <button class="btn-primary h-9 px-5 rounded-md text-white font-medium text-[13px]" style="transform: translateY(1px); box-shadow: 0 1px 2px 0 rgba(116,72,208,0.1);">Active</button>
+                  <button disabled class="h-9 px-5 rounded-md text-white font-medium text-[13px] bg-ink-400 dark:bg-dark-borderLight cursor-not-allowed">Disabled</button>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Secondary · default · hover · disabled</div>
+                <div class="preview-content">
+                  <button class="h-9 px-4 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface text-[13px] font-medium text-ink-800 dark:text-dark-text">Anuluj</button>
+                  <button class="h-9 px-4 rounded-md border border-ink-400 bg-white dark:bg-dark-surface text-[13px] font-medium text-ink-800 dark:text-dark-text">Hover</button>
+                  <button disabled class="h-9 px-4 rounded-md border border-ink-200/60 dark:border-dark-border/60 bg-ink-200/30 dark:bg-dark-surface/40 text-[13px] font-medium text-ink-700 dark:text-dark-textMuted cursor-not-allowed">Disabled</button>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Ghost · brand text only</div>
+                <div class="preview-content">
+                  <button class="h-9 px-3 rounded-md text-[13px] font-medium text-brand">Wybierz inny preset</button>
+                  <button class="h-9 px-3 rounded-md bg-brand-400/30 dark:bg-brand/10 text-[13px] font-medium text-brand-dark">Hover</button>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Icon-only · close · sizes 32px (modal) i 36px (header)</div>
+                <div class="preview-content">
+                  <button class="w-8 h-8 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-700 dark:text-dark-textMuted"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6L18 18M6 18L18 6"/></svg></button>
+                  <button class="w-8 h-8 rounded-md bg-ink-200 dark:bg-dark-elevated flex items-center justify-center text-ink-900 dark:text-dark-text"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6L18 18M6 18L18 6"/></svg></button>
+                  <button class="w-9 h-9 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-700 dark:text-dark-textMuted"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1V5M12 19V23M4.22 4.22L7.05 7.05M16.95 16.95L19.78 19.78M1 12H5M19 12H23M4.22 19.78L7.05 16.95M16.95 7.05L19.78 4.22"/></svg></button>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Sizes — h-7 (28px) · h-8 (32px) · h-9 (36px) · h-10 (40px)</div>
+                <div class="preview-content">
+                  <button class="h-7 px-2.5 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface text-[11px] font-medium text-ink-800 dark:text-dark-text">Small</button>
+                  <button class="h-8 px-3 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface text-[12px] font-medium text-ink-800 dark:text-dark-text">Default</button>
+                  <button class="btn-primary h-9 px-4 rounded-md text-white font-medium text-[13px]">CTA</button>
+                  <button class="btn-primary h-10 px-5 rounded-md text-white font-medium text-[13px]">Large</button>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Loading state — spinner zamiast ikony</div>
+                <div class="preview-content">
+                  <button disabled class="h-9 px-5 rounded-md bg-ink-400 dark:bg-dark-borderLight cursor-not-allowed text-white font-medium text-[13px] flex items-center gap-2">
+                    <svg class="w-3.5 h-3.5 spin" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 3V7M12 17V21M5.6 5.6L8.4 8.4M15.6 15.6L18.4 18.4M3 12H7M17 12H21M5.6 18.4L8.4 15.6M15.6 8.4L18.4 5.6"/></svg>
+                    Generuję…
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>[icon-left]? · label · [icon-right]?</span></div>
+            <div><strong>Variants</strong><span><strong>primary</strong> (gradient brand, biały tekst) · <strong>secondary</strong> (border ink, biały bg) · <strong>ghost</strong> (transparent, brand text) · <strong>icon-only</strong> (square, hover bg)</span></div>
+            <div><strong>Sizes</strong><span><code>h-7</code> 28px · <code>h-8</code> 32px (default) · <code>h-9</code> 36px (CTA) · <code>h-10</code> 40px (large)</span></div>
+            <div><strong>States</strong><span>default · <strong>hover</strong> (primary: lift -1px + brand-md shadow; secondary: border ink-400) · <strong>active</strong> (translateY +1px) · <strong>disabled</strong> (ink-400 bg, cursor not-allowed) · <strong>loading</strong> (spinner zamiast ikony, disabled state)</span></div>
+            <div><strong>Padding</strong><span>icon-only: <code>w-8 h-8</code> · z labelem: <code>px-3</code> (small), <code>px-4</code> (default), <code>px-5</code> (CTA)</span></div>
+            <div><strong>Tokeny</strong><span><code>color/brand/default (#7448D0)</code> · <code>color/brand/dark (#5915B2)</code> · <code>radius/md (12px)</code> · <code>size/control/h9 (36px)</code> · <code>shadow/brandSm</code> · <code>font/size/13</code> · <code>animation/preset/btnPress</code></span></div>
+            <div><strong>Notatki</strong><span>Primary używa <em>gradientu</em> (#7448D0 → #5915B2 135deg) — nie solid color. Hover dla primary to <em>kombo</em>: lift 1px + intensywniejszy cień. Active: translateY +1px (push-down feel). Loading state odbiera klikalność, ale zostawia kolor primary z disabled-look (ink-400 bg).</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- INPUT -->
+    <article id="c-input" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">Input</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Pole tekstowe · text / number / search</p>
+        </div>
+        <code class="text-[10px] text-ink-700 dark:text-dark-textMuted">3 types · 5 states · 2 sizes</code>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd — wszystkie stany</div>
+          <div class="preview-frame">
+            <div class="preview-grid">
+              <div class="preview-row">
+                <div class="preview-label">Text · default · focus · disabled · error</div>
+                <input type="text" placeholder="Wpisz nazwę programu" class="w-full h-9 px-3 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated text-[13px] placeholder:text-ink-600 dark:placeholder:text-dark-textDim outline-none">
+                <input type="text" value="Wiosenna przemiana" class="w-full h-9 px-3 rounded-md border border-brand bg-white dark:bg-dark-elevated text-[13px] outline-none" style="box-shadow: 0 0 0 3px rgba(116,72,208,0.2);">
+                <input type="text" value="2000 kcal" disabled class="w-full h-9 px-3 rounded-md border border-ink-200/60 dark:border-dark-border/60 bg-ink-200/30 dark:bg-dark-surface/40 text-[13px] text-ink-700 dark:text-dark-textMuted cursor-not-allowed">
+                <div>
+                  <input type="text" value="ab" class="w-full h-9 px-3 rounded-md border border-error bg-white dark:bg-dark-elevated text-[13px] outline-none" style="box-shadow: 0 0 0 3px rgba(212,68,80,0.2);">
+                  <div class="text-[11px] text-error-dark dark:text-error-bright mt-1 flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8V12M12 16H12.01"/></svg>
+                    Nazwa musi mieć co najmniej 3 znaki
+                  </div>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Search — z ikoną left</div>
+                <div class="relative">
+                  <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-ink-600 dark:text-dark-textMuted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16 16L21 21"/></svg>
+                  <input type="text" placeholder="Szukaj" class="w-full h-9 pl-8 pr-3 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated text-[12px] outline-none">
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Number — kompakt h-7 z sufiksem jednostki</div>
+                <div class="preview-content">
+                  <div class="relative w-24">
+                    <input type="number" value="10" class="w-full h-7 pl-2 pr-7 text-[12px] tabular-nums rounded border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated outline-none">
+                    <span class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-ink-600 dark:text-dark-textDim pointer-events-none">%</span>
+                  </div>
+                  <div class="relative w-28">
+                    <input type="number" value="2000" class="w-full h-7 pl-2 pr-9 text-[12px] tabular-nums rounded border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated outline-none">
+                    <span class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-ink-600 dark:text-dark-textDim pointer-events-none">kcal</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>[icon-left]? · field · [suffix]? · [helper-text | error-message]?</span></div>
+            <div><strong>Types</strong><span><strong>text</strong> · <strong>number</strong> (z sufiksem jednostki) · <strong>search</strong> (z ikoną search)</span></div>
+            <div><strong>Sizes</strong><span><code>h-7</code> 28px (kompakt — np. tabela marginesów) · <code>h-9</code> 36px (default form input)</span></div>
+            <div><strong>States</strong><span>default · <strong>focus</strong> (border brand + ring brand/20 3px) · <strong>filled</strong> · <strong>disabled</strong> (ink-200/30 bg, ink-700 text) · <strong>error</strong> (border error + ring error/20)</span></div>
+            <div><strong>Tokeny</strong><span><code>color/ink/200 (#F1F1F1)</code> border · <code>color/brand/default (#7448D0)</code> focus · <code>color/error (#D44450)</code> · <code>radius/md (12px)</code> · <code>size/control/h9 (36px)</code> · <code>shadow/focusBrand</code> · <code>shadow/focusError</code></span></div>
+            <div><strong>Notatki</strong><span>Liczby zawsze z <code>tabular-nums</code> (równe szerokości cyfr — wartości się nie skaczą przy edycji). Suffix to <code>position: absolute</code> w right-side, <code>pointer-events: none</code> żeby nie blokował focusu na input. Error message zawsze <em>pod</em> inputem (nie tooltip).</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- CHECKBOX / RADIO / TOGGLE -->
+    <article id="c-checkbox" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">Checkbox · Radio · Toggle</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Kontrolki binarne · multi-select / single-select / opt-in</p>
+        </div>
+        <code class="text-[10px] text-ink-700 dark:text-dark-textMuted">3 types · 4 states</code>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd — wszystkie stany</div>
+          <div class="preview-frame">
+            <div class="preview-grid">
+              <div class="preview-row">
+                <div class="preview-label">Checkbox native (z accent-brand) · unchecked · checked · disabled</div>
+                <div class="preview-content">
+                  <label class="flex items-center gap-2 text-[12px]">
+                    <input type="checkbox" class="w-3.5 h-3.5 accent-brand">
+                    Energia
+                  </label>
+                  <label class="flex items-center gap-2 text-[12px]">
+                    <input type="checkbox" checked class="w-3.5 h-3.5 accent-brand">
+                    Białko
+                  </label>
+                  <label class="flex items-center gap-2 text-[12px] opacity-50">
+                    <input type="checkbox" checked disabled class="w-3.5 h-3.5 accent-brand">
+                    Wymagane
+                  </label>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Checkbox custom (sidepanel) · 16x16 · brand fill po zaznaczeniu</div>
+                <div class="preview-content">
+                  <div class="flex items-center gap-3">
+                    <div class="w-4 h-4 rounded border border-ink-300 dark:border-dark-borderLight bg-white dark:bg-dark-surface"></div>
+                    <span class="text-[12px]">Niezaznaczone</span>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <div class="w-4 h-4 rounded border bg-brand border-brand flex items-center justify-center">
+                      <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 12L10 17L20 7"/></svg>
+                    </div>
+                    <span class="text-[12px]">Zaznaczone</span>
+                  </div>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Toggle (label-prefixed checkbox) — opt-in trybu</div>
+                <div class="preview-content">
+                  <label class="flex items-center gap-2 text-[12px] font-medium">
+                    <input type="checkbox" class="w-3.5 h-3.5 accent-brand">
+                    Ustaw osobno dla każdego typu dnia
+                  </label>
+                  <label class="flex items-center gap-2 text-[12px] font-medium">
+                    <input type="checkbox" checked class="w-3.5 h-3.5 accent-brand">
+                    Zapamiętaj te ustawienia
+                  </label>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Single-select via klikalna karta (zamiast radio)</div>
+                <div class="preview-content">
+                  <button class="px-3 py-1.5 rounded-md border-2 border-brand bg-brand-400/30 dark:bg-brand/10 text-brand text-[12px] font-medium">Dokładność</button>
+                  <button class="px-3 py-1.5 rounded-md border border-ink-200 dark:border-dark-border text-ink-700 dark:text-dark-textMuted text-[12px] font-medium">Różnorodność</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>[control] · [label] (opcjonalnie z opisem)</span></div>
+            <div><strong>Variants</strong><span><strong>checkbox-native</strong> z <code>accent-brand</code> (najczęściej w prototypie) · <strong>checkbox-custom</strong> 16x16 z border + check (sidepanel listy)</span></div>
+            <div><strong>Sizes</strong><span><code>w-3.5 h-3.5</code> 14px (form checkboxes) · <code>w-4 h-4</code> 16px (custom z border)</span></div>
+            <div><strong>States</strong><span>unchecked · checked (brand fill / accent) · disabled (opacity-50) · indeterminate (TODO — nie używamy w v30)</span></div>
+            <div><strong>Tokeny</strong><span><code>color/brand/default (#7448D0)</code> · <code>color/ink/300 (#E5E5E5)</code> border · <code>font/size/12</code> label</span></div>
+            <div><strong>Notatki</strong><span>W prototypie <strong>nie ma natywnego radio</strong> — gdy potrzeba single-select używamy klikalnych <em>kart</em> (z border-2 brand gdy wybrane) albo <em>chipów</em> single-select. Toggle to <em>label-prefixed checkbox</em>, nie iOS-switch (żeby zachować accessibility i prostotę).</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- CHIP -->
+    <article id="c-chip" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">Chip</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Multi-select tag · brand / semantic / neutral</p>
+        </div>
+        <code class="text-[10px] text-ink-700 dark:text-dark-textMuted">5 tones · 4 states · 2 variants</code>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd — wszystkie stany</div>
+          <div class="preview-frame">
+            <div class="preview-grid">
+              <div class="preview-row">
+                <div class="preview-label">Brand · multi-select · default · active · hover</div>
+                <div class="preview-content">
+                  <button class="inline-flex items-center px-3 h-8 rounded-full border bg-white dark:bg-dark-elevated border-ink-200 dark:border-dark-border text-ink-700 dark:text-dark-textMuted text-[12px] font-medium">Tłuszcze</button>
+                  <button class="inline-flex items-center gap-1.5 px-3 h-8 rounded-full border bg-brand-400 dark:bg-brand/20 border-brand text-brand text-[12px] font-medium"><svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12L10 17L20 7"/></svg>Białko</button>
+                  <button class="inline-flex items-center px-3 h-8 rounded-full border bg-white dark:bg-dark-elevated border-brand text-ink-900 dark:text-dark-text text-[12px] font-medium">Hover</button>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Semantic — profil klienta · success / error / warning</div>
+                <div class="preview-content">
+                  <span class="inline-flex items-center gap-1 px-2 h-6 rounded-full bg-success-light dark:bg-success/15 border border-success/30 text-[11px] font-medium text-success-dark dark:text-success-bright">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 12L11 14L15 10"/></svg>
+                    Dieta: Wegetariańska
+                  </span>
+                  <span class="inline-flex items-center gap-1 px-2 h-6 rounded-full bg-error-light dark:bg-error/15 border border-error/30 text-[11px] font-medium text-error-dark dark:text-error-bright">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 2L22 20H2L12 2Z"/><path d="M12 9V13M12 17H12.01"/></svg>
+                    Wyklucz: Seler
+                  </span>
+                  <span class="inline-flex items-center gap-1 px-2 h-6 rounded-full bg-warning-light dark:bg-warning/15 border border-warning/30 text-[11px] font-medium text-warning-dark dark:text-warning-bright">
+                    Nie lubi: Jogurty
+                  </span>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Disabled (po Ignore) — opacity 50% + line-through</div>
+                <div class="preview-content">
+                  <span class="inline-flex items-center gap-1 px-2 h-6 rounded-full bg-success-light dark:bg-success/15 border border-success/30 text-[11px] font-medium text-success-dark dark:text-success-bright opacity-50 line-through">
+                    Dieta: Wegetariańska
+                  </span>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Z removal — zastosowane filtry</div>
+                <div class="preview-content">
+                  <button class="inline-flex items-center gap-1 px-2 h-6 rounded-full bg-brand-400/30 dark:bg-brand/10 border border-brand/20 text-[11px] font-medium text-brand">
+                    Energetyczność
+                    <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 6L18 18M6 18L18 6"/></svg>
+                  </button>
+                  <button class="inline-flex items-center gap-1 px-2 h-6 rounded-full bg-brand-400/30 dark:bg-brand/10 border border-brand/20 text-[11px] font-medium text-brand">
+                    Rodzaj diety
+                    <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 6L18 18M6 18L18 6"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Dashed — "+ Dodaj rodzaj" (dropdown trigger)</div>
+                <div class="preview-content">
+                  <button class="inline-flex items-center gap-1 px-2.5 h-7 rounded-full border border-dashed border-brand/40 text-brand text-[11px] font-medium">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5V19M5 12H19"/></svg>
+                    Dodaj rodzaj
+                  </button>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Mini-chip — typy potraw aktywne (h-5)</div>
+                <div class="preview-content">
+                  <span class="inline-flex items-center px-1.5 h-5 rounded-full bg-brand-400 dark:bg-brand/20 border border-brand/40 text-brand text-[10px] font-medium">Owsianka</span>
+                  <span class="inline-flex items-center px-1.5 h-5 rounded-full bg-brand-400 dark:bg-brand/20 border border-brand/40 text-brand text-[10px] font-medium">Jaglanka</span>
+                  <span class="inline-flex items-center px-1.5 h-5 rounded-full bg-brand-400 dark:bg-brand/20 border border-brand/40 text-brand text-[10px] font-medium">Kanapka</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>[icon-left]? · label · [icon-right | count-badge]?</span></div>
+            <div><strong>Tones</strong><span><strong>brand</strong> (active multi-select) · <strong>success</strong> · <strong>warning</strong> · <strong>error</strong> · <strong>info</strong> · <strong>neutral</strong> (default unactive)</span></div>
+            <div><strong>Variants</strong><span><strong>pill</strong> (rounded-full, default) · <strong>dashed</strong> ("+ Dodaj …") · <strong>removable</strong> (X przycisk po prawej)</span></div>
+            <div><strong>Sizes</strong><span><code>h-5</code> 20px (mini, w wierszach posiłków) · <code>h-6</code> 24px (small, status klienta) · <code>h-7</code> 28px (kompakt) · <code>h-8</code> 32px (default multi-select)</span></div>
+            <div><strong>States</strong><span>default (neutral) · <strong>active</strong> (tonal bg + border kolorowy + check icon) · <strong>hover</strong> (border brand) · <strong>disabled</strong> (opacity-50, line-through dla "ignored")</span></div>
+            <div><strong>Tokeny</strong><span><code>color/{tone}/light</code> bg · <code>color/{tone}/dark</code> text · <code>color/{tone}/30</code> border · <code>radius/full</code> · <code>animation/preset/chipPress</code> · w dark mode: <code>color/{tone}/15</code> bg + <code>color/{tone}/bright</code> text</span></div>
+            <div><strong>Notatki</strong><span>"Active" tone <em>zawsze</em> ma 3 znaczniki: tonal bg + border kolorowy + check icon (jest checkbox dla wzroku, nie tylko kolor). Klik pulsuje (<code>scale(0.97)</code>). Mini-chip h-5 jest dla <em>kompresji</em> (np. wiersz "Lubi na obiad: Bowle, Naleśniki, Curry") — używamy <em>tylko</em> gdy chip jest informacyjny (read-only podgląd), nie klikalny.</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- BADGE -->
+    <article id="c-badge" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">Badge / Status pill</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Mały label statusu / metadata · count badge / kategoryzacja</p>
+        </div>
+        <code class="text-[10px] text-ink-700 dark:text-dark-textMuted">3 variants · 5 tones</code>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd</div>
+          <div class="preview-frame">
+            <div class="preview-grid">
+              <div class="preview-row">
+                <div class="preview-label">Status badge — uppercase, tracking-wider, kolor tonal</div>
+                <div class="preview-content">
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-brand-400 dark:bg-brand/15 text-brand">Modal</span>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-success-light dark:bg-success/15 text-success-dark dark:text-success-bright">Ekran</span>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-info-light dark:bg-info/15 text-info-dark dark:text-info-bright">Komponent</span>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Count badge — liczba notyfikacji / aktywnych filtrów</div>
+                <div class="preview-content">
+                  <button class="inline-flex items-center gap-1.5 px-3 h-8 rounded-md border border-brand text-brand bg-brand-400/30 dark:bg-brand/10 text-[12px] font-medium">
+                    Filtry
+                    <span class="inline-flex items-center justify-center min-w-[16px] h-4 px-1 rounded-full bg-brand text-white text-[10px] font-semibold">+3</span>
+                  </button>
+                  <div class="relative">
+                    <button class="w-9 h-9 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface flex items-center justify-center">
+                      <svg class="w-4 h-4 text-ink-700 dark:text-dark-textMuted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z"/><path d="M13.7 21A2 2 0 0110.3 21"/></svg>
+                    </button>
+                    <span class="absolute -top-1 -right-1 inline-flex items-center justify-center min-w-[18px] h-4.5 px-1 rounded-full bg-error text-white text-[10px] font-semibold">12</span>
+                  </div>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Tag badge — preset categories</div>
+                <div class="preview-content">
+                  <span class="px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-warning-light dark:bg-warning/15 text-warning-dark dark:text-warning-bright">Sportowcy, redukcja, terapia</span>
+                  <span class="px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-info-light dark:bg-info/15 text-info-dark dark:text-info-bright">Dużo wykluczeń, początkujący</span>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Status indicator — z dot</div>
+                <div class="preview-content">
+                  <span class="inline-flex items-center gap-1 text-[11px] text-success-dark dark:text-success-bright"><span class="w-2 h-2 rounded-full bg-success"></span>Aktywny</span>
+                  <span class="inline-flex items-center gap-1 text-[11px] text-warning-dark dark:text-warning-bright"><span class="w-2 h-2 rounded-full bg-warning"></span>W trakcie</span>
+                  <span class="inline-flex items-center gap-1 text-[11px] text-ink-700 dark:text-dark-textMuted"><span class="w-2 h-2 rounded-full bg-ink-400"></span>Nieaktywny</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>[dot]? · label · [icon]?</span></div>
+            <div><strong>Variants</strong><span><strong>status</strong> (uppercase, tracking-wider) · <strong>count</strong> (numeryczny, brand/error fill) · <strong>tag</strong> (kategoria w karcie) · <strong>indicator</strong> (status z dotem)</span></div>
+            <div><strong>Tones</strong><span>brand · success · warning · error · info · neutral</span></div>
+            <div><strong>Sizes</strong><span><code>h-4</code> 16px (count w button) · <code>auto</code> z padding (status/tag) — typografia 10px decyduje o wysokości</span></div>
+            <div><strong>Tokeny</strong><span><code>color/{tone}/light</code> bg · <code>color/{tone}/dark</code> text · <code>radius/full</code> (status/count/indicator) · <code>radius/xs</code> (tag) · <code>font/size/10</code> · <code>font/letterSpacing/wider (0.05em)</code></span></div>
+            <div><strong>Notatki</strong><span>Status badge i tag badge wyglądają podobnie ale różnią się <em>radius</em> (status: full, tag: xs/sm). Count badge zawsze <code>min-w-[16px]</code> żeby pojedyncza cyfra była okrągła. Status indicator (z dotem) używamy gdy potrzeba <em>kompaktu inline</em> z tekstem (np. w tabeli).</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ICON -->
+    <article id="c-icon" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">Icon</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">SVG icon system · stroke-only · 5 rozmiarów · color current</p>
+        </div>
+        <code class="text-[10px] text-ink-700 dark:text-dark-textMuted">~40 ikon · stroke 1.5–2.5</code>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd — wybrane ikony</div>
+          <div class="preview-frame">
+            <div class="preview-grid">
+              <div class="preview-row">
+                <div class="preview-label">Sizes — w-3 (12px) · w-3.5 (14px) · w-4 (16px) · w-5 (20px) · w-6 (24px)</div>
+                <div class="preview-content">
+                  <svg class="w-3 h-3 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3L14.5 9L21 10L16 14.5L17.5 21L12 17.5L6.5 21L8 14.5L3 10L9.5 9L12 3Z"/></svg>
+                  <svg class="w-3.5 h-3.5 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3L14.5 9L21 10L16 14.5L17.5 21L12 17.5L6.5 21L8 14.5L3 10L9.5 9L12 3Z"/></svg>
+                  <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3L14.5 9L21 10L16 14.5L17.5 21L12 17.5L6.5 21L8 14.5L3 10L9.5 9L12 3Z"/></svg>
+                  <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3L14.5 9L21 10L16 14.5L17.5 21L12 17.5L6.5 21L8 14.5L3 10L9.5 9L12 3Z"/></svg>
+                  <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3L14.5 9L21 10L16 14.5L17.5 21L12 17.5L6.5 21L8 14.5L3 10L9.5 9L12 3Z"/></svg>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Najczęściej używane (sample)</div>
+                <div class="preview-content gap-3">
+                  <div class="flex flex-col items-center gap-1 w-14"><svg class="w-5 h-5 text-ink-700 dark:text-dark-textMuted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3L14.5 9L21 10L16 14.5L17.5 21L12 17.5L6.5 21L8 14.5L3 10L9.5 9L12 3Z"/></svg><code class="text-[9px]">sparkles</code></div>
+                  <div class="flex flex-col items-center gap-1 w-14"><svg class="w-5 h-5 text-ink-700 dark:text-dark-textMuted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21V20C4 16 7 14 12 14C17 14 20 16 20 20V21"/></svg><code class="text-[9px]">users</code></div>
+                  <div class="flex flex-col items-center gap-1 w-14"><svg class="w-5 h-5 text-ink-700 dark:text-dark-textMuted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21C-7 8 6 -1 12 6C18 -1 31 8 12 21Z"/></svg><code class="text-[9px]">heart</code></div>
+                  <div class="flex flex-col items-center gap-1 w-14"><svg class="w-5 h-5 text-ink-700 dark:text-dark-textMuted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16 16L21 21"/></svg><code class="text-[9px]">search</code></div>
+                  <div class="flex flex-col items-center gap-1 w-14"><svg class="w-5 h-5 text-ink-700 dark:text-dark-textMuted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 5H20L14 13V20L10 18V13L4 5Z"/></svg><code class="text-[9px]">filter</code></div>
+                  <div class="flex flex-col items-center gap-1 w-14"><svg class="w-5 h-5 text-ink-700 dark:text-dark-textMuted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5V19M5 12H19"/></svg><code class="text-[9px]">plus</code></div>
+                  <div class="flex flex-col items-center gap-1 w-14"><svg class="w-5 h-5 text-ink-700 dark:text-dark-textMuted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6L18 18M6 18L18 6"/></svg><code class="text-[9px]">x</code></div>
+                  <div class="flex flex-col items-center gap-1 w-14"><svg class="w-5 h-5 text-ink-700 dark:text-dark-textMuted" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12L10 17L20 7"/></svg><code class="text-[9px]">check</code></div>
+                  <div class="flex flex-col items-center gap-1 w-14"><svg class="w-5 h-5 text-ink-700 dark:text-dark-textMuted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8V12M12 16H12.01"/></svg><code class="text-[9px]">info</code></div>
+                  <div class="flex flex-col items-center gap-1 w-14"><svg class="w-5 h-5 text-ink-700 dark:text-dark-textMuted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L22 20H2L12 2Z"/><path d="M12 9V13M12 17H12.01"/></svg><code class="text-[9px]">warning</code></div>
+                  <div class="flex flex-col items-center gap-1 w-14"><svg class="w-5 h-5 text-ink-700 dark:text-dark-textMuted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7V12L15 15"/></svg><code class="text-[9px]">clock</code></div>
+                  <div class="flex flex-col items-center gap-1 w-14"><svg class="w-5 h-5 text-ink-700 dark:text-dark-textMuted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg><code class="text-[9px]">chevD</code></div>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Stroke widths — 1.5 (subtle) · 2 (default) · 2.5 (emphasis, check)</div>
+                <div class="preview-content">
+                  <svg class="w-5 h-5 text-ink-700" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M5 12L10 17L20 7"/></svg>
+                  <svg class="w-5 h-5 text-ink-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12L10 17L20 7"/></svg>
+                  <svg class="w-5 h-5 text-ink-700" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12L10 17L20 7"/></svg>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Color — current (dziedziczy z parenta)</div>
+                <div class="preview-content">
+                  <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21C-7 8 6 -1 12 6C18 -1 31 8 12 21Z"/></svg>
+                  <svg class="w-5 h-5 text-success" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21C-7 8 6 -1 12 6C18 -1 31 8 12 21Z"/></svg>
+                  <svg class="w-5 h-5 text-warning" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21C-7 8 6 -1 12 6C18 -1 31 8 12 21Z"/></svg>
+                  <svg class="w-5 h-5 text-error" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21C-7 8 6 -1 12 6C18 -1 31 8 12 21Z"/></svg>
+                  <svg class="w-5 h-5 text-info" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21C-7 8 6 -1 12 6C18 -1 31 8 12 21Z"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Format</strong><span>SVG inline · <code>fill="none"</code> · <code>stroke="currentColor"</code> · <code>viewBox="0 0 24 24"</code></span></div>
+            <div><strong>Sizes</strong><span><code>w-3 h-3</code> 12px (inline w tekście) · <code>w-3.5 h-3.5</code> 14px (button/chip) · <code>w-4 h-4</code> 16px (modal close, footer) · <code>w-5 h-5</code> 20px (card header) · <code>w-6 h-6</code> 24px (hero icon)</span></div>
+            <div><strong>Stroke</strong><span><code>1.5</code> subtle (icony większe, kontekst dekoracyjny) · <code>2</code> default · <code>2.5</code> emphasis (check, plus, X — często w aktywnych chipach)</span></div>
+            <div><strong>Color</strong><span><code>currentColor</code> — kolor dziedziczy z parenta przez Tailwind <code>text-{color}</code>. Czyli ikona w button.text-brand jest brand, w chip.text-error jest error.</span></div>
+            <div><strong>Tokeny</strong><span><code>size/icon/{xs|sm|md|lg|xl}</code> — pełna mapa w tokens.json</span></div>
+            <div><strong>Notatki</strong><span>Wszystkie ikony w prototypie są <em>handmade SVG</em> w jednym pliku (~40 ikon, ~600 linii kodu). Format ujednolicony: zawsze 24x24 viewBox, zawsze stroke-only (nie fill). To duża baza dla design systemu — designer może wziąć wszystkie i zaimportować jako Figma components.</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- AVATAR -->
+    <article id="c-avatar" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">Avatar</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Personifikacja klienta · z initialsami / image</p>
+        </div>
+        <code class="text-[10px] text-ink-700 dark:text-dark-textMuted">3 sizes · 2 variants</code>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd</div>
+          <div class="preview-frame">
+            <div class="preview-grid">
+              <div class="preview-row">
+                <div class="preview-label">Sizes — sm 32px · md 40px · lg 56px</div>
+                <div class="preview-content">
+                  <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brand to-brand-dark text-white flex items-center justify-center text-[12px] font-semibold">KS</div>
+                  <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand to-brand-dark text-white flex items-center justify-center text-[14px] font-semibold">KS</div>
+                  <div class="w-14 h-14 rounded-full bg-gradient-to-br from-brand to-brand-dark text-white flex items-center justify-center text-[18px] font-semibold">KS</div>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Z image (placeholder)</div>
+                <div class="preview-content">
+                  <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-500 to-brand overflow-hidden border-2 border-white dark:border-dark-surface shadow-e1"></div>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Empty state — nieprzypisany klient</div>
+                <div class="preview-content">
+                  <div class="w-10 h-10 rounded-full bg-ink-200 dark:bg-dark-elevated flex items-center justify-center text-ink-600 dark:text-dark-textMuted">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21V20C4 16 7 14 12 14C17 14 20 16 20 20V21"/></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>circle (rounded-full) z [image | initials | empty-icon]</span></div>
+            <div><strong>Variants</strong><span><strong>initials</strong> (gradient brand bg + 2 litery białe) · <strong>image</strong> (zdjęcie + opcjonalny border) · <strong>empty</strong> (ink-200 bg + ikona user)</span></div>
+            <div><strong>Sizes</strong><span><code>w-8 h-8</code> 32px (inline w listach) · <code>w-10 h-10</code> 40px (default, header) · <code>w-14 h-14</code> 56px (modal hero, profile)</span></div>
+            <div><strong>Tokeny</strong><span><code>gradient/brand</code> bg dla initials · <code>color/ink/200</code> bg dla empty · <code>radius/full</code> · <code>size/thumbnail/{sm|md|lg}</code></span></div>
+            <div><strong>Notatki</strong><span>Initials zawsze 2 znaki (pierwsze litery imienia + nazwiska). Bez nazwiska? Pierwsze 2 litery imienia. Gradient kierunek <code>135deg</code> (jak primary button — spójność).</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- MOLECULES                                                     -->
+  <!-- ============================================================ -->
+  <section id="molecules" class="anchor mb-16">
+    <div class="group-label flex items-baseline gap-3 mb-6 pb-2 border-b border-ink-200 dark:border-dark-border bg-ink-100 dark:bg-dark-bg pt-2">
+      <h2 class="text-[24px] font-bold tracking-tight">Molecules</h2>
+      <span class="text-[12px] text-ink-700 dark:text-dark-textMuted">— atoms składane razem; jeden cel UX</span>
+    </div>
+
+    <!-- BUTTON GROUP -->
+    <article id="c-button-group" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">Button group</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Powiązane akcje · footer modali, segmented control, view toggle</p>
+        </div>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd</div>
+          <div class="preview-frame">
+            <div class="preview-grid">
+              <div class="preview-row">
+                <div class="preview-label">Footer modal — Anuluj + Primary CTA (right-aligned)</div>
+                <div class="preview-content justify-end">
+                  <button class="h-9 px-4 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface text-[13px] font-medium text-ink-800 dark:text-dark-text">Anuluj</button>
+                  <button class="btn-primary h-9 px-5 rounded-md text-white font-medium text-[13px]">Generuj jadłospis</button>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Segmented control — Widok 7 / 14 / 28 dni</div>
+                <div class="preview-content">
+                  <div class="inline-flex p-1 rounded-md bg-ink-200 dark:bg-dark-elevated gap-1">
+                    <button class="px-3 h-7 rounded text-[12px] font-medium bg-white dark:bg-dark-surface text-ink-900 dark:text-dark-text shadow-e1">7 dni</button>
+                    <button class="px-3 h-7 rounded text-[12px] font-medium text-ink-700 dark:text-dark-textMuted">14 dni</button>
+                    <button class="px-3 h-7 rounded text-[12px] font-medium text-ink-700 dark:text-dark-textMuted">28 dni</button>
+                  </div>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Joined buttons — view toggle (kalendarz / lista)</div>
+                <div class="preview-content">
+                  <div class="inline-flex border border-ink-200 dark:border-dark-border rounded-md overflow-hidden">
+                    <button class="w-9 h-9 flex items-center justify-center bg-brand-400 dark:bg-brand/15 text-brand">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                    </button>
+                    <button class="w-9 h-9 flex items-center justify-center text-ink-700 dark:text-dark-textMuted">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6H20M4 12H20M4 18H20"/></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">CTA group w empty state — primary + secondary</div>
+                <div class="preview-content">
+                  <button class="btn-primary h-9 px-4 rounded-md text-white font-medium text-[13px] flex items-center gap-2"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3L14.5 9L21 10L16 14.5L17.5 21L12 17.5L6.5 21L8 14.5L3 10L9.5 9L12 3Z"/></svg>Autogeneruj wszystkie posiłki</button>
+                  <button class="h-9 px-4 rounded-md bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border hover:border-brand text-ink-800 dark:text-dark-text text-[13px] font-medium flex items-center gap-2"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5V19M5 12H19"/></svg>Dodaj ręcznie</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>flex container z gap-2 · 2-3 buttony · primary CTA na końcu (right-most)</span></div>
+            <div><strong>Variants</strong><span><strong>footer</strong> (right-aligned, 2 buttony: secondary + primary) · <strong>segmented</strong> (jeden bg ink-200, w środku button bez border) · <strong>joined</strong> (2-3 buttony połączone borderem) · <strong>cta-group</strong> (left-aligned, primary + secondary)</span></div>
+            <div><strong>Sizes</strong><span>buttony zachowują własne sizes — h-7 (segmented kompakt) lub h-9 (default)</span></div>
+            <div><strong>Tokeny</strong><span><code>spacing/gap-2 (8px)</code> dla luźnych grup · <code>spacing/gap-1 (4px)</code> dla segmented</span></div>
+            <div><strong>Notatki</strong><span>W footer modala primary <em>zawsze</em> po prawej (Anuluj | Primary). Segmented control: aktywny wewnętrzny button ma <em>białe tło + cień e1</em> (efekt "wynurzenia"). Joined buttons współdzielą border zewnętrzny — używamy <code>overflow-hidden</code> na wrapperze.</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- TABS -->
+    <article id="c-tabs" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">Tabs</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Switch między widokami · z liczbami · z kolorami (typy dni)</p>
+        </div>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd</div>
+          <div class="preview-frame bg-white dark:bg-dark-surface">
+            <div class="preview-grid">
+              <div class="preview-row">
+                <div class="preview-label">Standard tabs — sidepanel (Kolekcje / Przepisy / Produkty)</div>
+                <div class="border-b border-ink-200 dark:border-dark-border">
+                  <div class="flex items-center gap-1">
+                    <button class="px-3 h-8 rounded-t-md text-[12px] font-medium text-ink-700 dark:text-dark-textMuted">Kolekcje <span class="text-ink-600 dark:text-dark-textDim">(12)</span></button>
+                    <button class="px-3 h-8 rounded-t-md text-[12px] font-medium bg-brand-400/40 dark:bg-brand/15 text-brand">Przepisy <span class="text-brand">(816)</span></button>
+                    <button class="px-3 h-8 rounded-t-md text-[12px] font-medium text-ink-700 dark:text-dark-textMuted">Produkty <span class="text-ink-600 dark:text-dark-textDim">(234)</span></button>
+                  </div>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Underline tabs — założenia / przepisy / produkty / tagi</div>
+                <div class="border-b border-ink-200 dark:border-dark-border">
+                  <div class="flex items-center gap-4">
+                    <button class="h-9 text-[12px] font-medium text-ink-700 dark:text-dark-textMuted">Założenia diety</button>
+                    <button class="h-9 text-[12px] font-medium text-brand border-b-2 border-brand -mb-px">Przepisy</button>
+                    <button class="h-9 text-[12px] font-medium text-ink-700 dark:text-dark-textMuted">Produkty</button>
+                    <button class="h-9 text-[12px] font-medium text-ink-700 dark:text-dark-textMuted">Tagi</button>
+                  </div>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Day type tabs — z kolorowym dotem (multi-day-types)</div>
+                <div class="flex items-center gap-1 p-1 rounded-md bg-ink-200 dark:bg-dark-elevated">
+                  <button class="flex items-center gap-1.5 px-3 h-7 rounded text-[11px] font-medium bg-white dark:bg-dark-surface text-ink-900 dark:text-dark-text shadow-e1">
+                    <span class="w-2 h-2 rounded-full bg-brand"></span>
+                    Dni treningowe
+                  </button>
+                  <button class="flex items-center gap-1.5 px-3 h-7 rounded text-[11px] font-medium text-ink-700 dark:text-dark-textMuted">
+                    <span class="w-2 h-2 rounded-full bg-success"></span>
+                    Dni wolne
+                  </button>
+                  <button class="flex items-center gap-1.5 px-3 h-7 rounded text-[11px] font-medium text-ink-700 dark:text-dark-textMuted">
+                    <span class="w-2 h-2 rounded-full bg-warning"></span>
+                    Edukacyjny
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>tabs container · tab buttons · [active indicator] · [count badge]?</span></div>
+            <div><strong>Variants</strong><span><strong>standard</strong> (rounded-top, brand-400 bg dla aktywnego, w sidepanelu) · <strong>underline</strong> (border-bottom-2 brand dla aktywnego, w nagłówkach ekranów) · <strong>segmented</strong> (jak button group, dla day types z dotami)</span></div>
+            <div><strong>Sizes</strong><span><code>h-8</code> 32px (standard) · <code>h-9</code> 36px (underline) · <code>h-7</code> 28px (segmented)</span></div>
+            <div><strong>States</strong><span>default · <strong>active</strong> (brand-400 bg / underline / shadow) · hover (text-ink-900)</span></div>
+            <div><strong>Tokeny</strong><span><code>color/brand/400 (#F5F1FE)</code> active bg · <code>color/brand/default (#7448D0)</code> active text/underline · <code>spacing/gap-1</code> · <code>spacing/gap-4</code> (underline)</span></div>
+            <div><strong>Notatki</strong><span>Day type tabs <em>zawsze</em> z dotem koloru (brand/success/warning/error/info) — pomaga rozpoznać typ wzrokowo bez czytania. Standard tabs (sidepanel) i Underline (full-width nagłówki) wybieramy zależnie od kontekstu — sidepanel kompakt vs ekran formal.</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ACCORDION -->
+    <article id="c-accordion" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">Accordion</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Rozwijalna sekcja · MealRow, "Lubi rodzaje potraw", FAQ</p>
+        </div>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd</div>
+          <div class="preview-frame bg-white dark:bg-dark-surface">
+            <div class="preview-grid">
+              <div class="preview-row">
+                <div class="preview-label">Collapsed — header z chevron-down</div>
+                <div class="rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface">
+                  <div class="px-4 py-3 flex items-center justify-between cursor-pointer">
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4 text-ink-700 dark:text-dark-textMuted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+                      <span class="text-[14px] font-semibold">Śniadanie, 09:00</span>
+                    </div>
+                    <span class="text-[11px] text-ink-700 dark:text-dark-textMuted">Podsumowanie (18 propozycji)</span>
+                  </div>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Expanded — header z chevron-up + body</div>
+                <div class="rounded-md border border-brand/30 bg-white dark:bg-dark-elevated">
+                  <div class="px-4 py-3 flex items-center justify-between cursor-pointer border-b border-ink-200 dark:border-dark-border">
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                      <span class="text-[14px] font-semibold">Śniadanie, 09:00</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                      <span class="text-[11px] text-ink-700 dark:text-dark-textMuted">506/500 kcal</span>
+                      <button class="text-[12px] text-brand font-medium">+ Dodaj przepis</button>
+                    </div>
+                  </div>
+                  <div class="p-4 text-[12px] text-ink-700 dark:text-dark-textMuted">
+                    Body — przepisy / produkty / empty state
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>border-wrap · header (chevron + title + meta) · body (collapsed: hidden, expanded: visible z border-top)</span></div>
+            <div><strong>States</strong><span><strong>collapsed</strong> (chevron-right, body hidden) · <strong>expanded</strong> (chevron-down, body visible, border brand)</span></div>
+            <div><strong>Animation</strong><span>chevron rotacja 90° (90° z right na down) — <code>animation/duration/fast (150ms)</code> · body fade-in 250ms</span></div>
+            <div><strong>Tokeny</strong><span><code>color/ink/200</code> border collapsed · <code>color/brand/30</code> border expanded · <code>radius/md (12px)</code> · <code>animation/preset/fadeIn</code></span></div>
+            <div><strong>Notatki</strong><span>Header zawsze klikalny <em>całością</em> (cały row, nie tylko chevron). W rozwiniętym stanie border zmienia kolor (subtle brand) — wzmacnia "to jest aktywne". Headerwy chevron zawsze po lewej, akcje po prawej (separator wzrokowy).</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- COUNTER INPUT -->
+    <article id="c-counter" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">Counter input</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Number z stepperami · ilość przepisów, marginesy</p>
+        </div>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd</div>
+          <div class="preview-frame">
+            <div class="preview-grid">
+              <div class="preview-row">
+                <div class="preview-label">Counter z plus/minus + slider</div>
+                <div class="flex items-center gap-3">
+                  <input type="number" value="10" class="w-16 h-9 px-3 text-[13px] tabular-nums rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated outline-none text-center font-semibold">
+                  <input type="range" min="3" max="20" value="10" class="flex-1 accent-brand">
+                  <span class="text-[11px] text-ink-700 dark:text-dark-textMuted whitespace-nowrap min-w-[80px]">propozycji</span>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Inline counter — przy makrze (margines + priorytet)</div>
+                <div class="flex items-center gap-2">
+                  <span class="text-[12px] font-medium min-w-[60px]">Energia</span>
+                  <div class="relative w-20">
+                    <input type="number" value="10" class="w-full h-7 pl-2 pr-6 text-[12px] tabular-nums rounded border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated outline-none">
+                    <span class="absolute right-1.5 top-1/2 -translate-y-1/2 text-[10px] text-ink-600 dark:text-dark-textDim pointer-events-none">±%</span>
+                  </div>
+                  <span class="text-[10px] text-ink-700 dark:text-dark-textMuted">2000 kcal · zakres 1800–2200</span>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Locked state — z lockiem (defaultowe wartości)</div>
+                <div class="flex items-center gap-2">
+                  <span class="text-[12px] font-medium min-w-[60px]">Energia</span>
+                  <div class="relative w-28">
+                    <svg class="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-ink-600 dark:text-dark-textMuted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7A4 4 0 0116 7V11"/></svg>
+                    <input type="text" value="500" disabled class="w-full h-7 pl-7 pr-9 text-[12px] tabular-nums rounded border border-ink-200/60 dark:border-dark-border/60 bg-ink-200/30 dark:bg-dark-surface/40 text-ink-700 dark:text-dark-textMuted cursor-not-allowed">
+                    <span class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-ink-600 dark:text-dark-textDim pointer-events-none">kcal</span>
+                  </div>
+                  <button class="text-[11px] text-brand font-medium">Edytuj</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>[label] · [icon-lock]? · number-input · [suffix unit]? · [slider]? · [helper]?</span></div>
+            <div><strong>Variants</strong><span><strong>standalone</strong> (z sliderem, w sekcji "ile przepisów") · <strong>inline</strong> (kompakt h-7, w tabeli marginesów) · <strong>locked</strong> (read-only z kłódką + button "Edytuj")</span></div>
+            <div><strong>States</strong><span>default · focus (border brand) · disabled · locked (z ikoną + button "Edytuj")</span></div>
+            <div><strong>Tokeny</strong><span><code>size/control/h7 (28px)</code> · <code>size/control/h9 (36px)</code> · <code>color/brand</code> slider accent · <code>font/family/mono</code> dla wartości (tabular-nums)</span></div>
+            <div><strong>Notatki</strong><span>Counter zawsze <code>tabular-nums</code> (cyfry tej samej szerokości — wartość się nie skacze przy edycji). Slider jako <em>uzupełnienie</em> (ułatwia szybkie zmiany), input pozwala precyzję. Locked state używamy gdy wartość pochodzi z założeń typu dnia — kłódka + button "Edytuj" sygnalizują że <em>jest możliwa edycja jednorazowa</em>.</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- SEARCH BAR -->
+    <article id="c-search" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">Search bar</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Pasek wyszukiwania · z filtrami / akcją</p>
+        </div>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd</div>
+          <div class="preview-frame">
+            <div class="preview-grid">
+              <div class="preview-row">
+                <div class="preview-label">Plain search</div>
+                <div class="relative">
+                  <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-ink-600 dark:text-dark-textMuted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16 16L21 21"/></svg>
+                  <input type="text" placeholder="Szukaj klientów (imię, nazwisko, email, telefon)" class="w-full h-9 pl-8 pr-3 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated text-[12px] outline-none">
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Search + Filters + Action — sidepanel</div>
+                <div class="flex items-center gap-2">
+                  <div class="relative flex-1">
+                    <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-ink-600 dark:text-dark-textMuted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16 16L21 21"/></svg>
+                    <input type="text" placeholder="Szukaj" class="w-full h-9 pl-8 pr-3 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated text-[12px] outline-none">
+                  </div>
+                  <button class="h-9 px-3 rounded-md border border-brand text-brand bg-brand-400/30 dark:bg-brand/10 text-[12px] font-medium flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 5H20L14 13V20L10 18V13L4 5Z"/></svg>
+                    Filtry
+                    <span class="inline-flex items-center justify-center min-w-[16px] h-4 px-1 rounded-full bg-brand text-white text-[10px] font-semibold">+3</span>
+                  </button>
+                  <button class="text-[12px] font-medium text-brand whitespace-nowrap flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5V19M5 12H19"/></svg>
+                    Dodaj własny
+                  </button>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Active filters chips (ikony usuń)</div>
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="text-[11px] text-ink-700 dark:text-dark-textMuted">Zastosowane filtry:</span>
+                  <button class="inline-flex items-center gap-1 px-2 h-6 rounded-full bg-brand-400/30 dark:bg-brand/10 border border-brand/20 text-[11px] font-medium text-brand">
+                    Energetyczność
+                    <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 6L18 18M6 18L18 6"/></svg>
+                  </button>
+                  <button class="inline-flex items-center gap-1 px-2 h-6 rounded-full bg-brand-400/30 dark:bg-brand/10 border border-brand/20 text-[11px] font-medium text-brand">
+                    Rodzaj diety
+                    <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 6L18 18M6 18L18 6"/></svg>
+                  </button>
+                  <button class="text-[11px] text-ink-700 dark:text-dark-textMuted hover:text-brand font-medium">Wyczyść filtry</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>[search input z ikoną] · [filter button z count badge]? · [primary action]?</span></div>
+            <div><strong>States</strong><span>empty · typing · with results · with active filters (highlight brand)</span></div>
+            <div><strong>Tokeny</strong><span><code>color/ink/200</code> default border · <code>color/brand</code> active filter · <code>size/control/h9 (36px)</code> · <code>spacing/gap-2</code></span></div>
+            <div><strong>Notatki</strong><span>Filter button <em>zmienia kolor</em> gdy są aktywne filtry (border brand + count badge). Active filters chips pokazujemy <em>poniżej</em> search bara, w osobnym wierszu — żeby było jasne co jest aktywne. "Wyczyść filtry" jako ghost button na końcu listy chipów.</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- DAY PATTERN DOTS -->
+    <article id="c-day-dots" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">Day pattern dots</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Wzór 7 kropek dla schematu powtarzania · Pn-Wt-Śr-Cz-Pt-Sb-Nd</p>
+        </div>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd — 4 schematy</div>
+          <div class="preview-frame">
+            <div class="preview-grid">
+              <div class="preview-row">
+                <div class="preview-label">Bez powtórzeń — każdy dzień inny</div>
+                <div class="flex items-end gap-1">
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-brand"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Pn</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-brand-500"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Wt</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-success"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Śr</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-warning"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Cz</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-error"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Pt</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-info"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Sb</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-graphite"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Nd</span></div>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">2 dni z rzędu — pary po 2</div>
+                <div class="flex items-end gap-1">
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-brand"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Pn</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-brand"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Wt</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-success"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Śr</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-success"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Cz</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-warning"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Pt</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-warning"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Sb</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-error"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Nd</span></div>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">3 dni z rzędu</div>
+                <div class="flex items-end gap-1">
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-brand"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Pn</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-brand"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Wt</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-brand"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Śr</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-success"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Cz</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-success"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Pt</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-success"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Sb</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-warning"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Nd</span></div>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Weekend taki sam — Sb=Nd</div>
+                <div class="flex items-end gap-1">
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-brand"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Pn</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-brand-500"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Wt</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-success"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Śr</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-warning"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Cz</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-error"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Pt</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-info"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Sb</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-3 h-3 rounded-full bg-info"></div><span class="text-[9px] text-ink-700 dark:text-dark-textMuted">Nd</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>row 7 kolumn · każda: dot 12px + label dnia (Pn–Nd)</span></div>
+            <div><strong>Variants</strong><span>4 patterny: <strong>none</strong> (każdy inny) · <strong>2-in-row</strong> (pary) · <strong>3-in-row</strong> (trójki) · <strong>weekend-same</strong> (Sb=Nd)</span></div>
+            <div><strong>Sizes</strong><span><code>w-3 h-3</code> 12px dot · <code>gap-1</code> między kolumnami · <code>font/size/9</code> dla labelek dni</span></div>
+            <div><strong>States</strong><span>default · <strong>active</strong> (kropki "zapalają się" sekwencyjnie z animacją <code>daySpark</code> 60ms/dot)</span></div>
+            <div><strong>Tokeny</strong><span>kolory dotów: brand → brand-500 → success → warning → error → info → graphite (palette tonalne dla unikalnych dni) · <code>animation/preset/daySpark</code> · <code>animation/easing/spring</code></span></div>
+            <div><strong>Notatki</strong><span>Te same dni w schemacie mają <em>ten sam kolor</em> — to wzrokowe wyjaśnienie schematu bez czytania. Animacja <code>daySpark</code> z opóźnieniem 60ms/dot daje efekt "fali" przy zmianie schematu — pozwala dostrzec jak dni się grupują.</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- ORGANISMS                                                     -->
+  <!-- ============================================================ -->
+  <section id="organisms" class="anchor mb-16">
+    <div class="group-label flex items-baseline gap-3 mb-6 pb-2 border-b border-ink-200 dark:border-dark-border bg-ink-100 dark:bg-dark-bg pt-2">
+      <h2 class="text-[24px] font-bold tracking-tight">Organisms</h2>
+      <span class="text-[12px] text-ink-700 dark:text-dark-textMuted">— złożone komponenty z jednoznaczną rolą produktową</span>
+    </div>
+
+    <!-- MODAL SHELL -->
+    <article id="c-modal-shell" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">ModalShell</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Wspólny container modali · header / body / footer · 4 widths</p>
+        </div>
+        <code class="text-[10px] text-ink-700 dark:text-dark-textMuted">4 widths · 2 states · no-click-outside</code>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd — schemat anatomii</div>
+          <div class="preview-frame">
+            <div class="rounded-lg shadow-e4 bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border max-w-[480px] mx-auto overflow-hidden">
+              <div class="px-5 py-4 border-b border-ink-200 dark:border-dark-border flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-9 h-9 rounded-md bg-gradient-brand text-white flex items-center justify-center shadow-brand-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3L14.5 9L21 10L16 14.5L17.5 21L12 17.5L6.5 21L8 14.5L3 10L9.5 9L12 3Z"/></svg>
+                  </div>
+                  <div>
+                    <h4 class="text-[15px] font-semibold leading-tight">Autogeneruj jadłospis</h4>
+                    <p class="text-[11px] text-ink-700 dark:text-dark-textMuted leading-tight">Wybierz preset lub dostosuj ustawienia samodzielnie</p>
+                  </div>
+                </div>
+                <button class="w-8 h-8 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-700 dark:text-dark-textMuted shrink-0">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6L18 18M6 18L18 6"/></svg>
+                </button>
+              </div>
+              <div class="px-5 py-6 text-[12px] text-ink-700 dark:text-dark-textMuted">
+                Body — scrollable content, max-height 70vh
+              </div>
+              <div class="px-5 py-3 border-t border-ink-200 dark:border-dark-border bg-ink-100 dark:bg-dark-bg/50 flex items-center justify-end gap-2">
+                <button class="h-9 px-4 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface text-[13px] font-medium text-ink-800 dark:text-dark-text">Anuluj</button>
+                <button class="btn-primary h-9 px-5 rounded-md text-white font-medium text-[13px]">Generuj jadłospis</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span><strong>backdrop</strong> (deepviolet/50 + backdrop-blur) · <strong>shell</strong> (rounded-lg, shadow-e4) · <strong>header</strong> (icon-badge + title + subtitle + close) · <strong>body</strong> (scrollable, padding 20px) · <strong>footer</strong> (sticky, gradient bg, button group)</span></div>
+            <div><strong>Variants</strong><span><strong>narrow</strong> 560px (NewProgram, simple) · <strong>default</strong> 600px (MealplanGenerator, AutogenRecipes) · <strong>wide</strong> 680px (AutogenFromScratch, presety) · <strong>side</strong> 640px (sidepanel, slide-in z prawej)</span></div>
+            <div><strong>States</strong><span><strong>idle</strong> (interaktywne body) · <strong>loading</strong> (body przełączone na LoadingState, footer disabled)</span></div>
+            <div><strong>Behavior</strong><span><strong>NIE</strong> zamyka się przy click-outside (backdrop nie ma <code>onClick</code>) — modale zamyka się tylko X albo Anuluj. Powód: użytkownicy gubili wprowadzone ustawienia. ESC: TBD.</span></div>
+            <div><strong>Tokeny</strong><span><code>color/deepviolet (#2D1D51)</code> backdrop · <code>shadow/e4</code> shell · <code>shadow/brandSm</code> header icon · <code>radius/lg (16px)</code> · <code>size/modal/{narrow|default|wide|side}</code> · <code>animation/preset/fadeIn</code></span></div>
+            <div><strong>Notatki</strong><span>Header icon to gradient brand 36x36 z white icon — to jest "stamping" produktu (pokazuje że to AI/automated action). Footer ma jasnoszary bg (ink-100 / dark-bg/50) — wzrokowo oddziela strefę akcji od treści. Loading state: zob. organism <a href="#c-loading-state" class="text-brand">LoadingState</a>.</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- SIDE PANEL -->
+    <article id="c-side-panel" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">SidePanel</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Slide-in z prawej · "Dodaj posiłek", "Lista zakupów"</p>
+        </div>
+        <code class="text-[10px] text-ink-700 dark:text-dark-textMuted">640px width · slide-in 300ms</code>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd — schemat anatomii</div>
+          <div class="preview-frame">
+            <div class="rounded-lg shadow-e4 bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border overflow-hidden">
+              <div class="px-5 py-4 border-b border-ink-200 dark:border-dark-border flex items-center justify-between">
+                <h4 class="text-[16px] font-semibold">Dodaj Śniadanie</h4>
+                <button class="w-8 h-8 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-700 dark:text-dark-textMuted">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6L18 18M6 18L18 6"/></svg>
+                </button>
+              </div>
+              <div class="px-5 pt-3 border-b border-ink-200 dark:border-dark-border">
+                <div class="flex items-center gap-1">
+                  <button class="px-3 h-8 rounded-t-md text-[12px] font-medium text-ink-700 dark:text-dark-textMuted">Kolekcje <span class="text-ink-600 dark:text-dark-textDim">(12)</span></button>
+                  <button class="px-3 h-8 rounded-t-md text-[12px] font-medium bg-brand-400/40 dark:bg-brand/15 text-brand">Przepisy <span>(816)</span></button>
+                  <button class="px-3 h-8 rounded-t-md text-[12px] font-medium text-ink-700 dark:text-dark-textMuted">Produkty <span class="text-ink-600 dark:text-dark-textDim">(234)</span></button>
+                </div>
+              </div>
+              <div class="px-5 py-3 border-b border-ink-200 dark:border-dark-border">
+                <div class="flex items-center gap-2">
+                  <div class="relative flex-1">
+                    <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-ink-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16 16L21 21"/></svg>
+                    <input type="text" placeholder="Szukaj" class="w-full h-9 pl-8 pr-3 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated text-[12px] outline-none">
+                  </div>
+                  <button class="h-9 px-3 rounded-md border border-brand text-brand bg-brand-400/30 text-[12px] font-medium flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 5H20L14 13V20L10 18V13L4 5Z"/></svg>
+                    Filtry
+                  </button>
+                </div>
+              </div>
+              <div class="px-5 py-4 text-[12px] text-ink-700 dark:text-dark-textMuted">
+                Lista wyników (scrollable) — z checkboxami, multi-select
+              </div>
+              <div class="px-5 py-3 border-t border-ink-200 dark:border-dark-border bg-ink-100 dark:bg-dark-bg/50 flex items-center justify-between gap-2">
+                <span class="text-[12px] text-ink-700 dark:text-dark-textMuted">Wybrano <span class="font-semibold text-ink-900 dark:text-dark-text">(3 propozycje)</span></span>
+                <div class="flex items-center gap-2">
+                  <button class="h-9 px-4 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface text-[13px] font-medium text-ink-800 dark:text-dark-text">Anuluj</button>
+                  <button class="btn-primary h-9 px-5 rounded-md text-white font-medium text-[13px]">Dodaj</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span><strong>backdrop</strong> (deepviolet/40) · <strong>panel</strong> (z prawej, full height, 640px) · <strong>header</strong> (title + close) · <strong>tabs</strong>? · <strong>search bar</strong>? · <strong>list</strong> (scrollable) · <strong>sticky footer</strong> (counter + actions)</span></div>
+            <div><strong>Behavior</strong><span><strong>NIE</strong> zamyka się click-outside · slide-in z prawej 300ms · ESC TBD</span></div>
+            <div><strong>Tokeny</strong><span><code>size/modal/side (640px)</code> · <code>shadow/e4</code> · <code>animation/preset/slideInR</code> · <code>color/deepviolet/40</code> backdrop</span></div>
+            <div><strong>Notatki</strong><span>Sticky footer pokazuje <em>licznik wybranych</em> + actions. CTA "Dodaj" disabled gdy 0 wybranych. Counter używa polskiej odmiany przez liczebniki: <em>1 propozycja / 2-4 propozycje / 5+ propozycji</em>.</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- MEAL ROW -->
+    <article id="c-meal-row" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">MealRow</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Accordion posiłku · header z makrami + body z przepisami / empty state</p>
+        </div>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd — collapsed / expanded / empty</div>
+          <div class="preview-frame">
+            <div class="preview-grid">
+              <div class="preview-row">
+                <div class="preview-label">Collapsed — z makrami i akcjami</div>
+                <div class="rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface">
+                  <div class="px-3 py-2.5 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4 text-ink-700 dark:text-dark-textMuted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+                      <span class="text-[14px] font-semibold">Śniadanie, 09:00</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-[11px] text-ink-700 dark:text-dark-textMuted">
+                      <span class="flex items-center gap-1"><svg class="w-3 h-3 text-warning" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C13 5 9 7 12 22C15 7 11 5 12 2Z"/></svg>506/500 kcal</span>
+                      <span>B 25/30g · T 20/15g · W 63/60g</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Expanded — z przepisami</div>
+                <div class="rounded-md border border-brand/30 bg-white dark:bg-dark-surface">
+                  <div class="px-3 py-2.5 flex items-center justify-between border-b border-ink-200 dark:border-dark-border">
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                      <span class="text-[14px] font-semibold">Śniadanie, 09:00</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <button class="w-8 h-8 rounded-full bg-white dark:bg-dark-surface border border-brand-300 dark:border-brand/30 text-brand flex items-center justify-center" title="Autogeneruj">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3L14.5 9L21 10L16 14.5L17.5 21L12 17.5L6.5 21L8 14.5L3 10L9.5 9L12 3Z"/></svg>
+                      </button>
+                      <button class="w-8 h-8 rounded-full bg-white dark:bg-dark-surface border border-brand-300 dark:border-brand/30 text-brand flex items-center justify-center" title="Dodaj ręcznie">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5V19M5 12H19"/></svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="p-3 space-y-2">
+                    <div class="flex items-center gap-2 p-2 rounded border border-ink-200 dark:border-dark-border bg-ink-100 dark:bg-dark-elevated/50">
+                      <div class="w-10 h-10 rounded bg-gradient-to-br from-warning-light to-warning/40 shrink-0"></div>
+                      <div class="flex-1 min-w-0">
+                        <div class="text-[12px] font-medium">Owsianka z owocami i miodem</div>
+                        <div class="text-[10px] text-ink-700 dark:text-dark-textMuted">496 kcal · 26B · 24T · 47W · &lt;30min</div>
+                      </div>
+                      <button class="text-ink-700 dark:text-dark-textMuted hover:text-error">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6L18 18M6 18L18 6"/></svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Expanded · empty — z mini-CTA</div>
+                <div class="rounded-md border border-brand/30 bg-white dark:bg-dark-surface">
+                  <div class="px-3 py-2.5 flex items-center justify-between border-b border-ink-200 dark:border-dark-border">
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                      <span class="text-[14px] font-semibold">Obiad, 14:30</span>
+                    </div>
+                  </div>
+                  <div class="p-4 text-center">
+                    <p class="text-[12px] text-ink-700 dark:text-dark-textMuted mb-3">Brak przepisów dla tego posiłku</p>
+                    <div class="flex items-center justify-center gap-2">
+                      <button class="h-8 px-3 rounded-md border border-brand-300 dark:border-brand/30 bg-white dark:bg-dark-surface text-brand text-[12px] font-semibold flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3L14.5 9L21 10L16 14.5L17.5 21L12 17.5L6.5 21L8 14.5L3 10L9.5 9L12 3Z"/></svg>
+                        Autogeneruj
+                      </button>
+                      <button class="h-8 px-3 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface text-ink-800 dark:text-dark-text text-[12px] font-semibold flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5V19M5 12H19"/></svg>
+                        Dodaj przepis
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>border-wrap · header (chevron + nazwa + czas + makra + akcje circle 32px) · body (przepisy / produkty / empty mini-CTA)</span></div>
+            <div><strong>Variants</strong><span><strong>collapsed</strong> (chevron-right, body hidden, makra inline w headerze) · <strong>expanded</strong> (chevron-down, body visible, akcje circle widoczne) · <strong>expanded-empty</strong> (mini-CTA: Autogeneruj + Dodaj przepis)</span></div>
+            <div><strong>States</strong><span>collapsed default · expanded default · expanded with content · expanded empty</span></div>
+            <div><strong>Tokeny</strong><span><code>color/brand/300</code> border circle button · <code>color/brand/30</code> border expanded · <code>radius/md (12px)</code> · <code>size/control/h8 (32px)</code> circle button · <code>animation/preset/fadeIn</code></span></div>
+            <div><strong>Notatki</strong><span>Akcje circle (32px) <em>tylko</em> w expanded — collapsed nie ma akcji żeby nie zaśmiecać. Makra w headerze: kolor brand gdy w normie, warning/error gdy poza. Empty state w body: 2 mini-CTA, primary "Autogeneruj" z brand border (nie filled — żeby nie konkurowało z głównymi CTA na ekranie).</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- PRESET CARD -->
+    <article id="c-preset-card" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">PresetCard</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Karta gotowego ustawienia · z ikoną, badge'em, listą features</p>
+        </div>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd — wszystkie stany</div>
+          <div class="preview-frame">
+            <div class="preview-grid">
+              <div class="preview-row">
+                <div class="preview-label">Default</div>
+                <button class="w-full text-left p-4 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated">
+                  <div class="flex items-start gap-3">
+                    <div class="w-12 h-12 rounded-md bg-ink-200 dark:bg-dark-elevated flex items-center justify-center text-ink-700 dark:text-dark-textMuted shrink-0">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3L14.5 9L21 10L16 14.5L17.5 21L12 17.5L6.5 21L8 14.5L3 10L9.5 9L12 3Z"/></svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <div class="flex items-center gap-2 mb-1">
+                        <h4 class="text-[14px] font-semibold">Standardowe</h4>
+                      </div>
+                      <p class="text-[12px] text-ink-700 dark:text-dark-textMuted mb-2">Sprawdzone ustawienia dla większości klientów</p>
+                      <div class="flex items-center gap-2 flex-wrap text-[10px] text-ink-700 dark:text-dark-textMuted">
+                        <span class="flex items-center gap-1">⚡ Energia + Białko</span>
+                        <span>·</span>
+                        <span>Margines ±10%</span>
+                        <span>·</span>
+                        <span>Bez powtórzeń</span>
+                        <span>·</span>
+                        <span>7/posiłek</span>
+                      </div>
+                    </div>
+                    <svg class="w-4 h-4 text-ink-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+                  </div>
+                </button>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Hover — gradient brand icon</div>
+                <button class="w-full text-left p-4 rounded-lg border border-brand-300 dark:border-brand/40 bg-brand-100 dark:bg-brand/5 shadow-e1">
+                  <div class="flex items-start gap-3">
+                    <div class="w-12 h-12 rounded-md bg-gradient-brand text-white flex items-center justify-center shadow-brand-sm shrink-0">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3L14.5 9L21 10L16 14.5L17.5 21L12 17.5L6.5 21L8 14.5L3 10L9.5 9L12 3Z"/></svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <h4 class="text-[14px] font-semibold mb-1">Standardowe</h4>
+                      <p class="text-[12px] text-ink-700 dark:text-dark-textMuted">Sprawdzone ustawienia dla większości klientów</p>
+                    </div>
+                    <svg class="w-4 h-4 text-brand shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+                  </div>
+                </button>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Selected (summary view) — border 2 brand</div>
+                <button class="w-full text-left p-4 rounded-lg border-2 border-brand bg-white dark:bg-dark-elevated">
+                  <div class="flex items-start gap-3">
+                    <div class="w-12 h-12 rounded-md bg-gradient-brand text-white flex items-center justify-center shadow-brand-sm shrink-0">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <div class="flex items-center gap-2 mb-1">
+                        <h4 class="text-[14px] font-semibold">Precyzyjne</h4>
+                        <span class="px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-warning-light dark:bg-warning/15 text-warning-dark dark:text-warning-bright">Sportowcy, redukcja, terapia</span>
+                      </div>
+                      <p class="text-[12px] text-ink-700 dark:text-dark-textMuted">Algorytm trzyma się ściśle założeń klienta</p>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Custom variant — dashed border</div>
+                <button class="w-full text-left p-4 rounded-lg border-2 border-dashed border-ink-300 dark:border-dark-borderLight bg-ink-100 dark:bg-dark-bg">
+                  <div class="flex items-start gap-3">
+                    <div class="w-12 h-12 rounded-md bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border flex items-center justify-center text-ink-700 dark:text-dark-textMuted shrink-0">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12C19 13 19 14 18 14L17 14M5 12C5 13 5 14 6 14L7 14M12 5V7M12 17V19"/></svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <h4 class="text-[14px] font-semibold mb-1">Własne ustawienia</h4>
+                      <p class="text-[12px] text-ink-700 dark:text-dark-textMuted">Pełna kontrola — wybierz makra, marginesy, schemat powtarzania, wszystko</p>
+                    </div>
+                    <svg class="w-4 h-4 text-ink-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>large icon (48px) · title + [badge]? · description · [features list]? · chevron-right</span></div>
+            <div><strong>Variants</strong><span><strong>filled</strong> (3 presety: Standardowe / Precyzyjne / Elastyczne) · <strong>custom</strong> (4. opcja "Własne ustawienia", dashed border)</span></div>
+            <div><strong>States</strong><span>default · <strong>hover</strong> (border brand-300, bg brand-100, ikona w gradient brand, shadow-e1) · <strong>selected</strong> (summary: border-2 brand, ikona w gradient brand)</span></div>
+            <div><strong>Tokeny</strong><span><code>size/thumbnail/md (48px)</code> ikona · <code>radius/lg (16px)</code> · <code>color/brand/100</code> hover bg · <code>gradient/brand</code> hover icon · <code>shadow/e1</code> hover · <code>shadow/brandSm</code> selected icon</span></div>
+            <div><strong>Notatki</strong><span>Hover state ma <em>3 zmiany naraz</em>: ikona zmienia się z neutral na gradient brand (efekt "ożywienia"), bg na brand-100, border na brand-300. To dużo, ale daje czytelne wskazanie "to klikalne". Features list (krótka): zwięzłe ikony + skrócone wartości — bez nazw kolumn (Margines, Schemat etc), bo zajmowałoby za dużo miejsca.</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- SOURCE SELECTOR -->
+    <article id="c-source-selector" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">SourceSelector</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">"Skąd brać przepisy" · 3 karty single-select · z licznikami</p>
+        </div>
+        <code class="text-[10px] text-ink-700 dark:text-dark-textMuted">3 sources · 3 modale</code>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd — domyślny i wybrany</div>
+          <div class="preview-frame">
+            <div class="preview-grid">
+              <div class="preview-row">
+                <div class="preview-label">Domyślnie zaznaczone "Baza Alloweat"</div>
+                <div class="grid grid-cols-3 gap-2">
+                  <button class="text-left p-2.5 rounded-md border border-brand bg-brand-400/30 dark:bg-brand/10">
+                    <svg class="w-3.5 h-3.5 text-brand mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3L14.5 9L21 10L16 14.5L17.5 21L12 17.5L6.5 21L8 14.5L3 10L9.5 9L12 3Z"/></svg>
+                    <div class="text-[11px] font-semibold text-brand mb-0.5">Baza Alloweat</div>
+                    <div class="text-[9px] text-ink-700 dark:text-dark-textMuted">4128 przepisów</div>
+                  </button>
+                  <button class="text-left p-2.5 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated">
+                    <svg class="w-3.5 h-3.5 text-ink-700 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6A2 2 0 004 4V20A2 2 0 006 22H18A2 2 0 0020 20V8L14 2Z"/></svg>
+                    <div class="text-[11px] font-semibold mb-0.5">Moja biblioteka</div>
+                    <div class="text-[9px] text-ink-700 dark:text-dark-textMuted">47 przepisów</div>
+                  </button>
+                  <button class="text-left p-2.5 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated">
+                    <svg class="w-3.5 h-3.5 text-ink-700 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 3H21V8M21 16V21H16M3 16V21H8M8 3H3V8"/></svg>
+                    <div class="text-[11px] font-semibold mb-0.5">Mieszanie</div>
+                    <div class="text-[9px] text-ink-700 dark:text-dark-textMuted">4175 z obu</div>
+                  </button>
+                </div>
+              </div>
+              <div class="preview-row">
+                <div class="preview-label">Z label sekcji</div>
+                <div>
+                  <div class="text-[11px] font-semibold text-ink-700 dark:text-dark-textMuted uppercase tracking-wider mb-2">Skąd brać przepisy?</div>
+                  <div class="grid grid-cols-3 gap-2">
+                    <button class="text-left p-2.5 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated"><svg class="w-3.5 h-3.5 text-ink-700 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3L14.5 9L21 10L16 14.5L17.5 21L12 17.5L6.5 21L8 14.5L3 10L9.5 9L12 3Z"/></svg><div class="text-[11px] font-semibold mb-0.5">Baza Alloweat</div><div class="text-[9px] text-ink-700 dark:text-dark-textMuted">4128 przepisów</div></button>
+                    <button class="text-left p-2.5 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated"><svg class="w-3.5 h-3.5 text-ink-700 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6A2 2 0 004 4V20A2 2 0 006 22H18A2 2 0 0020 20V8L14 2Z"/></svg><div class="text-[11px] font-semibold mb-0.5">Moja biblioteka</div><div class="text-[9px] text-ink-700 dark:text-dark-textMuted">47 przepisów</div></button>
+                    <button class="text-left p-2.5 rounded-md border border-brand bg-brand-400/30 dark:bg-brand/10"><svg class="w-3.5 h-3.5 text-brand mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 3H21V8M21 16V21H16M3 16V21H8M8 3H3V8"/></svg><div class="text-[11px] font-semibold text-brand mb-0.5">Mieszanie</div><div class="text-[9px] text-ink-700 dark:text-dark-textMuted">4175 z obu</div></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>label sekcji ("Skąd brać przepisy?") · grid 3 kart · każda karta: ikona + label + counter</span></div>
+            <div><strong>Sources</strong><span><strong>Baza Alloweat</strong> (ikona sparkles, 4128 przepisów — z backendu) · <strong>Moja biblioteka</strong> (ikona note, 47 — z backendu) · <strong>Mieszanie</strong> (ikona shuffle, suma)</span></div>
+            <div><strong>States</strong><span>default (border ink-200) · <strong>active</strong> (border brand, bg brand-400/30) · hover (border brand-300)</span></div>
+            <div><strong>Tokeny</strong><span><code>color/brand/400 (#F5F1FE)</code> active bg · <code>color/brand/default</code> active border + text + icon · <code>radius/md (12px)</code> · <code>spacing/gap-2 (8px)</code> grid</span></div>
+            <div><strong>Notatki</strong><span>Występuje w <em>3 modalach</em> (AutogenFromScratch, MealplanGenerator generate-from-scratch, AutogenRecipes) — to kandydat na <strong>shared component</strong> w design systemie. Liczniki zawsze podawane jako fakty: "4128 przepisów" nie "4000+ przepisów" (decyzja UX z v25).</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- MARGINS TABLE -->
+    <article id="c-margins-table" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">MarginsTable</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Tabela makr · cel · margines · zakres live</p>
+        </div>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd — z założeniami klienta</div>
+          <div class="preview-frame">
+            <div class="rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+              <div class="grid grid-cols-[1fr_80px_72px_140px_32px] gap-2 px-3 py-2 border-b border-ink-200 dark:border-dark-border bg-ink-100 dark:bg-dark-elevated/50 text-[10px] font-semibold uppercase tracking-wider text-ink-700 dark:text-dark-textMuted">
+                <div>Makro</div>
+                <div class="text-right">Z założeń</div>
+                <div>Margines</div>
+                <div>Zakres</div>
+                <div></div>
+              </div>
+              <div class="grid grid-cols-[1fr_80px_72px_140px_32px] gap-2 px-3 py-2.5 items-center border-b border-ink-200/50 dark:border-dark-border/50">
+                <label class="flex items-center gap-2 text-[12px] font-medium"><input type="checkbox" checked class="w-3.5 h-3.5 accent-brand">Energia</label>
+                <div class="text-right text-[12px] tabular-nums">2000 kcal</div>
+                <div class="relative">
+                  <input type="number" value="10" class="w-full h-7 pl-2 pr-6 text-[12px] tabular-nums rounded border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated outline-none">
+                  <span class="absolute right-1.5 top-1/2 -translate-y-1/2 text-[10px] text-ink-600 dark:text-dark-textDim pointer-events-none">±%</span>
+                </div>
+                <div class="text-[11px] tabular-nums text-ink-700 dark:text-dark-textMuted">1800–2200 kcal</div>
+                <button class="text-ink-600 hover:text-error"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 12L15 12"/></svg></button>
+              </div>
+              <div class="grid grid-cols-[1fr_80px_72px_140px_32px] gap-2 px-3 py-2.5 items-center border-b border-ink-200/50 dark:border-dark-border/50">
+                <label class="flex items-center gap-2 text-[12px] font-medium"><input type="checkbox" checked class="w-3.5 h-3.5 accent-brand">Białko</label>
+                <div class="text-right text-[12px] tabular-nums">100 g</div>
+                <div class="relative">
+                  <input type="number" value="10" class="w-full h-7 pl-2 pr-6 text-[12px] tabular-nums rounded border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated outline-none">
+                  <span class="absolute right-1.5 top-1/2 -translate-y-1/2 text-[10px] text-ink-600 dark:text-dark-textDim pointer-events-none">±%</span>
+                </div>
+                <div class="text-[11px] tabular-nums text-ink-700 dark:text-dark-textMuted">90–110 g</div>
+                <button class="text-ink-600 hover:text-error"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 12L15 12"/></svg></button>
+              </div>
+              <div class="grid grid-cols-[1fr_80px_72px_140px_32px] gap-2 px-3 py-2.5 items-center opacity-50">
+                <label class="flex items-center gap-2 text-[12px] font-medium"><input type="checkbox" class="w-3.5 h-3.5 accent-brand">Tłuszcze</label>
+                <div class="text-right text-[12px] tabular-nums text-ink-700">67 g</div>
+                <div class="text-[11px] text-ink-700 dark:text-dark-textMuted text-center">—</div>
+                <div class="text-[11px] text-ink-700 dark:text-dark-textMuted">—</div>
+                <div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>header row (uppercase labels) · n×data row (checkbox label · target value · margin input · live range · remove btn)</span></div>
+            <div><strong>Layout</strong><span>grid columns: <code>1fr · 80px · 72px · 140px · 32px</code> (Makro · Cel · Margines · Zakres · Akcje)</span></div>
+            <div><strong>States</strong><span><strong>checked</strong> (margines + zakres aktywne) · <strong>unchecked</strong> (cała wiersz <code>opacity-50</code>, margines/zakres "—")</span></div>
+            <div><strong>Tokeny</strong><span><code>size/control/h7 (28px)</code> input · <code>color/ink/100</code> header bg · <code>font/family/mono</code> + <code>tabular-nums</code> dla wartości · <code>radius/sm</code> input</span></div>
+            <div><strong>Notatki</strong><span>"Z założeń" pochodzi z <em>profilu klienta</em> — read-only (nie zmieniamy w autogeneracji). Margines edytowalny per makro. Zakres jest <em>live</em> — przelicza się przy zmianie marginesu (target ± margin%). Wartości zawsze <code>tabular-nums</code>. Energy w kcal, makra w g — sufiks dynamiczny w "Z założeń" i "Zakres".</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- LOADING STATE -->
+    <article id="c-loading-state" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">LoadingState</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Stan generowania jadłospisu · 4 fazy · ~2.4s</p>
+        </div>
+        <code class="text-[10px] text-ink-700 dark:text-dark-textMuted">w body modala</code>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd — fazy generowania</div>
+          <div class="preview-frame">
+            <div class="rounded-lg shadow-e2 bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border">
+              <div class="px-5 py-8">
+                <div class="flex flex-col items-center text-center">
+                  <div class="w-14 h-14 rounded-full bg-gradient-brand text-white flex items-center justify-center mb-4 shadow-brand-md">
+                    <svg class="w-7 h-7 spin" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3V7M12 17V21M5.6 5.6L8.4 8.4M15.6 15.6L18.4 18.4M3 12H7M17 12H21M5.6 18.4L8.4 15.6M15.6 8.4L18.4 5.6"/></svg>
+                  </div>
+                  <h4 class="text-[16px] font-semibold mb-1.5">Generuję jadłospis dla Karoliny…</h4>
+                  <p class="text-[12px] text-ink-700 dark:text-dark-textMuted mb-5">Dopasowuję propozycje do założeń</p>
+                  <div class="w-full max-w-[320px] space-y-2 text-left">
+                    <div class="flex items-center gap-2 text-[11px]">
+                      <svg class="w-3.5 h-3.5 text-success" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 12L11 14L15 10"/></svg>
+                      <span class="text-ink-700 dark:text-dark-textMuted line-through">Analizuję założenia diety</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-[11px]">
+                      <svg class="w-3.5 h-3.5 text-success" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 12L11 14L15 10"/></svg>
+                      <span class="text-ink-700 dark:text-dark-textMuted line-through">Wybieram źródła przepisów</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-[11px]">
+                      <svg class="w-3.5 h-3.5 spin text-brand" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 3V7M12 17V21M5.6 5.6L8.4 8.4M15.6 15.6L18.4 18.4M3 12H7M17 12H21"/></svg>
+                      <span class="text-ink-900 dark:text-dark-text font-medium">Dopasowuję rodzaje potraw</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-[11px] opacity-50">
+                      <div class="w-3.5 h-3.5 rounded-full border-2 border-ink-300 dark:border-dark-borderLight"></div>
+                      <span class="text-ink-700 dark:text-dark-textMuted">Wypełniam jadłospis</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>centered column: hero spinner (56px gradient brand) · headline (z imieniem klienta) · subtitle · 4-step list (każdy: ikona stanu + label)</span></div>
+            <div><strong>Phases (po 700ms każda, ~2.4s total)</strong><span>1. Analizuję założenia diety · 2. Wybieram źródła przepisów · 3. Dopasowuję rodzaje potraw · 4. Wypełniam jadłospis</span></div>
+            <div><strong>Step states</strong><span><strong>pending</strong> (puste kółko, opacity-50) · <strong>active</strong> (spinner brand, font-medium) · <strong>done</strong> (check success, line-through, muted text)</span></div>
+            <div><strong>Tokeny</strong><span><code>gradient/brand</code> hero · <code>shadow/brandMd</code> · <code>color/success</code> done · <code>color/brand</code> active · <code>animation/preset/spin</code> · <code>animation/duration/phaseStep (700ms)</code></span></div>
+            <div><strong>Notatki</strong><span>Czas każdej fazy <em>sztywny 700ms</em> w mocku — w produkcji powinien być <em>realtime progress</em> z backendu (TODO). Headline z imieniem klienta wzmacnia poczucie spersonalizowanej akcji ("Generuję dla Karoliny" nie "Generuję jadłospis"). Modal podczas loading: footer disabled, X w headerze nadal aktywny (możliwość anulowania).</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- EMPTY STATE CARD -->
+    <article id="c-empty-state" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">EmptyStateCard</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">"Pusty zbiór przepisów" · gradient brand z 2 CTA</p>
+        </div>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd</div>
+          <div class="preview-frame">
+            <div class="relative rounded-lg overflow-hidden bg-gradient-brand p-5 text-white shadow-brand-md">
+              <div class="relative z-10">
+                <div class="flex items-start gap-3 mb-4">
+                  <div class="w-10 h-10 rounded-md bg-white/15 backdrop-blur flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3L14.5 9L21 10L16 14.5L17.5 21L12 17.5L6.5 21L8 14.5L3 10L9.5 9L12 3Z"/></svg>
+                  </div>
+                  <div class="flex-1">
+                    <h3 class="text-[16px] font-bold leading-tight mb-1">Pusty zbiór przepisów dla typu dnia "Trening"</h3>
+                    <p class="text-[12px] text-white/85 leading-relaxed">Aby uniknąć pustego jadłospisu, dodaj przepisy do każdego posiłku — możesz autogenerować lub dodać ręcznie z bazy</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button class="h-9 px-4 rounded-md bg-white text-brand-dark text-[13px] font-semibold flex items-center gap-2">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3L14.5 9L21 10L16 14.5L17.5 21L12 17.5L6.5 21L8 14.5L3 10L9.5 9L12 3Z"/></svg>
+                    Autogeneruj wszystkie posiłki
+                  </button>
+                  <button class="h-9 px-4 rounded-md border border-white/40 text-white text-[13px] font-medium flex items-center gap-2">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5V19M5 12H19"/></svg>
+                    Dodaj ręcznie
+                  </button>
+                </div>
+              </div>
+              <!-- decorative blob -->
+              <div class="absolute -right-8 -bottom-8 w-32 h-32 rounded-full bg-white/10 blur-2xl"></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>gradient brand bg · icon-badge (white/15 backdrop-blur) · title + subtitle · 2 CTA · decorative blob</span></div>
+            <div><strong>Variants</strong><span><strong>recipes-empty</strong> (główny use case z prototypu — nad listą posiłków gdy zero przepisów) · <strong>shoppinglist-empty</strong>? (TBD) · <strong>clients-empty</strong>? (TBD)</span></div>
+            <div><strong>States</strong><span>visible · hover na CTA (white CTA: subtle scale + shadow) · dismissible? (TBD — obecnie zawsze widoczny do akcji)</span></div>
+            <div><strong>Tokeny</strong><span><code>gradient/brand</code> bg · <code>shadow/brandMd</code> · <code>color/brand/dark</code> tekst na białym CTA · <code>radius/lg (16px)</code> · <code>color/white/15</code> dla glassmorph icon-bg</span></div>
+            <div><strong>Notatki</strong><span>Title <em>dynamiczny</em> — pokazuje typ dnia z którym pracujemy ("Pusty zbiór dla dni treningowych", "edukacyjnych" itd.). Subtitle wyjaśnia <em>dlaczego</em> empty state jest problematyczny ("aby uniknąć pustego jadłospisu"). 2 CTA: pierwszy primary (autogen — szybka droga) drugi secondary (ręcznie — pełna kontrola).</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- PATTERNS                                                      -->
+  <!-- ============================================================ -->
+  <section id="patterns" class="anchor mb-16">
+    <div class="group-label flex items-baseline gap-3 mb-6 pb-2 border-b border-ink-200 dark:border-dark-border bg-ink-100 dark:bg-dark-bg pt-2">
+      <h2 class="text-[24px] font-bold tracking-tight">Patterns</h2>
+      <span class="text-[12px] text-ink-700 dark:text-dark-textMuted">— kompozycje organisms · powtarzalne sekcje produktowe</span>
+    </div>
+
+    <!-- "Z PROFILU KLIENTA" BANER -->
+    <article id="p-profile" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">"Z profilu klienta" baner</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Pokazuje jakie ustawienia algorytm wziął z profilu · z możliwością edycji</p>
+        </div>
+        <code class="text-[10px] text-ink-700 dark:text-dark-textMuted">3 modale · profil read + edit per chip</code>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd — ze wszystkimi typami chipów</div>
+          <div class="preview-frame">
+            <div class="rounded-md border border-info/20 bg-info-light/40 dark:bg-info/5 p-3.5">
+              <div class="flex items-start gap-2.5 mb-2.5">
+                <div class="w-8 h-8 rounded-md bg-info/15 dark:bg-info/15 flex items-center justify-center text-info-dark dark:text-info-bright shrink-0">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21V20C4 16 7 14 12 14C17 14 20 16 20 20V21"/></svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-[10px] font-semibold uppercase tracking-wider text-info-dark dark:text-info-bright leading-tight">Z profilu Karolina</div>
+                  <div class="text-[12px] font-semibold leading-tight mt-0.5">Domyślnie zastosowane</div>
+                  <div class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Możesz wyłączyć poszczególne ograniczenia jeśli chcesz</div>
+                </div>
+                <button class="text-[11px] text-info-dark dark:text-info-bright font-medium hover:underline whitespace-nowrap">Otwórz profil</button>
+              </div>
+              <div class="flex flex-wrap gap-1.5">
+                <span class="inline-flex items-center gap-1 px-2 h-6 rounded-full bg-success-light dark:bg-success/15 border border-success/30 text-[11px] font-medium text-success-dark dark:text-success-bright">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 12L11 14L15 10"/></svg>
+                  Dieta: Wegetariańska
+                  <button class="ml-0.5"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 6L18 18M6 18L18 6"/></svg></button>
+                </span>
+                <span class="inline-flex items-center gap-1 px-2 h-6 rounded-full bg-error-light dark:bg-error/15 border border-error/30 text-[11px] font-medium text-error-dark dark:text-error-bright">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 2L22 20H2L12 2Z"/><path d="M12 9V13M12 17H12.01"/></svg>
+                  Wyklucz: Seler
+                </span>
+                <span class="inline-flex items-center gap-1 px-2 h-6 rounded-full bg-error-light dark:bg-error/15 border border-error/30 text-[11px] font-medium text-error-dark dark:text-error-bright">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 2L22 20H2L12 2Z"/><path d="M12 9V13M12 17H12.01"/></svg>
+                  Wyklucz: Orzechy
+                </span>
+                <span class="inline-flex items-center gap-1 px-2 h-6 rounded-full bg-warning-light dark:bg-warning/15 border border-warning/30 text-[11px] font-medium text-warning-dark dark:text-warning-bright opacity-50 line-through">
+                  Nie lubi: Jogurty
+                  <button class="ml-0.5 no-underline"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12L10 17L20 7"/></svg></button>
+                </span>
+                <button class="inline-flex items-center gap-1 px-2 h-6 rounded-full border border-dashed border-ink-300 dark:border-dark-borderLight text-[11px] font-medium text-ink-700 dark:text-dark-textMuted">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5V19M5 12H19"/></svg>
+                  Dodaj ograniczenie
+                </button>
+              </div>
+              <div class="mt-2 flex items-center gap-3 text-[10px]">
+                <button class="text-ink-700 dark:text-dark-textMuted hover:text-error font-medium">Ignoruj wszystkie</button>
+                <span class="text-ink-300 dark:text-dark-borderLight">·</span>
+                <button class="text-info-dark dark:text-info-bright hover:underline font-medium">Przywróć z profilu</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>info-toned baner · lewa: avatar profilu (info ikon) · góra: label "Z profilu {imię}" · podtytuł "Domyślnie zastosowane" · helper text · prawo: link "Otwórz profil" · pod tym: lista chipów (success/error/warning) z X · footer: "Ignoruj wszystkie" / "Przywróć z profilu"</span></div>
+            <div><strong>Chip semantics</strong><span><strong>success</strong> = preferencje (Dieta: X) · <strong>error</strong> = wykluczenia (Wyklucz: X) · <strong>warning</strong> = niechciane (Nie lubi: X)</span></div>
+            <div><strong>States</strong><span>chip <strong>active</strong> (kolorowy fill, klikalna X) · chip <strong>ignored</strong> (opacity-50, line-through, X zamienia się w check — klik przywraca)</span></div>
+            <div><strong>Where used</strong><span>AutogenFromScratchModal (pełna sekcja) · MealplanGeneratorModal w rozwijanych "Zaawansowane" · AutogenRecipesModal scope=all (skompaktowana wersja)</span></div>
+            <div><strong>Tokeny</strong><span><code>color/info/light</code> · <code>color/info/dark</code> · <code>color/info/15</code> dark · <code>color/{success|warning|error}</code> chips · <code>radius/md (12px)</code></span></div>
+            <div><strong>Notatki</strong><span>Każdy chip <em>indywidualnie</em> wyłączalny — UX z v28. Po wyłączeniu chip nie znika, tylko <em>line-through + opacity-50</em>. Klik X w aktywnym = ignore, klik check w ignored = przywróć. "Otwórz profil" przekierowuje do edycji profilu (nowy tab) — żeby nie zgubić ustawień modala.</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- "SKĄD BRAĆ PRZEPISY" TRIO -->
+    <article id="p-source" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">"Skąd brać przepisy" trio</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">SourceSelector w pełnym kontekście · z helper text + tooltip</p>
+        </div>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd — z label, helper, tooltip</div>
+          <div class="preview-frame">
+            <div>
+              <div class="flex items-center gap-1.5 mb-1.5">
+                <div class="text-[11px] font-semibold uppercase tracking-wider text-ink-700 dark:text-dark-textMuted">Skąd brać przepisy?</div>
+                <button class="text-ink-600 dark:text-dark-textMuted hover:text-brand">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8V12M12 16H12.01"/></svg>
+                </button>
+              </div>
+              <div class="grid grid-cols-3 gap-2 mb-2">
+                <button class="text-left p-2.5 rounded-md border border-brand bg-brand-400/30 dark:bg-brand/10">
+                  <svg class="w-3.5 h-3.5 text-brand mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3L14.5 9L21 10L16 14.5L17.5 21L12 17.5L6.5 21L8 14.5L3 10L9.5 9L12 3Z"/></svg>
+                  <div class="text-[11px] font-semibold text-brand mb-0.5">Baza Alloweat</div>
+                  <div class="text-[9px] text-ink-700 dark:text-dark-textMuted">4128 przepisów</div>
+                </button>
+                <button class="text-left p-2.5 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated">
+                  <svg class="w-3.5 h-3.5 text-ink-700 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6A2 2 0 004 4V20A2 2 0 006 22H18A2 2 0 0020 20V8L14 2Z"/></svg>
+                  <div class="text-[11px] font-semibold mb-0.5">Moja biblioteka</div>
+                  <div class="text-[9px] text-ink-700 dark:text-dark-textMuted">47 przepisów</div>
+                </button>
+                <button class="text-left p-2.5 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated">
+                  <svg class="w-3.5 h-3.5 text-ink-700 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 3H21V8M21 16V21H16M3 16V21H8M8 3H3V8"/></svg>
+                  <div class="text-[11px] font-semibold mb-0.5">Mieszanie</div>
+                  <div class="text-[9px] text-ink-700 dark:text-dark-textMuted">4175 z obu</div>
+                </button>
+              </div>
+              <div class="text-[10px] text-ink-700 dark:text-dark-textMuted">
+                <strong class="text-ink-900 dark:text-dark-text">Wybrano:</strong> Baza Alloweat — algorytm użyje tylko przepisów z bazy Alloweat (4128 dostępnych)
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>label sekcji "Skąd brać przepisy?" + ikona info (tooltip "Co to znaczy?") · 3 karty single-select · helper text "Wybrano: {source} — {explanation}"</span></div>
+            <div><strong>Sources</strong><span>1) Baza Alloweat — globalne · 2) Moja biblioteka — własne · 3) Mieszanie — oba</span></div>
+            <div><strong>Counters</strong><span>z backendu: liczba przepisów per source. Mieszanie = suma deduped (przepisy w obu źródłach liczone raz).</span></div>
+            <div><strong>Tooltip content</strong><span>"Baza Alloweat: ~4000+ profesjonalnych przepisów. Moja biblioteka: tylko Twoje przepisy. Mieszanie: oba źródła z priorytetem dla Twoich."</span></div>
+            <div><strong>Helper text</strong><span>Pod kartami pokazuje <em>co wybrane</em> i <em>co to znaczy</em> — pomaga zrozumieć decyzję bez najeżdżania na info icon.</span></div>
+            <div><strong>Notatki</strong><span>Pattern występuje w 3 modalach z tymi samymi parametrami. <em>Default selection</em>: "Baza Alloweat" (najszerszy zbiór). Single-select przez klik karty (bez radio button). Tooltip: hover w info-icon.</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- "LUBI RODZAJE POTRAW" LISTA -->
+    <article id="p-dish-types" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">"Lubi rodzaje potraw" lista</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Per-meal lista typów potraw · 25-elementowa taksonomia · z edit in-place</p>
+        </div>
+        <code class="text-[10px] text-ink-700 dark:text-dark-textMuted">v30</code>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd — collapsed + expanded edit</div>
+          <div class="preview-frame">
+            <div class="rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface divide-y divide-ink-200 dark:divide-dark-border">
+              <!-- collapsed row -->
+              <div class="px-3 py-2.5 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="text-[12px] font-medium min-w-[80px]">Śniadanie</span>
+                  <div class="flex items-center gap-1 flex-wrap">
+                    <span class="inline-flex items-center px-1.5 h-5 rounded-full bg-brand-400 dark:bg-brand/20 border border-brand/40 text-brand text-[10px] font-medium">Owsianka</span>
+                    <span class="inline-flex items-center px-1.5 h-5 rounded-full bg-brand-400 dark:bg-brand/20 border border-brand/40 text-brand text-[10px] font-medium">Jaglanka</span>
+                    <span class="inline-flex items-center px-1.5 h-5 rounded-full bg-brand-400 dark:bg-brand/20 border border-brand/40 text-brand text-[10px] font-medium">Kanapka</span>
+                  </div>
+                </div>
+                <button class="text-[11px] text-brand font-medium whitespace-nowrap">Edytuj</button>
+              </div>
+              <!-- expanded row (edit) -->
+              <div class="bg-brand-100/40 dark:bg-brand/5">
+                <div class="px-3 py-2.5 flex items-center justify-between gap-3">
+                  <span class="text-[12px] font-medium min-w-[80px]">Obiad</span>
+                  <button class="text-[11px] text-brand font-medium whitespace-nowrap">Zwiń</button>
+                </div>
+                <div class="px-3 pb-3">
+                  <div class="text-[10px] text-ink-700 dark:text-dark-textMuted mb-2">Wybierz rodzaje potraw które klient lubi:</div>
+                  <div class="flex flex-wrap gap-1">
+                    <button class="px-2 h-6 rounded-full bg-brand-400 dark:bg-brand/20 border border-brand/40 text-brand text-[10px] font-medium flex items-center gap-1">
+                      <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12L10 17L20 7"/></svg>
+                      Bowl
+                    </button>
+                    <button class="px-2 h-6 rounded-full border border-ink-200 dark:border-dark-border text-ink-700 dark:text-dark-textMuted text-[10px] font-medium">Ciastka</button>
+                    <button class="px-2 h-6 rounded-full border border-ink-200 dark:border-dark-border text-ink-700 dark:text-dark-textMuted text-[10px] font-medium">Ciasto</button>
+                    <button class="px-2 h-6 rounded-full bg-brand-400 dark:bg-brand/20 border border-brand/40 text-brand text-[10px] font-medium flex items-center gap-1">
+                      <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12L10 17L20 7"/></svg>
+                      Curry
+                    </button>
+                    <button class="px-2 h-6 rounded-full border border-ink-200 dark:border-dark-border text-ink-700 dark:text-dark-textMuted text-[10px] font-medium">Gofry</button>
+                    <button class="px-2 h-6 rounded-full border border-ink-200 dark:border-dark-border text-ink-700 dark:text-dark-textMuted text-[10px] font-medium">Jaglanka</button>
+                    <button class="px-2 h-6 rounded-full bg-brand-400 dark:bg-brand/20 border border-brand/40 text-brand text-[10px] font-medium flex items-center gap-1">
+                      <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12L10 17L20 7"/></svg>
+                      Jednogarnkowe
+                    </button>
+                    <button class="px-2 h-6 rounded-full border border-ink-200 dark:border-dark-border text-ink-700 dark:text-dark-textMuted text-[10px] font-medium">Jogurt</button>
+                    <button class="px-2 h-6 rounded-full border border-ink-200 dark:border-dark-border text-ink-700 dark:text-dark-textMuted text-[10px] font-medium">Kanapka</button>
+                    <button class="px-2 h-6 rounded-full border border-ink-200 dark:border-dark-border text-ink-700 dark:text-dark-textMuted text-[10px] font-medium">Kaszotto</button>
+                    <button class="px-2 h-6 rounded-full bg-brand-400 dark:bg-brand/20 border border-brand/40 text-brand text-[10px] font-medium flex items-center gap-1">
+                      <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12L10 17L20 7"/></svg>
+                      Naleśniki
+                    </button>
+                    <span class="text-[10px] text-ink-600 dark:text-dark-textDim self-center">+15 więcej</span>
+                  </div>
+                </div>
+              </div>
+              <!-- collapsed row 2 -->
+              <div class="px-3 py-2.5 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="text-[12px] font-medium min-w-[80px]">Kolacja</span>
+                  <div class="flex items-center gap-1 flex-wrap">
+                    <span class="inline-flex items-center px-1.5 h-5 rounded-full bg-brand-400 dark:bg-brand/20 border border-brand/40 text-brand text-[10px] font-medium">Jednogarnkowe</span>
+                    <span class="inline-flex items-center px-1.5 h-5 rounded-full bg-brand-400 dark:bg-brand/20 border border-brand/40 text-brand text-[10px] font-medium">Zupa</span>
+                  </div>
+                </div>
+                <button class="text-[11px] text-brand font-medium whitespace-nowrap">Edytuj</button>
+              </div>
+            </div>
+            <div class="mt-2 flex items-center justify-between text-[10px]">
+              <button class="text-ink-700 dark:text-dark-textMuted hover:text-error font-medium">Ignoruj wszystkie</button>
+              <button class="text-info-dark dark:text-info-bright hover:underline font-medium">Przywróć z profilu</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>n×row (collapsed: nazwa posiłku + chipy aktywne + "Edytuj" / expanded: pełna paleta 25 typów multi-select + "Zwiń") · footer: "Ignoruj wszystkie" / "Przywróć z profilu"</span></div>
+            <div><strong>Taksonomia (25)</strong><span>Bowl · Ciastka · Ciasto · Curry · Gofry · Jaglanka · Jednogarnkowe · Jogurt · Kanapka · Kaszotto · Koktajl · Lody · Makaron · Naleśniki · Omlet · Owsianka · Pancake · Pizza · Risotto · Ryżanka · Sałatka · Shake · Smoothie · Tortilla · Zupa</span></div>
+            <div><strong>States</strong><span>collapsed (chipy h-5 read-only podgląd) · expanded (chipy h-6 multi-select aktywne) · row "expanding" — bg brand-100/40 (subtle highlight)</span></div>
+            <div><strong>Where used</strong><span>AutogenRecipesModal scope=all (per-meal rows) · AutogenRecipesModal scope=single (jeden meal) · AutogenFromScratchModal (pełna sekcja)</span></div>
+            <div><strong>Tokeny</strong><span><code>color/brand/400</code> active chip bg · <code>color/brand/40</code> active chip border · <code>color/brand/100</code> expanding row bg · <code>size/chip/h5 (mini)</code> · <code>size/chip/h6 (small)</code></span></div>
+            <div><strong>Notatki</strong><span>Mini-chip h-5 w collapsed mode kompresuje listę (mieści się w jednym wierszu obok nazwy posiłku). Po expand pełna paleta 25 z chipami h-6 multi-select. Domyślnie zaznaczone <em>z profilu klienta</em> (MOCK_FAVORITE_DISH_TYPES). Algorytm v30 bierze pod uwagę tę listę.</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- "SCHEMAT POWTARZANIA" KARTY -->
+    <article id="p-repeat-scheme" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">"Schemat powtarzania" karty</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">4 karty single-select · Day pattern dots · z animacją daySpark</p>
+        </div>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd — 4 schematy</div>
+          <div class="preview-frame">
+            <div class="grid grid-cols-2 gap-2">
+              <button class="text-left p-3 rounded-md border-2 border-brand bg-brand-100 dark:bg-brand/10">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-[12px] font-semibold text-brand">Bez powtórzeń</span>
+                  <svg class="w-3.5 h-3.5 text-brand" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12L10 17L20 7"/></svg>
+                </div>
+                <div class="flex items-end gap-0.5 mb-1.5">
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-brand"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Pn</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-brand-500"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Wt</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-success"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Śr</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-warning"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Cz</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-error"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Pt</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-info"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Sb</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-graphite"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Nd</span></div>
+                </div>
+                <p class="text-[10px] text-ink-700 dark:text-dark-textMuted">Każdy dzień inny przepis — maksymalna różnorodność</p>
+              </button>
+              <button class="text-left p-3 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-[12px] font-semibold">2 dni z rzędu</span>
+                </div>
+                <div class="flex items-end gap-0.5 mb-1.5">
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-brand"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Pn</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-brand"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Wt</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-success"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Śr</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-success"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Cz</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-warning"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Pt</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-warning"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Sb</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-error"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Nd</span></div>
+                </div>
+                <p class="text-[10px] text-ink-700 dark:text-dark-textMuted">Pary dni — łatwiej z resztkami i przygotowaniem</p>
+              </button>
+              <button class="text-left p-3 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-[12px] font-semibold">3 dni z rzędu</span>
+                </div>
+                <div class="flex items-end gap-0.5 mb-1.5">
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-brand"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Pn</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-brand"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Wt</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-brand"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Śr</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-success"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Cz</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-success"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Pt</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-success"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Sb</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-warning"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Nd</span></div>
+                </div>
+                <p class="text-[10px] text-ink-700 dark:text-dark-textMuted">Ekonomicznie — mniej zakupów, więcej powtórzeń</p>
+              </button>
+              <button class="text-left p-3 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-[12px] font-semibold">Weekend taki sam</span>
+                </div>
+                <div class="flex items-end gap-0.5 mb-1.5">
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-brand"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Pn</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-brand-500"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Wt</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-success"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Śr</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-warning"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Cz</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-error"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Pt</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-info"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Sb</span></div>
+                  <div class="flex flex-col items-center gap-0.5"><div class="w-2 h-2 rounded-full bg-info"></div><span class="text-[8px] text-ink-700 dark:text-dark-textMuted">Nd</span></div>
+                </div>
+                <p class="text-[10px] text-ink-700 dark:text-dark-textMuted">Tydzień zróżnicowany, weekend luźniejszy</p>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>grid 2x2 · każda karta: title (+ check icon dla active) · day pattern dots (7 kolorowych kropek + label dni) · description (1 zdanie wyjaśniające)</span></div>
+            <div><strong>Schematy (4)</strong><span>1) Bez powtórzeń (każdy inny) · 2) 2 dni z rzędu · 3) 3 dni z rzędu · 4) Weekend taki sam (Sb=Nd)</span></div>
+            <div><strong>States</strong><span>default (border ink-200) · <strong>active</strong> (border-2 brand, bg brand-100, check icon) · animacja daySpark przy zmianie (60ms/dot, easing spring)</span></div>
+            <div><strong>Tokeny</strong><span><code>color/brand/100</code> active bg · <code>color/brand</code> active border · <code>animation/preset/daySpark</code> · <code>animation/easing/spring (0.34,1.56,0.64,1)</code> · <code>animation/duration/fast (450ms)</code> total</span></div>
+            <div><strong>Notatki</strong><span>UX z v22 — zawężono z 7+ opcji do 4 najczęściej używanych. Description każdej karty <em>wyjaśnia kontekst praktyczny</em> ("łatwiej z resztkami", "mniej zakupów") — nie tylko opis schematu. Animacja daySpark uruchamiana przy każdej zmianie schematu (każda kropka pulsuje z opóźnieniem).</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- RECIPE CARD (SIDEPANEL) -->
+    <article id="p-recipe-card" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">Recipe card (sidepanel)</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Wiersz przepisu w "Dodaj posiłek" sidepanelu · z multi-select</p>
+        </div>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd — selected / default / matching</div>
+          <div class="preview-frame">
+            <div class="space-y-2">
+              <!-- selected -->
+              <div class="flex items-start gap-3 p-2.5 rounded-md border-2 border-brand bg-brand-100 dark:bg-brand/10">
+                <div class="w-4 h-4 rounded border bg-brand border-brand flex items-center justify-center mt-0.5 shrink-0">
+                  <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 12L10 17L20 7"/></svg>
+                </div>
+                <div class="w-12 h-12 rounded bg-gradient-to-br from-warning-light to-warning/40 shrink-0"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="text-[13px] font-semibold leading-tight">Owsianka z owocami i miodem</div>
+                    <span class="text-[10px] text-success-dark dark:text-success-bright font-medium shrink-0">96% match</span>
+                  </div>
+                  <div class="text-[10px] text-ink-700 dark:text-dark-textMuted mt-0.5">496 kcal · 26g białka · 24g tłuszczu · 47g węgli</div>
+                  <div class="flex items-center gap-1 mt-1.5 flex-wrap">
+                    <span class="inline-flex items-center px-1.5 h-4 rounded text-[9px] font-medium bg-info-light dark:bg-info/15 text-info-dark dark:text-info-bright">Owsianka</span>
+                    <span class="inline-flex items-center gap-1 px-1.5 h-4 rounded text-[9px] font-medium bg-ink-200 dark:bg-dark-elevated text-ink-700 dark:text-dark-textMuted">
+                      <svg class="w-2 h-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7V12L15 15"/></svg>
+                      &lt;15min
+                    </span>
+                    <span class="inline-flex items-center px-1.5 h-4 rounded text-[9px] font-medium bg-success-light dark:bg-success/15 text-success-dark dark:text-success-bright">Wegetariańskie</span>
+                  </div>
+                </div>
+              </div>
+              <!-- default -->
+              <div class="flex items-start gap-3 p-2.5 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated">
+                <div class="w-4 h-4 rounded border border-ink-300 dark:border-dark-borderLight bg-white dark:bg-dark-surface mt-0.5 shrink-0"></div>
+                <div class="w-12 h-12 rounded bg-gradient-to-br from-brand-300 to-brand-500/40 shrink-0"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="text-[13px] font-semibold leading-tight">Jaglanka z malinami</div>
+                    <span class="text-[10px] text-warning-dark dark:text-warning-bright font-medium shrink-0">82% match</span>
+                  </div>
+                  <div class="text-[10px] text-ink-700 dark:text-dark-textMuted mt-0.5">412 kcal · 12g białka · 8g tłuszczu · 78g węgli</div>
+                  <div class="flex items-center gap-1 mt-1.5 flex-wrap">
+                    <span class="inline-flex items-center px-1.5 h-4 rounded text-[9px] font-medium bg-info-light dark:bg-info/15 text-info-dark dark:text-info-bright">Jaglanka</span>
+                    <span class="inline-flex items-center gap-1 px-1.5 h-4 rounded text-[9px] font-medium bg-ink-200 dark:bg-dark-elevated text-ink-700 dark:text-dark-textMuted">&lt;30min</span>
+                    <span class="inline-flex items-center px-1.5 h-4 rounded text-[9px] font-medium bg-success-light dark:bg-success/15 text-success-dark dark:text-success-bright">Wegetariańskie</span>
+                  </div>
+                </div>
+              </div>
+              <!-- with mismatch warning -->
+              <div class="flex items-start gap-3 p-2.5 rounded-md border border-warning/30 bg-warning-light/30 dark:bg-warning/5">
+                <div class="w-4 h-4 rounded border border-ink-300 dark:border-dark-borderLight bg-white dark:bg-dark-surface mt-0.5 shrink-0"></div>
+                <div class="w-12 h-12 rounded bg-gradient-to-br from-success-light to-success/30 shrink-0"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="text-[13px] font-semibold leading-tight">Tortilla z kurczakiem</div>
+                    <span class="text-[10px] text-error-dark dark:text-error-bright font-medium shrink-0">42% match</span>
+                  </div>
+                  <div class="text-[10px] text-ink-700 dark:text-dark-textMuted mt-0.5">654 kcal · 38g białka · 22g tłuszczu · 65g węgli</div>
+                  <div class="flex items-center gap-1 mt-1.5 flex-wrap">
+                    <span class="inline-flex items-center px-1.5 h-4 rounded text-[9px] font-medium bg-info-light dark:bg-info/15 text-info-dark dark:text-info-bright">Tortilla</span>
+                    <span class="inline-flex items-center gap-1 px-1.5 h-4 rounded text-[9px] font-medium bg-warning-light dark:bg-warning/15 text-warning-dark dark:text-warning-bright">
+                      <svg class="w-2 h-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L22 20H2L12 2Z"/></svg>
+                      Mięso
+                    </span>
+                    <span class="inline-flex items-center px-1.5 h-4 rounded text-[9px] font-medium bg-error-light dark:bg-error/15 text-error-dark dark:text-error-bright">Wbrew dietom</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>checkbox 16x16 · thumbnail 48x48 (gradient placeholder lub zdjęcie) · main: title + match% (right) + makra · footer: tagi (typ potrawy + czas + diety + warningi)</span></div>
+            <div><strong>States</strong><span><strong>default</strong> (border ink-200) · <strong>selected</strong> (border-2 brand, bg brand-100, checkbox checked) · <strong>mismatch warning</strong> (border warning, bg warning-light, "Wbrew dietom" tag)</span></div>
+            <div><strong>Match score</strong><span><strong>90%+</strong> (success-dark text) · <strong>70-89%</strong> (warning-dark) · <strong>&lt;70%</strong> (error-dark) — pokazuje jak dobrze przepis pasuje do założeń klienta</span></div>
+            <div><strong>Tags</strong><span><strong>typ potrawy</strong> (info-light, np. "Owsianka") · <strong>czas</strong> (neutralny, ikona zegara) · <strong>diety</strong> (success-light, np. "Wegetariańskie") · <strong>ostrzeżenia</strong> (warning-light "Mięso" / error-light "Wbrew dietom")</span></div>
+            <div><strong>Tokeny</strong><span><code>size/thumbnail/sm (48px)</code> · <code>size/checkbox/md (16px)</code> · <code>color/brand/100</code> selected bg · <code>color/warning/light</code> mismatch bg · <code>radius/sm (8px)</code> wrapper · <code>radius/xs (4px)</code> tag</span></div>
+            <div><strong>Notatki</strong><span>Match% wyliczany przez algorytm — bierze pod uwagę: makra, diety, wykluczenia, preferencje typów potraw. Mismatch warning: kiedy match &lt;70% lub łamie wykluczenia z profilu (np. mięso przy diecie wegetariańskiej). Designer może <em>kliknąć</em> żeby zobaczyć szczegóły niezgodności (TBD).</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- EMPTY STATE PER POSIŁEK -->
+    <article id="p-meal-list-empty" class="anchor mb-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+      <header class="px-5 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between flex-wrap gap-2">
+        <div>
+          <h3 class="text-[15px] font-semibold">Empty state per posiłek</h3>
+          <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Mini-CTA wewnątrz expanded MealRow · Autogeneruj + Dodaj ręcznie</p>
+        </div>
+      </header>
+      <div class="component-card">
+        <div>
+          <div class="preview-label mb-3">Podgląd — pojedynczy posiłek bez przepisów</div>
+          <div class="preview-frame">
+            <div class="rounded-md border border-brand/30 bg-white dark:bg-dark-surface">
+              <div class="px-3 py-2.5 flex items-center justify-between border-b border-ink-200 dark:border-dark-border">
+                <div class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                  <span class="text-[14px] font-semibold">Obiad, 14:30</span>
+                </div>
+                <span class="text-[11px] text-ink-700 dark:text-dark-textMuted">cel 700 kcal · 35B/25T/85W</span>
+              </div>
+              <div class="p-5 text-center">
+                <div class="w-12 h-12 rounded-full bg-ink-200 dark:bg-dark-elevated flex items-center justify-center mx-auto mb-3 text-ink-700 dark:text-dark-textMuted">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 15V19A2 2 0 0119 21H5A2 2 0 013 19V15M17 8L12 3M12 3L7 8M12 3V15"/></svg>
+                </div>
+                <p class="text-[13px] font-medium mb-1">Brak przepisów dla tego posiłku</p>
+                <p class="text-[11px] text-ink-700 dark:text-dark-textMuted mb-4 max-w-[280px] mx-auto">Algorytm wybierze najlepiej dopasowane do założeń, lub wybierz przepisy ręcznie z bazy</p>
+                <div class="flex items-center justify-center gap-2">
+                  <button class="h-8 px-3 rounded-md border border-brand-300 dark:border-brand/30 bg-white dark:bg-dark-surface text-brand text-[12px] font-semibold flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3L14.5 9L21 10L16 14.5L17.5 21L12 17.5L6.5 21L8 14.5L3 10L9.5 9L12 3Z"/></svg>
+                    Autogeneruj
+                  </button>
+                  <button class="h-8 px-3 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface text-ink-800 dark:text-dark-text text-[12px] font-semibold flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5V19M5 12H19"/></svg>
+                    Dodaj przepis
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="preview-label mb-3">Spec</div>
+          <div class="specs">
+            <div><strong>Anatomia</strong><span>parent: MealRow expanded · body: ikona ink-200 (pakunek/pusto, 48px) · headline · description (max-w 280px) · 2 mini-CTA</span></div>
+            <div><strong>vs. EmptyStateCard</strong><span>EmptyStateCard (gradient brand, na górze listy) — gdy <em>cała sekcja</em> przepisów pusta. Empty state per posiłek — gdy <em>jeden posiłek</em> w istniejącej liście jest pusty. Drugi jest <em>znacznie cichszy wzrokowo</em> (neutral icon, plain bg).</span></div>
+            <div><strong>Headline copy</strong><span>"Brak przepisów dla tego posiłku" — neutralny statement (nie problem)</span></div>
+            <div><strong>CTA priority</strong><span>1) Autogeneruj (brand border, white bg) · 2) Dodaj przepis (neutral border)</span></div>
+            <div><strong>Tokeny</strong><span><code>color/ink/200</code> ikona bg · <code>color/brand/300</code> primary CTA border · <code>size/control/h8 (32px)</code> · <code>spacing/gap-2</code></span></div>
+            <div><strong>Notatki</strong><span>Cichy ton (vs. EmptyStateCard) — bo to jest <em>oczekiwany stan</em> w trakcie pracy nad jadłospisem. Ikona <em>pakunek z górną strzałką</em> sugeruje "tu coś można wrzucić". CTA: brand-bordered (nie filled) — żeby nie konkurować z głównymi akcjami na ekranie.</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- FOOTER                                                        -->
+  <!-- ============================================================ -->
+  <footer class="border-t border-ink-200 dark:border-dark-border pt-8 pb-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div>
+        <div class="text-[10px] font-semibold uppercase tracking-wider text-ink-700 dark:text-dark-textMuted mb-2">Powiązane dokumenty</div>
+        <ul class="text-[12px] space-y-1">
+          <li><a href="alloweat-program-redesign-v30.html" class="text-brand hover:underline">→ Prototyp v30 (HTML/React)</a> — ścieżka autogeneracji w działaniu</li>
+          <li><a href="alloweat-autogen-handoff.html" class="text-brand hover:underline">→ Handoff doc</a> — decyzje UX, mapa flowów, mock vs production</li>
+          <li><a href="alloweat-design-tokens.json" class="text-brand hover:underline">→ Design tokens</a> — JSON W3C, importowalne do Figma Variables / Tokens Studio</li>
+        </ul>
+      </div>
+      <div>
+        <div class="text-[10px] font-semibold uppercase tracking-wider text-ink-700 dark:text-dark-textMuted mb-2">Jak używać tego pliku w Figmie</div>
+        <ol class="text-[12px] space-y-1 list-decimal list-inside text-ink-800 dark:text-dark-text">
+          <li>Import <span class="mono">alloweat-design-tokens.json</span> przez <em>Tokens Studio</em> plugin</li>
+          <li>Otwórz tę stronę w przeglądarce, zrobić screenshoty per komponent</li>
+          <li>Stwórz Figma component z każdego — variants/states/sizes z spec</li>
+          <li>Połącz tokeny z Figma Variables (z Tokens Studio)</li>
+          <li>Patrns / Organisms = compositions (nie atomowe Figma component, tylko frame z instances)</li>
+        </ol>
+      </div>
+    </div>
+    <div class="text-[10px] text-ink-700 dark:text-dark-textMuted text-center">
+      Alloweat Design Components · v30 · zbudowane na podstawie prototypu autogeneracji jadłospisu
+    </div>
+  </footer>
+
+</main>
+
+</body>
+</html>
