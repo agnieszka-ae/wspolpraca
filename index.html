@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alloweat Design — Autogeneracja jadłospisu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Figtree', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+      },
+      colors: {
+        brand: { DEFAULT: '#7448D0', dark: '#5915B2', darker: '#3D0A8F', 100: '#FAF7FF', 300: '#F6F1FF', 400: '#F5F1FE' },
+        ink: { 900: '#141414', 800: '#333333', 700: '#727272', 600: '#4D516E', 500: '#B4B4B4', 400: '#D0D0D0', 300: '#E5E5E5', 200: '#F1F1F1', 100: '#FFFFFF' },
+        dark: { bg: '#0B080F', surface: '#1F1C22', elevated: '#2C292F', border: '#323036', text: '#EDECFF', textMuted: '#D4CCE8', textDim: '#8B8B9E' },
+        deepviolet: '#2D1D51',
+      },
+      backgroundImage: {
+        'gradient-brand': 'linear-gradient(135deg, #7448D0 0%, #5915B2 100%)',
+      },
+      boxShadow: {
+        'brand-md': '0 4px 8px -1px rgba(116, 72, 208, 0.2), 0 2px 4px -1px rgba(116, 72, 208, 0.12)',
+      }
+    }
+  }
+}
+</script>
+<style>
+  body { font-family: 'Figtree', system-ui, sans-serif; }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+  /* gradient text */
+  .gradient-text {
+    background: linear-gradient(135deg, #7448D0 0%, #5915B2 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* card hover */
+  .card-link { transition: all 200ms ease; }
+  .card-link:hover {
+    transform: translateY(-2px);
+    border-color: #7448D0;
+    box-shadow: 0 8px 24px -4px rgba(116, 72, 208, 0.15);
+  }
+</style>
+</head>
+<body class="bg-ink-100 dark:bg-dark-bg text-ink-900 dark:text-dark-text antialiased min-h-screen">
+
+<!-- Theme toggle -->
+<button onclick="document.documentElement.classList.toggle('dark')" class="fixed top-4 right-4 z-50 text-[11px] px-3 h-8 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface hover:border-brand transition-colors text-ink-700 dark:text-dark-textMuted">
+  Toggle theme
+</button>
+
+<main class="max-w-[860px] mx-auto px-6 py-12 md:py-20">
+
+  <!-- Hero -->
+  <header class="mb-12 md:mb-16">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-12 h-12 rounded-lg bg-gradient-brand text-white flex items-center justify-center font-bold text-xl shadow-brand-md">A</div>
+      <div>
+        <div class="text-[11px] font-semibold uppercase tracking-wider text-brand">Alloweat · Design</div>
+        <div class="text-[12px] text-ink-700 dark:text-dark-textMuted">Materiały dla zespołu design · v30</div>
+      </div>
+    </div>
+    <h1 class="text-[36px] md:text-[44px] font-bold tracking-tight leading-[1.1] mb-4">
+      Redesign <span class="gradient-text">autogeneracji jadłospisu</span>
+    </h1>
+    <p class="text-[16px] text-ink-700 dark:text-dark-textMuted leading-relaxed max-w-[640px]">
+      3 materiały do przekazania w Figmę i implementacji: klikalny prototyp, biblioteka komponentów, design tokens. Wszystko jest statyczne — nic nie trzeba instalować, klikaj i czytaj w przeglądarce.
+    </p>
+  </header>
+
+  <!-- 3 main cards -->
+  <section class="space-y-3 mb-12">
+    <a href="prototype.html" class="card-link block p-6 rounded-xl border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface">
+      <div class="flex items-start gap-4">
+        <div class="w-12 h-12 rounded-lg bg-gradient-brand text-white flex items-center justify-center shrink-0 shadow-brand-md">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3L14.5 9L21 10L16 14.5L17.5 21L12 17.5L6.5 21L8 14.5L3 10L9.5 9L12 3Z"/></svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 mb-1">
+            <h2 class="text-[20px] font-bold">Prototyp</h2>
+            <span class="px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-brand-400 dark:bg-brand/15 text-brand">Klikalny</span>
+          </div>
+          <p class="text-[14px] text-ink-700 dark:text-dark-textMuted mb-3 leading-relaxed">
+            Pełna ścieżka autogeneracji jadłospisu w działaniu — 7 modali, sidepanel "Dodaj posiłek", ekran przepisów, widok jadłospisu. Klikaj, otwieraj modale, zmieniaj presety.
+          </p>
+          <div class="flex items-center gap-3 text-[11px] text-ink-700 dark:text-dark-textMuted">
+            <span class="flex items-center gap-1">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6A2 2 0 004 4V20A2 2 0 006 22H18A2 2 0 0020 20V8L14 2Z"/></svg>
+              prototype.html
+            </span>
+            <span>·</span>
+            <span>~540 KB</span>
+            <span>·</span>
+            <span>HTML + React + Tailwind</span>
+          </div>
+        </div>
+        <svg class="w-5 h-5 text-ink-500 dark:text-dark-textDim shrink-0 mt-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+    </a>
+
+    <a href="components.html" class="card-link block p-6 rounded-xl border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface">
+      <div class="flex items-start gap-4">
+        <div class="w-12 h-12 rounded-lg bg-ink-200 dark:bg-dark-elevated text-ink-800 dark:text-dark-text flex items-center justify-center shrink-0">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 mb-1">
+            <h2 class="text-[20px] font-bold">Komponenty</h2>
+            <span class="px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-ink-200 dark:bg-dark-elevated text-ink-800 dark:text-dark-text">27 komponentów</span>
+          </div>
+          <p class="text-[14px] text-ink-700 dark:text-dark-textMuted mb-3 leading-relaxed">
+            Biblioteka komponentów z prototypu w 4 grupach: Atoms (button, input, chip…) · Molecules (tabs, accordion, search…) · Organisms (modale, sidepanel, MealRow…) · Patterns (sekcje produktowe). Każdy ze spec, statycznymi snapshotami stanów i tokenami.
+          </p>
+          <div class="flex items-center gap-3 text-[11px] text-ink-700 dark:text-dark-textMuted">
+            <span class="flex items-center gap-1">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6A2 2 0 004 4V20A2 2 0 006 22H18A2 2 0 0020 20V8L14 2Z"/></svg>
+              components.html
+            </span>
+            <span>·</span>
+            <span>~185 KB</span>
+            <span>·</span>
+            <span>Do screenshotowania w Figmę</span>
+          </div>
+        </div>
+        <svg class="w-5 h-5 text-ink-500 dark:text-dark-textDim shrink-0 mt-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+    </a>
+
+    <a href="tokens.json" class="card-link block p-6 rounded-xl border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface">
+      <div class="flex items-start gap-4">
+        <div class="w-12 h-12 rounded-lg bg-ink-200 dark:bg-dark-elevated text-ink-800 dark:text-dark-text flex items-center justify-center shrink-0">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 mb-1">
+            <h2 class="text-[20px] font-bold">Design tokens</h2>
+            <span class="px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-ink-200 dark:bg-dark-elevated text-ink-800 dark:text-dark-text">W3C JSON</span>
+          </div>
+          <p class="text-[14px] text-ink-700 dark:text-dark-textMuted mb-3 leading-relaxed">
+            138 tokenów w 9 grupach (color, gradient, font, spacing, radius, size, shadow, animation, z-index). Format W3C Design Tokens — importowalne do <strong>Figma Variables</strong> przez plugin <strong>Tokens Studio</strong> lub do Style Dictionary.
+          </p>
+          <div class="flex items-center gap-3 text-[11px] text-ink-700 dark:text-dark-textMuted">
+            <span class="flex items-center gap-1 mono">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              tokens.json
+            </span>
+            <span>·</span>
+            <span>~19 KB</span>
+            <span>·</span>
+            <span>Do importu w Figmie</span>
+          </div>
+        </div>
+        <svg class="w-5 h-5 text-ink-500 dark:text-dark-textDim shrink-0 mt-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+    </a>
+  </section>
+
+  <!-- How to use -->
+  <section class="mb-12 p-6 rounded-xl bg-brand-100 dark:bg-brand/5 border border-brand/20">
+    <h3 class="text-[16px] font-bold mb-3 flex items-center gap-2">
+      <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8V12M12 16H12.01"/></svg>
+      Jak to wykorzystać w Figmie
+    </h3>
+    <ol class="text-[13px] space-y-2 text-ink-800 dark:text-dark-text">
+      <li class="flex gap-3">
+        <span class="font-mono font-semibold text-brand shrink-0 min-w-[20px]">1.</span>
+        <span><strong>Zacznij od prototypu</strong> — kliknij "Ułóż jadłospis" na ekranie i przejdź wszystkie ścieżki. Zobacz jak modale i sidepanel pracują razem.</span>
+      </li>
+      <li class="flex gap-3">
+        <span class="font-mono font-semibold text-brand shrink-0 min-w-[20px]">2.</span>
+        <span><strong>Otwórz komponenty</strong> — przejrzyj listę. Każdy komponent ma anatomię i wszystkie stany obok siebie. Screenshotuj do Figmy.</span>
+      </li>
+      <li class="flex gap-3">
+        <span class="font-mono font-semibold text-brand shrink-0 min-w-[20px]">3.</span>
+        <span><strong>Zaimportuj tokens.json</strong> w Figmie przez plugin <a href="https://tokens.studio/" target="_blank" class="text-brand hover:underline font-medium">Tokens Studio</a>. Pliki są w formacie W3C — Tokens Studio rozumie je natywnie.</span>
+      </li>
+      <li class="flex gap-3">
+        <span class="font-mono font-semibold text-brand shrink-0 min-w-[20px]">4.</span>
+        <span><strong>Twórz Figma components</strong> z każdego komponentu HTML — variants/states/sizes prosto ze spec. Połącz z Figma Variables (z Tokens Studio).</span>
+      </li>
+    </ol>
+  </section>
+
+  <!-- Tip -->
+  <section class="mb-12 p-5 rounded-xl bg-ink-200/40 dark:bg-dark-surface border border-ink-200 dark:border-dark-border">
+    <div class="flex items-start gap-3">
+      <svg class="w-5 h-5 text-ink-700 dark:text-dark-textMuted shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3L14.5 9L21 10L16 14.5L17.5 21L12 17.5L6.5 21L8 14.5L3 10L9.5 9L12 3Z"/></svg>
+      <div>
+        <h4 class="text-[13px] font-semibold mb-1">Tip — przeglądaj prototyp w trybie ciemnym</h4>
+        <p class="text-[12px] text-ink-700 dark:text-dark-textMuted leading-relaxed">
+          Każdy z 3 plików ma toggle theme w prawym górnym rogu. Aplikacja Alloweat ma być spójna z mobile app w purple-tinted dark mode — warto przejrzeć obie wersje żeby zobaczyć jak tokeny się przekładają.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="pt-6 border-t border-ink-200 dark:border-dark-border text-[11px] text-ink-700 dark:text-dark-textMuted text-center">
+    Alloweat · v30 · Design handoff materials
+  </footer>
+
+</main>
+
+</body>
+</html>
