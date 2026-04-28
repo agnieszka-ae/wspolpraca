@@ -99,17 +99,47 @@ tailwind.config = {
 }
 </script>
 <style>
+  /* ====== DS TOKEN SYSTEM ====== */
+  :root {
+    --brand:         #7448D0;
+    --brand-hover:   #59379E;
+    --brand-tint:    #F5F1FE;
+    --bg:            #F7F7FB;
+    --surface:       #FFFFFF;
+    --border:        rgba(20, 20, 20, 0.10);
+    --ink:           #050505;
+    --ink-secondary: rgba(5, 5, 5, 0.55);
+    --ink-tertiary:  rgba(5, 5, 5, 0.35);
+    --success:       #16A34A;
+    --danger:        #DC2626;
+    --warning:       #D97706;
+  }
+  .dark {
+    --brand:         #9B6FE8;
+    --brand-hover:   #7448D0;
+    --brand-tint:    rgba(116, 72, 208, 0.18);
+    --bg:            #13131F;
+    --surface:       #1C1C2E;
+    --border:        rgba(255, 255, 255, 0.09);
+    --ink:           #F0F0F8;
+    --ink-secondary: rgba(240, 240, 248, 0.55);
+    --ink-tertiary:  rgba(240, 240, 248, 0.35);
+    --success:       #4ADE80;
+    --danger:        #F87171;
+    --warning:       #FCD34D;
+  }
+
   html, body {
     font-family: 'Figtree', system-ui, sans-serif;
-    background: #FAFAFB;
+    background: var(--bg);
     color: #141414;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background-color 0.2s ease-out, color 0.2s ease-out;
   }
   html.dark, html.dark body {
-    background: #0B080F;
-    color: #EDECFF;
+    background: var(--bg);
+    color: var(--ink);
   }
   html.dark *::-webkit-scrollbar-thumb { background: #3A3749; }
   html.dark *::-webkit-scrollbar-thumb:hover { background: #4D4A60; }
@@ -405,160 +435,85 @@ const AllowLogo = ({ size = 36 }) => (
 );
 
 const Sidebar = ({ mobileOpen, setMobileOpen }) => {
-  // Default state: expanded on desktop. User can collapse with button in header.
-  const [collapsed, setCollapsed] = useState(false);
-
-  // Grouped navigation — matches Figma categories
-  const groups = [
-    {
-      label: 'Gabinet',
-      items: [
-        { key: 'home', icon: 'home', label: 'Dashboard' },
-        { key: 'clients', icon: 'users', label: 'Klienci', active: true },
-        { key: 'calendar', icon: 'calendar', label: 'Terminarz' },
-        { key: 'clipboard', icon: 'clipboard', label: 'Ankiety i raporty' },
-      ]
-    },
-    {
-      label: 'Bazy',
-      items: [
-        { key: 'apple', icon: 'apple', label: 'Produkty' },
-        { key: 'doc', icon: 'doc', label: 'Przepisy' },
-        { key: 'folder', icon: 'folder', label: 'Kolekcje przepisów' },
-        { key: 'book', icon: 'book', label: 'Diety' },
-        { key: 'programs', icon: 'box', label: 'Programy żywieniowe' },
-        { key: 'cap', icon: 'cap', label: 'Materiały edukacyjne' },
-      ]
-    }
+  const navItems = [
+    { key: 'home',      icon: 'home',       label: 'Dashboard' },
+    { key: 'clients',   icon: 'users',      label: 'Klienci',   active: true },
+    { key: 'calendar',  icon: 'calendar',   label: 'Terminarz' },
+    { key: 'clipboard', icon: 'clipboard',  label: 'Ankiety i raporty' },
+    { key: 'apple',     icon: 'apple',      label: 'Produkty' },
+    { key: 'doc',       icon: 'doc',        label: 'Przepisy' },
+    { key: 'book',      icon: 'book',       label: 'Diety' },
+    { key: 'programs',  icon: 'box',        label: 'Programy żywieniowe' },
   ];
-
-  const otherItems = [
-    { key: 'news', icon: 'sparkles', label: 'Nowości i tutoriale', accent: true },
-    { key: 'bug', icon: 'warning', label: 'Zgłoś błąd' },
+  const bottomItems = [
+    { key: 'settings', icon: 'settings', label: 'Ustawienia' },
   ];
 
   return (
     <>
-      {/* Mobile overlay backdrop */}
       {mobileOpen && (
         <div
           className="md:hidden fixed inset-0 z-40 bg-deepviolet/50 backdrop-in"
           onClick={() => setMobileOpen(false)}
         />
       )}
-      <aside className={`
-        ${mobileOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0
-        ${collapsed ? 'md:w-[64px]' : 'md:w-[232px]'}
-        fixed md:relative
-        w-[280px] md:w-auto
-        h-full bg-white dark:bg-dark-surface border-r border-ink-200 dark:border-dark-border flex flex-col shrink-0 transition-all duration-200 ease-out z-50 md:z-40
-      `}>
-      {/* Header with logo + collapse toggle */}
-      <div className={`h-14 flex items-center shrink-0 border-b border-ink-200 dark:border-dark-border ${collapsed ? 'justify-center px-0' : 'justify-between px-4'}`}>
-        {collapsed ? (
-          <button
-            onClick={() => setCollapsed(false)}
-            className="group relative w-10 h-10 rounded-md flex items-center justify-center hover:bg-brand-200 dark:bg-brand/20 transition-colors"
-            aria-label="Rozwiń menu">
-            <AllowLogo size={28} />
-            {/* Expand indicator on hover */}
-            <div className="absolute -right-1 -bottom-1 w-4 h-4 rounded-full bg-white dark:bg-dark-surface border border-ink-300 dark:border-dark-borderLight flex items-center justify-center shadow-e1 opacity-0 group-hover:opacity-100 transition-opacity">
-              <Icon name="chevR" className="w-2.5 h-2.5 text-ink-700 dark:text-dark-textMuted" stroke={2.5} />
-            </div>
-          </button>
-        ) : (
-          <>
-            <div className="flex items-center gap-2">
-              <AllowLogo size={28} />
-              <span className="text-ink-900 dark:text-dark-text font-bold text-[15px] tracking-tight">alloweat</span>
-            </div>
-            <button
-              onClick={() => setCollapsed(true)}
-              className="w-7 h-7 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-600 dark:text-dark-textMuted hover:text-ink-900 dark:text-dark-text transition-colors"
-              aria-label="Zwiń menu">
-              <Icon name="chevL" className="w-4 h-4" stroke={2} />
-            </button>
-          </>
-        )}
-      </div>
+      <aside
+        style={{ width: '52px', minWidth: '52px', background: 'var(--surface)', borderRight: '1px solid var(--border)' }}
+        className={`
+          ${mobileOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0
+          fixed md:relative h-full flex flex-col shrink-0 transition-all duration-200 ease-out z-50 md:z-40
+        `}
+      >
+        {/* Logo */}
+        <div
+          style={{ height: '56px', borderBottom: '1px solid var(--border)' }}
+          className="flex items-center justify-center shrink-0"
+        >
+          <AllowLogo size={28} />
+        </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto py-3 px-2">
-        {groups.map((group, gi) => (
-          <div key={group.label} className={gi > 0 ? 'mt-5' : ''}>
-            {/* Group label — only when expanded */}
-            {!collapsed && (
-              <div className="px-3 mb-1.5">
-                <span className="text-[10px] font-semibold text-ink-600 dark:text-dark-textMuted uppercase tracking-[0.1em]">{group.label}</span>
-              </div>
-            )}
-            {/* Separator — only when collapsed */}
-            {collapsed && gi > 0 && (
-              <div className="mx-4 mb-2 h-px bg-ink-200 dark:bg-dark-elevated"></div>
-            )}
-            <div className="flex flex-col gap-0.5">
-              {group.items.map(it => (
-                <div key={it.key} className="group/item relative">
-                  <button className={`w-full h-10 rounded-md flex items-center ${collapsed ? 'justify-center px-0' : 'px-3 gap-3'} transition-all ${
-                    it.active
-                      ? 'bg-gradient-brand text-white shadow-brand-sm'
-                      : 'text-ink-700 dark:text-dark-textMuted hover:bg-brand-200 dark:bg-brand/20 hover:text-brand'
-                  }`}>
-                    <Icon name={it.icon} className="w-[18px] h-[18px] shrink-0" stroke={it.active ? 2 : 1.75} />
-                    {!collapsed && (
-                      <span className="text-[13px] font-medium whitespace-nowrap flex-1 text-left">
-                        {it.label}
-                      </span>
-                    )}
-                  </button>
-                  {/* Tooltip — only when collapsed */}
-                  {collapsed && (
-                    <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-deepviolet text-white text-[11px] font-semibold rounded-md opacity-0 group-hover/item:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-e3 z-50">
-                      {it.label}
-                      <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-deepviolet"></div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </nav>
-
-      {/* Bottom group */}
-      <div className="border-t border-ink-200 dark:border-dark-border py-2 px-2">
-        {!collapsed && (
-          <div className="px-3 mb-1.5">
-            <span className="text-[10px] font-semibold text-ink-600 dark:text-dark-textMuted uppercase tracking-[0.1em]">Inne</span>
-          </div>
-        )}
-        <div className="flex flex-col gap-0.5">
-          {otherItems.map(it => (
-            <div key={it.key} className="group/item relative">
-              <button className={`w-full h-10 rounded-md flex items-center ${collapsed ? 'justify-center px-0' : 'px-3 gap-3'} transition-all ${
-                it.accent
-                  ? 'text-brand hover:bg-brand-200 dark:bg-brand/20'
-                  : 'text-ink-700 dark:text-dark-textMuted hover:bg-ink-200 dark:hover:bg-dark-elevated hover:text-ink-900 dark:text-dark-text'
-              }`}>
-                <Icon name={it.icon} className="w-[18px] h-[18px] shrink-0" stroke={1.75} />
-                {!collapsed && (
-                  <span className="text-[13px] font-medium whitespace-nowrap flex-1 text-left">
-                    {it.label}
-                  </span>
-                )}
+        {/* Nav items */}
+        <nav className="flex-1 overflow-y-auto py-2 flex flex-col gap-0.5 items-center px-1.5">
+          {navItems.map(it => (
+            <div key={it.key} className="group/item relative w-full">
+              <button
+                style={it.active
+                  ? { background: 'var(--brand-tint)', color: 'var(--brand)', borderRadius: '8px' }
+                  : { color: 'var(--ink-secondary)', borderRadius: '8px' }
+                }
+                className={`w-full h-[40px] flex items-center justify-center transition-all ${
+                  it.active ? '' : 'hover:bg-[rgba(116,72,208,0.07)]'
+                }`}
+              >
+                <Icon name={it.icon} className="w-[18px] h-[18px] shrink-0" stroke={it.active ? 2 : 1.75} />
               </button>
-              {collapsed && (
-                <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-deepviolet text-white text-[11px] font-semibold rounded-md opacity-0 group-hover/item:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-e3 z-50">
-                  {it.label}
-                  <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-deepviolet"></div>
-                </div>
-              )}
+              <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-deepviolet text-white text-[11px] font-semibold rounded-md opacity-0 group-hover/item:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-e3 z-50">
+                {it.label}
+                <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-deepviolet"></div>
+              </div>
+            </div>
+          ))}
+        </nav>
+
+        {/* Bottom items */}
+        <div style={{ borderTop: '1px solid var(--border)' }} className="py-2 flex flex-col gap-0.5 items-center px-1.5">
+          {bottomItems.map(it => (
+            <div key={it.key} className="group/item relative w-full">
+              <button
+                style={{ color: 'var(--ink-tertiary)', borderRadius: '8px' }}
+                className="w-full h-[40px] flex items-center justify-center hover:bg-[rgba(116,72,208,0.07)] transition-all"
+              >
+                <Icon name={it.icon} className="w-[18px] h-[18px] shrink-0" stroke={1.75} />
+              </button>
+              <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-deepviolet text-white text-[11px] font-semibold rounded-md opacity-0 group-hover/item:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-e3 z-50">
+                {it.label}
+                <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-deepviolet"></div>
+              </div>
             </div>
           ))}
         </div>
-      </div>
-    </aside>
-  </>
+      </aside>
+    </>
   );
 };
 
@@ -579,7 +534,7 @@ const Topbar = ({ breadcrumb = [], onMenuClick }) => {
   const mobileTitle = breadcrumb.length > 0 ? breadcrumb[breadcrumb.length - 1] : 'Dashboard';
 
   return (
-    <header className="h-14 bg-white dark:bg-dark-surface border-b border-ink-200 dark:border-dark-border flex items-center px-3 md:px-5 gap-2 md:gap-4 shrink-0 relative z-30">
+    <header style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)' }} className="h-14 flex items-center px-3 md:px-5 gap-2 md:gap-4 shrink-0 relative z-30">
       {/* Mobile hamburger menu */}
       <button onClick={onMenuClick}
         className="md:hidden w-9 h-9 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-700 dark:text-dark-textMuted shrink-0 btn-press"
@@ -655,6 +610,16 @@ const Topbar = ({ breadcrumb = [], onMenuClick }) => {
 
       {/* Right actions */}
       <div className="ml-auto flex items-center gap-1 shrink-0">
+        {/* Dark mode toggle */}
+        <button
+          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+          style={{ borderRadius: '8px' }}
+          className="btn-press w-9 h-9 flex items-center justify-center hover:bg-ink-200 dark:hover:bg-dark-elevated text-ink-700 dark:text-dark-textMuted hover:text-ink-900 dark:text-dark-text transition-colors"
+          title={theme === 'dark' ? 'Przełącz na jasny' : 'Przełącz na ciemny'}
+        >
+          <Icon name={theme === 'dark' ? 'sun' : 'moon'} className="w-[18px] h-[18px]" stroke={1.75} />
+        </button>
+
         {/* Inbox dropdown — combined tasks/notes/messages */}
         <div className="relative">
           <button onClick={() => { setInboxOpen(!inboxOpen); setUserOpen(false); }}
