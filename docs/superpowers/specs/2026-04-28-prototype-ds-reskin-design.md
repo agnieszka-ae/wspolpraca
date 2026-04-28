@@ -157,6 +157,35 @@ Font: Figtree, self-hosted z `fonts/` (już załadowany w prototype.html). Skala
 
 ---
 
+## Proces wdrożenia — iteracyjny, ekran po ekranie
+
+Implementacja przebiega w cyklach. Każdy cykl = jeden ekran lub moduł:
+
+1. **Implementuję ekran** — stosuję DS tokens, wymieniam Sidebar/Topbar, restyluję komponenty na tym ekranie
+2. **Serwuję podgląd** — uruchamiam lokalny serwer i podaję URL do weryfikacji
+3. **Czekam na walidację** — użytkownik przegląda ekran w przeglądarce
+4. **Wspólna praca** — omawiamy uwagi, razem dopracowujemy komponenty lub wprowadzamy dodatkowe poprawki do ekranu
+5. **Zatwierdzenie** — przechodzimy do następnego ekranu
+
+### Kolejność ekranów
+
+| # | Ekran / moduł | Zakres |
+|---|---|---|
+| 1 | Shell (Sidebar + Topbar) | Struktura aplikacji, tokeny, dark mode toggle |
+| 2 | Dashboard (lista klientów) | Karty, tabela/lista, badges, search |
+| 3 | IntentScreen | Wizard krok 1 — karty wyboru |
+| 4 | SetupScreen | Wizard krok 2 — formularze, inputs |
+| 5 | RecipesScreen | Wizard krok 3 — lista przepisów, filtry, chips |
+| 6 | ProductsScreen | Wizard krok 4 — tabela produktów |
+| 7 | MealplanScreen | Wizard krok 5 — MealRow, DayTypeEditor |
+| 8 | MaterialsScreen + DoneScreen | Wizard krok 6–7 |
+| 9 | Modale | Restyling wszystkich 7 modali |
+| 10 | AddRecipesSidePanel + ShoppingListPanel | Side panele |
+
+Po każdym kroku: podgląd → walidacja → opcjonalne poprawki → następny ekran.
+
+---
+
 ## Co NIE wchodzi w zakres
 
 - Zmiana przepływów UX ani kolejności kroków wizarda
