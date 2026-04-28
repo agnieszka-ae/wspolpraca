@@ -104,6 +104,7 @@ tailwind.config = {
     --brand:         #7448D0;
     --brand-hover:   #59379E;
     --brand-tint:    #F5F1FE;
+    --brand-surface-hover: rgba(116, 72, 208, 0.07);
     --bg:            #F7F7FB;
     --surface:       #FFFFFF;
     --border:        rgba(20, 20, 20, 0.10);
@@ -118,6 +119,7 @@ tailwind.config = {
     --brand:         #9B6FE8;
     --brand-hover:   #7448D0;
     --brand-tint:    rgba(116, 72, 208, 0.18);
+    --brand-surface-hover: rgba(155, 111, 232, 0.09);
     --bg:            #13131F;
     --surface:       #1C1C2E;
     --border:        rgba(255, 255, 255, 0.09);
@@ -132,7 +134,7 @@ tailwind.config = {
   html, body {
     font-family: 'Figtree', system-ui, sans-serif;
     background: var(--bg);
-    color: #141414;
+    color: var(--ink);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background-color 0.2s ease-out, color 0.2s ease-out;
@@ -163,6 +165,11 @@ tailwind.config = {
     outline: none;
     box-shadow: 0 0 0 3px rgba(116, 72, 208, 0.3);
     border-radius: 6px;
+  }
+
+  /* Sidebar nav button hover state */
+  .sidebar-nav-btn:hover {
+    background: var(--brand-surface-hover);
   }
 
   /* === SLIDERS === */
@@ -482,7 +489,7 @@ const Sidebar = ({ mobileOpen, setMobileOpen }) => {
                   : { color: 'var(--ink-secondary)', borderRadius: '8px' }
                 }
                 className={`w-full h-[40px] flex items-center justify-center transition-all ${
-                  it.active ? '' : 'hover:bg-[rgba(116,72,208,0.07)]'
+                  it.active ? '' : 'sidebar-nav-btn'
                 }`}
               >
                 <Icon name={it.icon} className="w-[18px] h-[18px] shrink-0" stroke={it.active ? 2 : 1.75} />
@@ -501,7 +508,7 @@ const Sidebar = ({ mobileOpen, setMobileOpen }) => {
             <div key={it.key} className="group/item relative w-full">
               <button
                 style={{ color: 'var(--ink-tertiary)', borderRadius: '8px' }}
-                className="w-full h-[40px] flex items-center justify-center hover:bg-[rgba(116,72,208,0.07)] transition-all"
+                className="w-full h-[40px] flex items-center justify-center sidebar-nav-btn transition-all"
               >
                 <Icon name={it.icon} className="w-[18px] h-[18px] shrink-0" stroke={1.75} />
               </button>
