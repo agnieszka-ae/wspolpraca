@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(cp \"/Users/krzysztof/.claude/projects/-Users-krzysztof-Documents-GitHub-wspolpraca/7d3734ac-51ae-45da-bd24-165f1a695e73/tool-results/webfetch-1777387934960-853adl.bin\" /tmp/design.gz)",
+      "Read(//tmp/**)",
+      "Bash(gunzip -c /tmp/design.gz)",
+      "Bash(tar -tf /tmp/design_extracted)",
+      "Bash(mkdir -p /tmp/design_files)",
+      "Bash(tar -xf /tmp/design_extracted -C /tmp/design_files)",
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "Bash(afplay /System/Library/Sounds/Glass.aiff)",
+      "Bash(afplay /System/Library/Sounds/Funk.aiff)",
+      "Read(//private/tmp/design_files/**)",
+      "Bash(python3 -m http.server 8080)"
+    ]
+  }
+}

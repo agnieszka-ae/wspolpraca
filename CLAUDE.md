@@ -13,7 +13,18 @@ Static design handoff package for **Alloweat** — specifically the meal plan au
 | `components.html` | Component library — 27 components in 4 groups with specs and state snapshots |
 | `tokens.json` | W3C Design Tokens (CG draft) — importable to Figma Variables / Tokens Studio / Style Dictionary |
 
-No build step, no package manager, no server. Open files directly in a browser.
+No build step, no package manager. Most files open directly in a browser, but `ui_kits/app/index.html` loads JSX components via `<script src>` which requires a local HTTP server (browsers block cross-origin file reads for `file://` URLs).
+
+## Running the UI Kit prototype
+
+```bash
+# from the repo root
+python3 -m http.server 8080
+```
+
+Then open: `http://localhost:8080/ui_kits/app/index.html`
+
+The prototype loads React 18 + Babel Standalone from unpkg CDN — internet access is required on first load (resources are cached after that). Component files loaded: `Sidebar.jsx`, `Topbar.jsx`, `Dashboard.jsx`, `Finance.jsx`, `DataServices.jsx`. Fonts are served from `fonts/` at the repo root via relative path `../../fonts/`.
 
 ## Tech stack
 
