@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+@font-face { font-family: 'Figtree'; src: url('../fonts/Figtree-Regular.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Figtree'; src: url('../fonts/Figtree-Medium.ttf') format('truetype'); font-weight: 500; }
+@font-face { font-family: 'Figtree'; src: url('../fonts/Figtree-SemiBold.ttf') format('truetype'); font-weight: 600; }
+</style>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Figtree', sans-serif; background: #F7F7FB; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+  .label { font-size: 11px; font-weight: 600; color: rgba(5,5,5,0.4); text-transform: uppercase; letter-spacing: 0.05em; }
+  .input-wrap { display: flex; flex-direction: column; gap: 4px; }
+  .input-label { font-size: 13px; font-weight: 500; color: #050505; }
+  input { width: 100%; height: 36px; border: 1px solid rgba(20,20,20,0.12); border-radius: 8px; padding: 0 12px; font-family: 'Figtree', sans-serif; font-size: 14px; color: #050505; background: #fff; outline: none; transition: border-color 150ms; }
+  input::placeholder { color: rgba(5,5,5,0.35); }
+  input:focus { border-color: #7448D0; box-shadow: 0 0 0 3px rgba(116,72,208,0.12); }
+  input.error { border-color: #DC2626; }
+  input.error:focus { box-shadow: 0 0 0 3px rgba(220,38,38,0.12); }
+  .hint { font-size: 12px; color: rgba(5,5,5,0.45); }
+  .error-msg { font-size: 12px; color: #DC2626; }
+  .search-wrap { position: relative; }
+  .search-wrap .icon-left { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+  .search-wrap input { padding-left: 34px; }
+  .row { display: flex; gap: 8px; }
+  /* Custom select — equal padding, custom chevron */
+  .select-wrap { position: relative; width: 100%; }
+  .select-wrap select { width: 100%; height: 36px; border: 1px solid rgba(20,20,20,0.12); border-radius: 8px; padding: 0 36px 0 12px; font-family: 'Figtree', sans-serif; font-size: 14px; color: #050505; background: #fff; outline: none; appearance: none; -webkit-appearance: none; cursor: pointer; transition: border-color 150ms; }
+  .select-wrap select:focus { border-color: #7448D0; box-shadow: 0 0 0 3px rgba(116,72,208,0.12); }
+  .select-wrap .chevron { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none; color: rgba(5,5,5,0.45); }
+</style>
+</head>
+<body>
+<p class="label">Inputs</p>
+<div class="input-wrap">
+  <label class="input-label">Nazwa firmy</label>
+  <input type="text" placeholder="np. Alloweat Sp. z o.o.">
+  <span class="hint">Podaj pełną nazwę prawną firmy</span>
+</div>
+<div class="input-wrap">
+  <label class="input-label">Email</label>
+  <input type="email" value="anna.kowalska@firma.pl">
+</div>
+<div class="input-wrap">
+  <label class="input-label">Kwota (błąd)</label>
+  <input type="text" class="error" value="abc">
+  <span class="error-msg">Podaj prawidłową kwotę</span>
+</div>
+<div class="search-wrap">
+  <svg class="icon-left" width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#727272" stroke-width="1.4"/><path d="M10 10L13 13" stroke="#727272" stroke-width="1.4" stroke-linecap="round"/></svg>
+  <input type="search" placeholder="Szukaj...">
+</div>
+<div class="input-wrap">
+  <label class="input-label">Kategoria</label>
+  <div class="select-wrap">
+    <select>
+      <option>Posiłki pracownicze</option>
+      <option>Catering</option>
+      <option>Restauracje</option>
+    </select>
+    <svg class="chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+</div>
+</body>
+</html>

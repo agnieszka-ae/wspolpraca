@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+@font-face { font-family: 'Figtree'; src: url('../fonts/Figtree-Regular.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Figtree'; src: url('../fonts/Figtree-SemiBold.ttf') format('truetype'); font-weight: 600; }
+@font-face { font-family: 'Figtree'; src: url('../fonts/Figtree-Bold.ttf') format('truetype'); font-weight: 700; }
+</style>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Figtree', sans-serif; background: #F7F7FB; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .label { font-size: 11px; font-weight: 600; color: #4A4A5A; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom:2px; }
+  .card { background: #fff; border: 1px solid rgba(20,20,20,0.10); border-radius: 12px; padding: 16px 20px; }
+  .card-title { font-size: 13px; font-weight: 600; color: #2D2D3A; margin-bottom: 2px; }
+  .card-value { font-size: 22px; font-weight: 700; color: #050505; }
+  .card-delta { font-size: 12px; font-weight: 500; color: #16A34A; margin-top: 2px; }
+  .row { display: flex; gap: 8px; }
+  .badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 9px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+  .badge-purple { background: #F5F1FE; color: #7448D0; }
+  .badge-green  { background: #F0FDF4; color: #16A34A; }
+  .badge-red    { background: #FEF2F2; color: #DC2626; }
+  .badge-gray   { background: rgba(20,20,20,0.06); color: #2D2D3A; }
+  .badge-orange { background: #FFFBEB; color: #92400E; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink:0; }
+</style>
+</head>
+<body>
+<p class="label">Stat Cards</p>
+<div class="row">
+  <div class="card" style="flex:1">
+    <div class="card-title">Aktywni pracownicy</div>
+    <div class="card-value">1 248</div>
+    <div class="card-delta">↑ +12% vs poprzedni miesiąc</div>
+  </div>
+  <div class="card" style="flex:1">
+    <div class="card-title">Budżet miesięczny</div>
+    <div class="card-value">84 320 zł</div>
+    <div class="card-delta" style="color:#DC2626">↓ −3% vs poprzedni miesiąc</div>
+  </div>
+</div>
+<p class="label" style="margin-top:2px">Badges</p>
+<div class="row" style="flex-wrap:wrap; gap:6px">
+  <span class="badge badge-purple"><span class="dot" style="background:#7448D0"></span>Aktywny</span>
+  <span class="badge badge-green"><span class="dot" style="background:#16A34A"></span>Opłacony</span>
+  <span class="badge badge-red"><span class="dot" style="background:#DC2626"></span>Odrzucony</span>
+  <span class="badge badge-orange"><span class="dot" style="background:#D97706"></span>Oczekujący</span>
+  <span class="badge badge-gray">Archiwum</span>
+</div>
+</body>
+</html>

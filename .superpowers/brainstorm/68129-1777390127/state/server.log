@@ -1,0 +1,7 @@
+{"type":"server-started","port":59676,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:59676","screen_dir":"/Users/krzysztof/Documents/GitHub/wspolpraca/.superpowers/brainstorm/68129-1777390127/content","state_dir":"/Users/krzysztof/Documents/GitHub/wspolpraca/.superpowers/brainstorm/68129-1777390127/state"}
+{"type":"screen-added","file":"/Users/krzysztof/Documents/GitHub/wspolpraca/.superpowers/brainstorm/68129-1777390127/content/question-01.html"}
+{"type":"screen-added","file":"/Users/krzysztof/Documents/GitHub/wspolpraca/.superpowers/brainstorm/68129-1777390127/content/question-02.html"}
+{"type":"screen-added","file":"/Users/krzysztof/Documents/GitHub/wspolpraca/.superpowers/brainstorm/68129-1777390127/content/question-03.html"}
+{"type":"screen-added","file":"/Users/krzysztof/Documents/GitHub/wspolpraca/.superpowers/brainstorm/68129-1777390127/content/approaches.html"}
+{"type":"screen-added","file":"/Users/krzysztof/Documents/GitHub/wspolpraca/.superpowers/brainstorm/68129-1777390127/content/design.html"}
+{"type":"server-stopped","reason":"idle timeout"}

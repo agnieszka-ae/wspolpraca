@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+@font-face { font-family: 'Figtree'; src: url('../fonts/Figtree-Regular.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Figtree'; src: url('../fonts/Figtree-SemiBold.ttf') format('truetype'); font-weight: 600; }
+</style>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Figtree', sans-serif; background: #F7F7FB; padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+  .label { font-size: 11px; font-weight: 600; color: rgba(5,5,5,0.4); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+  .logo-row { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .logo-on-white { background: #fff; border: 1px solid rgba(20,20,20,0.08); border-radius: 10px; padding: 14px 20px; display: flex; align-items: center; }
+  .logo-on-dark { background: #2D1D51; border-radius: 10px; padding: 14px 20px; display: flex; align-items: center; }
+  .logo-on-brand { background: #7448D0; border-radius: 10px; padding: 14px 20px; display: flex; align-items: center; }
+  .icon-row { display: flex; gap: 12px; }
+  .icon-wrap { background: #fff; border: 1px solid rgba(20,20,20,0.08); border-radius: 10px; padding: 12px; display: flex; align-items: center; }
+  .icon-wrap-dark { background: #2D1D51; border-radius: 10px; padding: 12px; display: flex; align-items: center; }
+</style>
+</head>
+<body>
+<p class="label">Wordmark</p>
+<div class="logo-row">
+  <div class="logo-on-white">
+    <img src="../assets/logo.svg" height="22" alt="alloweat logo">
+  </div>
+  <div class="logo-on-dark">
+    <img src="../assets/logo.svg" height="22" alt="alloweat logo" style="filter: brightness(0) invert(1)">
+  </div>
+  <div class="logo-on-brand">
+    <img src="../assets/logo.svg" height="22" alt="alloweat logo" style="filter: brightness(0) invert(1)">
+  </div>
+</div>
+<p class="label">Logomark / Icon</p>
+<div class="icon-row">
+  <div class="icon-wrap">
+    <img src="../assets/logo-icon.svg" height="28" alt="alloweat icon">
+  </div>
+  <div class="icon-wrap-dark">
+    <img src="../assets/logo-icon.svg" height="28" alt="alloweat icon" style="filter: brightness(0) invert(1)">
+  </div>
+</div>
+</body>
+</html>

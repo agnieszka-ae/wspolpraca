@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+@font-face { font-family: 'Figtree'; src: url('../fonts/Figtree-Regular.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Figtree'; src: url('../fonts/Figtree-SemiBold.ttf') format('truetype'); font-weight: 600; }
+</style>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Figtree', sans-serif; background: #F7F7FB; padding: 20px; }
+  .section-label { font-size: 11px; font-weight: 600; color: rgba(5,5,5,0.4); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+  .spacing-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .bar { background: #7448D0; border-radius: 3px; height: 14px; opacity: 0.8; }
+  .spacing-meta { font-size: 12px; font-weight: 500; color: rgba(5,5,5,0.5); width: 120px; flex-shrink:0; }
+  .divider { height: 1px; background: rgba(20,20,20,0.08); margin: 14px 0; }
+  .radii { display: flex; gap: 8px; flex-wrap: wrap; }
+  .radius-item { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+  .radius-box { width: 40px; height: 40px; background: #7448D0; opacity: 0.15; border: 2px solid #7448D0; }
+  .radius-label { font-size: 11px; font-weight: 500; color: rgba(5,5,5,0.5); }
+</style>
+</head>
+<body>
+<p class="section-label">Spacing Scale (4px base)</p>
+<div class="spacing-row"><div class="spacing-meta">--space-1 · 4px</div><div class="bar" style="width:4px"></div></div>
+<div class="spacing-row"><div class="spacing-meta">--space-2 · 8px</div><div class="bar" style="width:8px"></div></div>
+<div class="spacing-row"><div class="spacing-meta">--space-3 · 12px</div><div class="bar" style="width:12px"></div></div>
+<div class="spacing-row"><div class="spacing-meta">--space-4 · 16px</div><div class="bar" style="width:16px"></div></div>
+<div class="spacing-row"><div class="spacing-meta">--space-5 · 20px</div><div class="bar" style="width:20px"></div></div>
+<div class="spacing-row"><div class="spacing-meta">--space-6 · 24px</div><div class="bar" style="width:24px"></div></div>
+<div class="spacing-row"><div class="spacing-meta">--space-8 · 32px</div><div class="bar" style="width:32px"></div></div>
+<div class="spacing-row"><div class="spacing-meta">--space-10 · 40px</div><div class="bar" style="width:40px"></div></div>
+<div class="spacing-row"><div class="spacing-meta">--space-16 · 64px</div><div class="bar" style="width:64px"></div></div>
+<div class="divider"></div>
+<p class="section-label">Border Radius</p>
+<div class="radii">
+  <div class="radius-item"><div class="radius-box" style="border-radius:4px"></div><div class="radius-label">4px sm</div></div>
+  <div class="radius-item"><div class="radius-box" style="border-radius:8px"></div><div class="radius-label">8px md</div></div>
+  <div class="radius-item"><div class="radius-box" style="border-radius:12px"></div><div class="radius-label">12px lg</div></div>
+  <div class="radius-item"><div class="radius-box" style="border-radius:16px"></div><div class="radius-label">16px xl</div></div>
+  <div class="radius-item"><div class="radius-box" style="border-radius:20px"></div><div class="radius-label">20px 2xl</div></div>
+  <div class="radius-item"><div class="radius-box" style="border-radius:9999px"></div><div class="radius-label">full</div></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+@font-face { font-family: 'Figtree'; src: url('../fonts/Figtree-Regular.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Figtree'; src: url('../fonts/Figtree-SemiBold.ttf') format('truetype'); font-weight: 600; }
+@font-face { font-family: 'Figtree'; src: url('../fonts/Figtree-Bold.ttf') format('truetype'); font-weight: 700; }
+</style>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Figtree', sans-serif; background: #F7F7FB; padding: 20px; }
+  .row { display: flex; gap: 8px; margin-bottom: 8px; }
+  .swatch { flex: 1; height: 56px; border-radius: 8px; display: flex; align-items: flex-end; padding: 6px 8px; }
+  .swatch span { font-size: 11px; font-weight: 600; }
+  .label { font-size: 11px; font-weight: 600; color: rgba(5,5,5,0.45); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+</style>
+</head>
+<body>
+<p class="label">Brand Purple</p>
+<div class="row">
+  <div class="swatch" style="background:#F5F1FE"><span style="color:#7448D0">50</span></div>
+  <div class="swatch" style="background:#EBE3FD"><span style="color:#7448D0">100</span></div>
+  <div class="swatch" style="background:#D5C5FB"><span style="color:#7448D0">200</span></div>
+  <div class="swatch" style="background:#B99AF6"><span style="color:#fff">300</span></div>
+  <div class="swatch" style="background:#9A6EEF"><span style="color:#fff">400</span></div>
+  <div class="swatch" style="background:#7448D0; outline: 3px solid #2D1D51; outline-offset:2px; border-radius:8px"><span style="color:#fff">500 ★</span></div>
+  <div class="swatch" style="background:#59379E"><span style="color:#fff">600</span></div>
+  <div class="swatch" style="background:#442B7A"><span style="color:#fff">700</span></div>
+  <div class="swatch" style="background:#2D1D51"><span style="color:#fff">800</span></div>
+  <div class="swatch" style="background:#1A1030"><span style="color:#fff">900</span></div>
+</div>
+<p class="label" style="margin-top:12px">Key Brand Values</p>
+<div class="row">
+  <div style="flex:1;background:#7448D0;border-radius:10px;padding:14px 16px">
+    <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.6);margin-bottom:2px">Primary</div>
+    <div style="font-size:15px;font-weight:700;color:#fff">#7448D0</div>
+  </div>
+  <div style="flex:1;background:#2D1D51;border-radius:10px;padding:14px 16px">
+    <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.5);margin-bottom:2px">Deep / Wordmark</div>
+    <div style="font-size:15px;font-weight:700;color:#fff">#2D1D51</div>
+  </div>
+  <div style="flex:1;background:#F5F1FE;border-radius:10px;padding:14px 16px;border:1px solid rgba(116,72,208,0.15)">
+    <div style="font-size:11px;font-weight:600;color:#7448D0;margin-bottom:2px">Tint / Active BG</div>
+    <div style="font-size:15px;font-weight:700;color:#2D1D51">#F5F1FE</div>
+  </div>
+</div>
+</body>
+</html>
