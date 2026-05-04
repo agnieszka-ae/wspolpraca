@@ -99,17 +99,49 @@ tailwind.config = {
 }
 </script>
 <style>
+  /* ====== DS TOKEN SYSTEM ====== */
+  :root {
+    --brand:         #7448D0;
+    --brand-hover:   #59379E;
+    --brand-tint:    #F5F1FE;
+    --brand-surface-hover: rgba(116, 72, 208, 0.07);
+    --bg:            #F7F7FB;
+    --surface:       #FFFFFF;
+    --border:        rgba(20, 20, 20, 0.10);
+    --ink:           #050505;
+    --ink-secondary: rgba(5, 5, 5, 0.55);
+    --ink-tertiary:  rgba(5, 5, 5, 0.35);
+    --success:       #16A34A;
+    --danger:        #DC2626;
+    --warning:       #D97706;
+  }
+  .dark {
+    --brand:         #9B6FE8;
+    --brand-hover:   #7448D0;
+    --brand-tint:    rgba(116, 72, 208, 0.18);
+    --brand-surface-hover: rgba(155, 111, 232, 0.09);
+    --bg:            #13131F;
+    --surface:       #1C1C2E;
+    --border:        rgba(255, 255, 255, 0.09);
+    --ink:           #F0F0F8;
+    --ink-secondary: rgba(240, 240, 248, 0.55);
+    --ink-tertiary:  rgba(240, 240, 248, 0.35);
+    --success:       #4ADE80;
+    --danger:        #F87171;
+    --warning:       #FCD34D;
+  }
+
   html, body {
     font-family: 'Figtree', system-ui, sans-serif;
-    background: #FAFAFB;
-    color: #141414;
+    background: var(--bg);
+    color: var(--ink);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background-color 0.2s ease-out, color 0.2s ease-out;
   }
   html.dark, html.dark body {
-    background: #0B080F;
-    color: #EDECFF;
+    background: var(--bg);
+    color: var(--ink);
   }
   html.dark *::-webkit-scrollbar-thumb { background: #3A3749; }
   html.dark *::-webkit-scrollbar-thumb:hover { background: #4D4A60; }
@@ -133,6 +165,11 @@ tailwind.config = {
     outline: none;
     box-shadow: 0 0 0 3px rgba(116, 72, 208, 0.3);
     border-radius: 6px;
+  }
+
+  /* Sidebar nav button hover state */
+  .sidebar-nav-btn:hover {
+    background: var(--brand-surface-hover);
   }
 
   /* === SLIDERS === */
@@ -405,160 +442,85 @@ const AllowLogo = ({ size = 36 }) => (
 );
 
 const Sidebar = ({ mobileOpen, setMobileOpen }) => {
-  // Default state: expanded on desktop. User can collapse with button in header.
-  const [collapsed, setCollapsed] = useState(false);
-
-  // Grouped navigation — matches Figma categories
-  const groups = [
-    {
-      label: 'Gabinet',
-      items: [
-        { key: 'home', icon: 'home', label: 'Dashboard' },
-        { key: 'clients', icon: 'users', label: 'Klienci', active: true },
-        { key: 'calendar', icon: 'calendar', label: 'Terminarz' },
-        { key: 'clipboard', icon: 'clipboard', label: 'Ankiety i raporty' },
-      ]
-    },
-    {
-      label: 'Bazy',
-      items: [
-        { key: 'apple', icon: 'apple', label: 'Produkty' },
-        { key: 'doc', icon: 'doc', label: 'Przepisy' },
-        { key: 'folder', icon: 'folder', label: 'Kolekcje przepisów' },
-        { key: 'book', icon: 'book', label: 'Diety' },
-        { key: 'programs', icon: 'box', label: 'Programy żywieniowe' },
-        { key: 'cap', icon: 'cap', label: 'Materiały edukacyjne' },
-      ]
-    }
+  const navItems = [
+    { key: 'home',      icon: 'home',       label: 'Dashboard' },
+    { key: 'clients',   icon: 'users',      label: 'Klienci',   active: true },
+    { key: 'calendar',  icon: 'calendar',   label: 'Terminarz' },
+    { key: 'clipboard', icon: 'clipboard',  label: 'Ankiety i raporty' },
+    { key: 'apple',     icon: 'apple',      label: 'Produkty' },
+    { key: 'doc',       icon: 'doc',        label: 'Przepisy' },
+    { key: 'book',      icon: 'book',       label: 'Diety' },
+    { key: 'programs',  icon: 'box',        label: 'Programy żywieniowe' },
   ];
-
-  const otherItems = [
-    { key: 'news', icon: 'sparkles', label: 'Nowości i tutoriale', accent: true },
-    { key: 'bug', icon: 'warning', label: 'Zgłoś błąd' },
+  const bottomItems = [
+    { key: 'settings', icon: 'settings', label: 'Ustawienia' },
   ];
 
   return (
     <>
-      {/* Mobile overlay backdrop */}
       {mobileOpen && (
         <div
           className="md:hidden fixed inset-0 z-40 bg-deepviolet/50 backdrop-in"
           onClick={() => setMobileOpen(false)}
         />
       )}
-      <aside className={`
-        ${mobileOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0
-        ${collapsed ? 'md:w-[64px]' : 'md:w-[232px]'}
-        fixed md:relative
-        w-[280px] md:w-auto
-        h-full bg-white dark:bg-dark-surface border-r border-ink-200 dark:border-dark-border flex flex-col shrink-0 transition-all duration-200 ease-out z-50 md:z-40
-      `}>
-      {/* Header with logo + collapse toggle */}
-      <div className={`h-14 flex items-center shrink-0 border-b border-ink-200 dark:border-dark-border ${collapsed ? 'justify-center px-0' : 'justify-between px-4'}`}>
-        {collapsed ? (
-          <button
-            onClick={() => setCollapsed(false)}
-            className="group relative w-10 h-10 rounded-md flex items-center justify-center hover:bg-brand-200 dark:bg-brand/20 transition-colors"
-            aria-label="Rozwiń menu">
-            <AllowLogo size={28} />
-            {/* Expand indicator on hover */}
-            <div className="absolute -right-1 -bottom-1 w-4 h-4 rounded-full bg-white dark:bg-dark-surface border border-ink-300 dark:border-dark-borderLight flex items-center justify-center shadow-e1 opacity-0 group-hover:opacity-100 transition-opacity">
-              <Icon name="chevR" className="w-2.5 h-2.5 text-ink-700 dark:text-dark-textMuted" stroke={2.5} />
-            </div>
-          </button>
-        ) : (
-          <>
-            <div className="flex items-center gap-2">
-              <AllowLogo size={28} />
-              <span className="text-ink-900 dark:text-dark-text font-bold text-[15px] tracking-tight">alloweat</span>
-            </div>
-            <button
-              onClick={() => setCollapsed(true)}
-              className="w-7 h-7 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-600 dark:text-dark-textMuted hover:text-ink-900 dark:text-dark-text transition-colors"
-              aria-label="Zwiń menu">
-              <Icon name="chevL" className="w-4 h-4" stroke={2} />
-            </button>
-          </>
-        )}
-      </div>
+      <aside
+        style={{ width: '52px', minWidth: '52px', background: 'var(--surface)', borderRight: '1px solid var(--border)' }}
+        className={`
+          ${mobileOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0
+          fixed md:relative h-full flex flex-col shrink-0 transition-all duration-200 ease-out z-50 md:z-40
+        `}
+      >
+        {/* Logo */}
+        <div
+          style={{ height: '56px', borderBottom: '1px solid var(--border)' }}
+          className="flex items-center justify-center shrink-0"
+        >
+          <AllowLogo size={28} />
+        </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto py-3 px-2">
-        {groups.map((group, gi) => (
-          <div key={group.label} className={gi > 0 ? 'mt-5' : ''}>
-            {/* Group label — only when expanded */}
-            {!collapsed && (
-              <div className="px-3 mb-1.5">
-                <span className="text-[10px] font-semibold text-ink-600 dark:text-dark-textMuted uppercase tracking-[0.1em]">{group.label}</span>
-              </div>
-            )}
-            {/* Separator — only when collapsed */}
-            {collapsed && gi > 0 && (
-              <div className="mx-4 mb-2 h-px bg-ink-200 dark:bg-dark-elevated"></div>
-            )}
-            <div className="flex flex-col gap-0.5">
-              {group.items.map(it => (
-                <div key={it.key} className="group/item relative">
-                  <button className={`w-full h-10 rounded-md flex items-center ${collapsed ? 'justify-center px-0' : 'px-3 gap-3'} transition-all ${
-                    it.active
-                      ? 'bg-gradient-brand text-white shadow-brand-sm'
-                      : 'text-ink-700 dark:text-dark-textMuted hover:bg-brand-200 dark:bg-brand/20 hover:text-brand'
-                  }`}>
-                    <Icon name={it.icon} className="w-[18px] h-[18px] shrink-0" stroke={it.active ? 2 : 1.75} />
-                    {!collapsed && (
-                      <span className="text-[13px] font-medium whitespace-nowrap flex-1 text-left">
-                        {it.label}
-                      </span>
-                    )}
-                  </button>
-                  {/* Tooltip — only when collapsed */}
-                  {collapsed && (
-                    <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-deepviolet text-white text-[11px] font-semibold rounded-md opacity-0 group-hover/item:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-e3 z-50">
-                      {it.label}
-                      <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-deepviolet"></div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </nav>
-
-      {/* Bottom group */}
-      <div className="border-t border-ink-200 dark:border-dark-border py-2 px-2">
-        {!collapsed && (
-          <div className="px-3 mb-1.5">
-            <span className="text-[10px] font-semibold text-ink-600 dark:text-dark-textMuted uppercase tracking-[0.1em]">Inne</span>
-          </div>
-        )}
-        <div className="flex flex-col gap-0.5">
-          {otherItems.map(it => (
-            <div key={it.key} className="group/item relative">
-              <button className={`w-full h-10 rounded-md flex items-center ${collapsed ? 'justify-center px-0' : 'px-3 gap-3'} transition-all ${
-                it.accent
-                  ? 'text-brand hover:bg-brand-200 dark:bg-brand/20'
-                  : 'text-ink-700 dark:text-dark-textMuted hover:bg-ink-200 dark:hover:bg-dark-elevated hover:text-ink-900 dark:text-dark-text'
-              }`}>
-                <Icon name={it.icon} className="w-[18px] h-[18px] shrink-0" stroke={1.75} />
-                {!collapsed && (
-                  <span className="text-[13px] font-medium whitespace-nowrap flex-1 text-left">
-                    {it.label}
-                  </span>
-                )}
+        {/* Nav items */}
+        <nav className="flex-1 overflow-y-auto py-2 flex flex-col gap-0.5 items-center px-1.5">
+          {navItems.map(it => (
+            <div key={it.key} className="group/item relative w-full">
+              <button
+                style={it.active
+                  ? { background: 'var(--brand-tint)', color: 'var(--brand)', borderRadius: '8px' }
+                  : { color: 'var(--ink-secondary)', borderRadius: '8px' }
+                }
+                className={`w-full h-[40px] flex items-center justify-center transition-all ${
+                  it.active ? '' : 'sidebar-nav-btn'
+                }`}
+              >
+                <Icon name={it.icon} className="w-[18px] h-[18px] shrink-0" stroke={it.active ? 2 : 1.75} />
               </button>
-              {collapsed && (
-                <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-deepviolet text-white text-[11px] font-semibold rounded-md opacity-0 group-hover/item:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-e3 z-50">
-                  {it.label}
-                  <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-deepviolet"></div>
-                </div>
-              )}
+              <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-deepviolet text-white text-[11px] font-semibold rounded-md opacity-0 group-hover/item:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-e3 z-50">
+                {it.label}
+                <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-deepviolet"></div>
+              </div>
+            </div>
+          ))}
+        </nav>
+
+        {/* Bottom items */}
+        <div style={{ borderTop: '1px solid var(--border)' }} className="py-2 flex flex-col gap-0.5 items-center px-1.5">
+          {bottomItems.map(it => (
+            <div key={it.key} className="group/item relative w-full">
+              <button
+                style={{ color: 'var(--ink-tertiary)', borderRadius: '8px' }}
+                className="w-full h-[40px] flex items-center justify-center sidebar-nav-btn transition-all"
+              >
+                <Icon name={it.icon} className="w-[18px] h-[18px] shrink-0" stroke={1.75} />
+              </button>
+              <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-deepviolet text-white text-[11px] font-semibold rounded-md opacity-0 group-hover/item:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-e3 z-50">
+                {it.label}
+                <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-deepviolet"></div>
+              </div>
             </div>
           ))}
         </div>
-      </div>
-    </aside>
-  </>
+      </aside>
+    </>
   );
 };
 
@@ -574,94 +536,62 @@ const Topbar = ({ breadcrumb = [], onMenuClick }) => {
     { type: 'chat', label: '3 nowe wiadomości od klientów', meta: 'Dzisiaj', icon: 'chat', unread: true },
   ];
   const inboxBadgeCount = inboxItems.filter(i => i.unread).length;
+  const notifBadgeCount = 6;
 
-  // On mobile: show truncated breadcrumb (last 2 items) or just title
-  const mobileTitle = breadcrumb.length > 0 ? breadcrumb[breadcrumb.length - 1] : 'Dashboard';
+  const pageTitle = breadcrumb.length > 0 ? breadcrumb[breadcrumb.length - 1] : 'Dashboard';
+
+  const iconBtnCls = `btn-press w-10 h-10 rounded-full flex items-center justify-center transition-colors relative shrink-0 bg-white dark:bg-dark-elevated text-ink-700 dark:text-dark-textMuted hover:bg-ink-200 dark:hover:bg-dark-elevated/70`;
+  const iconBtnStyle = { border: '1px solid rgba(89,55,158,0.10)' };
 
   return (
-    <header className="h-14 bg-white dark:bg-dark-surface border-b border-ink-200 dark:border-dark-border flex items-center px-3 md:px-5 gap-2 md:gap-4 shrink-0 relative z-30">
-      {/* Mobile hamburger menu */}
-      <button onClick={onMenuClick}
-        className="md:hidden w-9 h-9 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-700 dark:text-dark-textMuted shrink-0 btn-press"
-        aria-label="Otwórz menu">
-        <Icon name="menu" className="w-5 h-5" stroke={2} />
-      </button>
-
-      {/* Breadcrumb — desktop only */}
-      <div className="hidden md:flex items-center gap-1.5 min-w-0 flex-1 max-w-[60%]">
-        {breadcrumb.length > 0 ? (
-          breadcrumb.map((crumb, i) => (
-            <Fragment key={i}>
-              {i > 0 && <Icon name="chevR" className="w-3.5 h-3.5 text-ink-500 dark:text-dark-textDim shrink-0" stroke={2} />}
-              <button className={`text-[13px] font-medium truncate transition-colors ${
-                i === breadcrumb.length - 1
-                  ? 'text-ink-900 dark:text-dark-text'
-                  : 'text-ink-600 dark:text-dark-textMuted hover:text-brand'
-              }`}>
-                {crumb}
-              </button>
-            </Fragment>
-          ))
-        ) : (
-          <div className="text-[13px] font-medium text-ink-900 dark:text-dark-text">Dashboard</div>
-        )}
+    <header
+      className="h-14 flex items-center px-6 justify-between shrink-0 relative z-30 bg-white dark:bg-dark-surface"
+      style={{ borderBottom: '1px solid rgba(89,55,158,0.10)' }}
+    >
+      {/* Left: mobile hamburger + page title */}
+      <div className="flex items-center gap-3 flex-1 min-w-0">
+        <button onClick={onMenuClick}
+          className="md:hidden w-9 h-9 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-700 dark:text-dark-textMuted shrink-0 btn-press"
+          aria-label="Otwórz menu">
+          <Icon name="menu" className="w-5 h-5" stroke={2} />
+        </button>
+        <div className="text-[18px] font-bold text-ink-900 dark:text-dark-text truncate">{pageTitle}</div>
       </div>
 
-      {/* Mobile title */}
-      <div className="md:hidden flex-1 min-w-0">
-        <div className="text-[14px] font-semibold text-ink-900 dark:text-dark-text truncate">{mobileTitle}</div>
+      {/* Center: search bar */}
+      <div className="hidden md:flex items-center gap-2 w-[400px] shrink-0 h-10 px-2 rounded-lg bg-white dark:bg-dark-elevated focus-within:ring-2 focus-within:ring-brand/20 transition-shadow"
+        style={{ border: '1px solid rgba(89,55,158,0.10)' }}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{flexShrink:0}}>
+          <circle cx="10.5" cy="10.5" r="6" stroke="#727272" strokeWidth="1.5"/>
+          <path d="M15.5 15.5L19 19" stroke="#727272" strokeWidth="1.5" strokeLinecap="round"/>
+        </svg>
+        <input type="text" placeholder="Szukaj klientów (imię, nazwisko, adres email)"
+          className="flex-1 bg-transparent text-[14px] text-ink-900 dark:text-dark-text placeholder-ink-500 dark:placeholder-dark-textDim outline-none" />
       </div>
 
-      {/* Search — desktop: inline, mobile: icon button that expands */}
-      <div className="hidden md:block w-[320px] shrink-0">
-        <div className="relative">
-          <Icon name="search" className="w-4 h-4 text-ink-500 dark:text-dark-textDim absolute left-3 top-1/2 -translate-y-1/2" stroke={2} />
-          <input type="text" placeholder="Szukaj klientów..."
-            className="w-full h-9 pl-9 pr-14 bg-ink-200 dark:bg-dark-elevated hover:bg-ink-300 dark:hover:bg-dark-elevated/60 focus:bg-white dark:bg-dark-surface rounded-md text-[13px] text-ink-700 dark:text-dark-textMuted placeholder-ink-500 dark:placeholder-dark-textDim focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand transition-all" />
-          <kbd className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-medium text-ink-600 dark:text-dark-textMuted bg-white dark:bg-dark-surface border border-ink-300 dark:border-dark-borderLight rounded px-1.5 py-0.5">⌘K</kbd>
-        </div>
-      </div>
-      {/* Mobile search icon */}
-      <button onClick={() => setMobileSearchOpen(true)}
-        className="md:hidden w-9 h-9 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-700 dark:text-dark-textMuted shrink-0 btn-press">
-        <Icon name="search" className="w-[18px] h-[18px]" stroke={1.75} />
-      </button>
-      {/* Mobile search fullscreen overlay */}
-      {mobileSearchOpen && (
-        <div className="md:hidden fixed inset-0 z-50 bg-white dark:bg-dark-surface fade-in flex flex-col">
-          <div className="h-14 flex items-center px-3 gap-2 border-b border-ink-200 dark:border-dark-border">
-            <button onClick={() => setMobileSearchOpen(false)} className="w-9 h-9 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-700 dark:text-dark-textMuted btn-press">
-              <Icon name="arrL" className="w-5 h-5" />
-            </button>
-            <div className="relative flex-1">
-              <Icon name="search" className="w-4 h-4 text-ink-500 dark:text-dark-textDim absolute left-3 top-1/2 -translate-y-1/2" stroke={2} />
-              <input type="text" autoFocus placeholder="Szukaj klientów..."
-                className="w-full h-9 pl-9 pr-3 bg-ink-200 dark:bg-dark-elevated focus:bg-white dark:bg-dark-surface rounded-md text-[13px] focus:outline-none focus:ring-2 focus:ring-brand/30 dark:text-dark-text dark:placeholder-dark-textDim" />
-            </div>
-          </div>
-          <div className="flex-1 p-4">
-            <div className="text-[11px] font-semibold text-ink-700 dark:text-dark-textMuted uppercase tracking-wider mb-3">Ostatnio wyszukiwani</div>
-            <div className="space-y-1">
-              {['Karolina Kowalska', 'Marcelina Flo', 'Jan Nowak'].map((name, i) => (
-                <button key={i} className="w-full flex items-center gap-3 p-2 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated text-left">
-                  <div className="w-9 h-9 rounded-full bg-gradient-brand text-white text-[11px] font-bold flex items-center justify-center">{name.split(' ').map(w => w[0]).join('')}</div>
-                  <span className="text-[13px] text-ink-900 dark:text-dark-text">{name}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Right: icon buttons + user pill */}
+      <div className="flex items-center gap-2 flex-1 justify-end">
 
-      {/* Right actions */}
-      <div className="ml-auto flex items-center gap-1 shrink-0">
-        {/* Inbox dropdown — combined tasks/notes/messages */}
+        {/* Mobile search icon */}
+        <button onClick={() => setMobileSearchOpen(true)}
+          className="md:hidden w-9 h-9 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-700 dark:text-dark-textMuted shrink-0 btn-press">
+          <Icon name="search" className="w-[18px] h-[18px]" stroke={1.75} />
+        </button>
+
+        {/* Monitor icon — dark mode toggle */}
+        <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+          className={iconBtnCls} style={iconBtnStyle}
+          title={theme === 'dark' ? 'Przełącz na jasny' : 'Przełącz na ciemny'}>
+          <Icon name={theme === 'dark' ? 'sun' : 'monitor'} className="w-5 h-5" stroke={1.75} />
+        </button>
+
+        {/* Chat icon — inbox dropdown */}
         <div className="relative">
           <button onClick={() => { setInboxOpen(!inboxOpen); setUserOpen(false); }}
-            className={`btn-press w-9 h-9 rounded-md flex items-center justify-center transition-colors relative ${inboxOpen ? 'bg-brand-400 dark:bg-brand/15 text-brand' : 'hover:bg-ink-200 dark:hover:bg-dark-elevated text-ink-700 dark:text-dark-textMuted hover:text-ink-900 dark:text-dark-text'}`}>
-            <Icon name="inbox" className="w-[18px] h-[18px]" stroke={1.75} />
+            className={iconBtnCls} style={iconBtnStyle}>
+            <Icon name="inbox" className="w-5 h-5" stroke={1.75} />
             {inboxBadgeCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-[16px] px-1 rounded-full bg-error text-white text-[9px] flex items-center justify-center font-bold ring-2 ring-white">{inboxBadgeCount}</span>
+              <span className="absolute -top-0.5 -right-0.5 min-w-[15px] h-[15px] px-0.5 rounded-full bg-error text-white text-[9px] flex items-center justify-center font-bold ring-[1.5px] ring-white dark:ring-dark-surface">{inboxBadgeCount}</span>
             )}
           </button>
 
@@ -709,26 +639,20 @@ const Topbar = ({ breadcrumb = [], onMenuClick }) => {
           )}
         </div>
 
-        {/* Notifications */}
-        <div className="relative">
-          <button className="btn-press w-9 h-9 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-700 dark:text-dark-textMuted hover:text-ink-900 dark:text-dark-text transition-colors relative">
-            <Icon name="bell" className="w-[18px] h-[18px]" stroke={1.75} />
-            <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-[16px] px-1 rounded-full bg-error text-white text-[9px] flex items-center justify-center font-bold ring-2 ring-white">9</span>
-          </button>
-        </div>
-
-        {/* Demo CTA — desktop only */}
-        <button className="hidden lg:flex btn-press h-9 px-3 ml-2 rounded-md bg-gradient-brand-subtle dark:bg-dark-surfaceTint border border-brand-300 dark:border-brand/30 text-brand hover:bg-gradient-brand hover:text-white hover:border-brand text-[12px] font-semibold items-center gap-1.5 transition-all shadow-brand-sm">
-          <Icon name="sparkles" className="w-3.5 h-3.5" stroke={2} /> Umów demo
+        {/* Bell icon — notifications */}
+        <button className={iconBtnCls} style={iconBtnStyle} title="Powiadomienia">
+          <Icon name="bell" className="w-5 h-5" stroke={1.75} />
+          <span className="absolute -top-0.5 -right-0.5 min-w-[15px] h-[15px] px-0.5 rounded-full bg-error text-white text-[9px] flex items-center justify-center font-bold ring-[1.5px] ring-white dark:ring-dark-surface">{notifBadgeCount}</span>
         </button>
 
-        {/* User dropdown */}
+        {/* User pill */}
         <div className="relative ml-1">
           <button onClick={() => { setUserOpen(!userOpen); setInboxOpen(false); }}
-            className={`btn-press flex items-center gap-2.5 pl-1 pr-2 py-1 rounded-md transition-colors ${userOpen ? 'bg-brand-200 dark:bg-brand/20' : 'hover:bg-ink-200 dark:hover:bg-dark-elevated'}`}>
-            <div className="w-8 h-8 rounded-full bg-gradient-brand text-white text-[11px] font-bold flex items-center justify-center shadow-brand-sm">AK</div>
-            <span className="text-[13px] font-medium text-ink-900 dark:text-dark-text hidden md:inline">Agnieszka</span>
-            <Icon name="chevD" className="w-4 h-4 text-ink-600 dark:text-dark-textMuted" />
+            className="btn-press flex items-center gap-1.5 h-10 pl-1 pr-2 rounded-full bg-white dark:bg-dark-elevated transition-colors hover:bg-ink-200 dark:hover:bg-dark-elevated/70"
+            style={{ border: '1px solid rgba(89,55,158,0.10)' }}>
+            <div className="w-8 h-8 rounded-full bg-gradient-brand text-white text-[11px] font-bold flex items-center justify-center shrink-0">AK</div>
+            <span className="text-[14px] font-semibold text-ink-900 dark:text-dark-text hidden md:inline whitespace-nowrap">Agnieszka Kułaga</span>
+            <Icon name="chevD" className="w-4 h-4 text-ink-700 dark:text-dark-textMuted shrink-0" />
           </button>
 
           {userOpen && (
@@ -790,6 +714,33 @@ const Topbar = ({ breadcrumb = [], onMenuClick }) => {
           )}
         </div>
       </div>
+
+      {/* Mobile search fullscreen overlay */}
+      {mobileSearchOpen && (
+        <div className="md:hidden fixed inset-0 z-50 bg-white dark:bg-dark-surface fade-in flex flex-col">
+          <div className="h-14 flex items-center px-3 gap-2 border-b border-ink-200 dark:border-dark-border">
+            <button onClick={() => setMobileSearchOpen(false)} className="w-9 h-9 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-700 dark:text-dark-textMuted btn-press">
+              <Icon name="arrL" className="w-5 h-5" />
+            </button>
+            <div className="relative flex-1">
+              <Icon name="search" className="w-4 h-4 text-ink-500 dark:text-dark-textDim absolute left-3 top-1/2 -translate-y-1/2" stroke={2} />
+              <input type="text" autoFocus placeholder="Szukaj klientów..."
+                className="w-full h-9 pl-9 pr-3 bg-ink-200 dark:bg-dark-elevated focus:bg-white dark:bg-dark-surface rounded-md text-[13px] focus:outline-none focus:ring-2 focus:ring-brand/30 dark:text-dark-text dark:placeholder-dark-textDim" />
+            </div>
+          </div>
+          <div className="flex-1 p-4">
+            <div className="text-[11px] font-semibold text-ink-700 dark:text-dark-textMuted uppercase tracking-wider mb-3">Ostatnio wyszukiwani</div>
+            <div className="space-y-1">
+              {['Karolina Kowalska', 'Marcelina Flo', 'Jan Nowak'].map((name, i) => (
+                <button key={i} className="w-full flex items-center gap-3 p-2 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated text-left">
+                  <div className="w-9 h-9 rounded-full bg-gradient-brand text-white text-[11px] font-bold flex items-center justify-center">{name.split(' ').map(w => w[0]).join('')}</div>
+                  <span className="text-[13px] text-ink-900 dark:text-dark-text">{name}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 };
@@ -805,9 +756,7 @@ const FlowProgress = ({ steps, current }) => (
 const StepperBar = ({ labels, current, onBack, clientPreferences }) => (
   <div className="bg-white dark:bg-dark-surface border-b border-ink-200 dark:border-dark-border shadow-e1">
     <div className="max-w-[1400px] mx-auto px-8 py-3 flex items-center">
-      <button onClick={onBack} className="flex items-center gap-1.5 text-sm text-ink-700 dark:text-dark-textMuted hover:text-ink-900 dark:text-dark-text font-medium btn-press transition-colors">
-        <Icon name="arrL" className="w-4 h-4" /> Wróć
-      </button>
+      <div className="w-16"></div>
       <div className="flex-1 flex items-center justify-center gap-1.5">
         {labels.map((label, i) => {
           const isActive = i + 1 === current;
@@ -1657,9 +1606,14 @@ const Dashboard = ({ onStart }) => {
             </div>
           </div>
 
-          <div>
-            <h3 className="text-sm font-semibold text-ink-900 dark:text-dark-text mb-4">Historia aktywności</h3>
-            <div className="space-y-3.5">
+          <div className="bg-white dark:bg-dark-surface rounded-2xl p-5 flex flex-col gap-4" style={{border:'1px solid rgba(20,20,20,0.10)'}}>
+            {/* Card header */}
+            <div className="flex items-center justify-between">
+              <div className="text-[16px] font-semibold text-ink-900 dark:text-dark-text">Historia aktywności</div>
+            </div>
+
+            {/* Timeline entries */}
+            <div className="flex flex-col gap-3.5">
               <div className="text-[11px] text-ink-700 dark:text-dark-textMuted font-medium">25.11</div>
               <div className="flex gap-3">
                 <div className="w-8 h-8 rounded-full bg-brand-400 dark:bg-brand/15 flex items-center justify-center text-brand shrink-0"><Icon name="cap" className="w-4 h-4" /></div>
@@ -1669,7 +1623,7 @@ const Dashboard = ({ onStart }) => {
                   <div className="text-xs text-ink-700 dark:text-dark-textMuted mt-0.5">8:00</div>
                 </div>
               </div>
-              <div className="text-[11px] text-ink-700 dark:text-dark-textMuted font-medium pt-2">24.11</div>
+              <div className="text-[11px] text-ink-700 dark:text-dark-textMuted font-medium pt-1">24.11</div>
               {[
                 { icon: 'phone', title: 'Aktywowano aplikację mobilną' },
                 { icon: 'book', title: 'Dodano program żywieniowy' },
@@ -1683,6 +1637,14 @@ const Dashboard = ({ onStart }) => {
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* Divider + footer */}
+            <div className="border-t border-ink-200 dark:border-dark-border pt-3">
+              <button className="text-[14px] font-medium text-brand hover:text-brand-dark transition-colors flex items-center gap-1">
+                Zobacz wszystkie
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </button>
             </div>
           </div>
         </div>
@@ -1988,41 +1950,36 @@ const IntentScreen = ({ onPick, onBack }) => {
 
   const options = [
     {
-      id: 'assumptions',
-      badge: null,
-      icon: 'pie',
-      title: 'Same założenia',
-      subtitle: '2 min',
-      description: 'Klient dostaje kcal i makro per typ dnia. Komponuje posiłki sam w aplikacji.',
-      bullets: ['Założenia kaloryczne + makro', 'Opcjonalnie: zbiory przepisów do wymian', 'Bez jadłospisu'],
-    },
-    {
       id: 'mealplan',
-      badge: 'REKOMENDOWANY',
+      badge: 'REKOMENDOWANE',
       icon: 'sparkles',
-      title: 'Gotowy jadłospis',
+      title: 'Wygeneruj jadłospis',
       subtitle: '~5 min',
-      description: 'Algorytm ułoży jadłospis pod założenia. Zobaczysz podgląd i zmienisz co nie pasuje.',
-      bullets: ['Założenia + pełny jadłospis', 'Autogeneracja z Twoimi preferencjami', 'Pełna edycja po wygenerowaniu'],
+      description: 'Algorytm ułoży pełny plan pod Twoje założenia. Zobaczysz podgląd i zmienisz to, co nie pasuje.',
     },
     {
       id: 'template',
-      badge: null,
-      accent: 'template', // special styling
-      icon: 'folder',
-      title: 'Z szablonu',
+      badge: 'SZYBKI START',
+      icon: 'copy',
+      title: 'Użyj gotowego szablonu',
       subtitle: '~3 min',
-      description: 'Wczytaj gotowy program z Twojej biblioteki — założenia, przepisy, materiały. Dostosuj pod klienta.',
-      bullets: ['Gotowy program z biblioteki', 'Założenia + przepisy + materiały', 'Edycja przed wysyłką'],
+      description: 'Wczytaj program ze swojej biblioteki. Dostosuj założenia, przepisy i materiały pod klienta.',
+    },
+    {
+      id: 'assumptions',
+      badge: null,
+      icon: 'pie',
+      title: 'Tylko założenia (bez jadłospisu)',
+      subtitle: '2 min',
+      description: 'Klient dostaje wytyczne kcal i makro na każdy dzień. Komponuje posiłki samodzielnie w aplikacji.',
     },
     {
       id: 'expert',
       badge: null,
       icon: 'edit',
-      title: 'Zacznij od zera',
+      title: 'Stwórz od zera',
       subtitle: 'Bez limitu',
-      description: 'Konfigurujesz wszystko ręcznie — typy dni, posiłki, przepisy. Pełna kontrola.',
-      bullets: ['Wszystkie wartości ręczne', 'Ręczny wybór przepisów', 'Dla doświadczonych dietetyków'],
+      description: 'Konfigurujesz wszystko ręcznie — typy dni, posiłki, przepisy. Pełna kontrola dla doświadczonych.',
     },
   ];
 
@@ -2083,92 +2040,69 @@ const IntentScreen = ({ onPick, onBack }) => {
   ];
 
   return (
-    <div className="flex-1 overflow-y-auto bg-ink-200/30 dark:bg-dark-elevated/30">
-      <div className="bg-white dark:bg-dark-surface border-b border-ink-200 dark:border-dark-border">
-        <div className="max-w-[1400px] mx-auto px-8 py-3">
-          <button onClick={onBack} className="flex items-center gap-1.5 text-sm text-ink-700 dark:text-dark-textMuted hover:text-ink-900 dark:text-dark-text font-medium">
-            <Icon name="arrL" className="w-4 h-4" /> Wróć
-          </button>
+    <div className="flex-1 flex flex-col bg-ink-200/40 dark:bg-dark-bg overflow-hidden">
+      {/* Breadcrumb header */}
+      <div className="h-14 bg-white dark:bg-dark-surface border-b border-ink-200 dark:border-dark-border flex items-center px-8 gap-4 shrink-0">
+        <button onClick={onBack} className="flex items-center gap-1.5 text-[13px] text-ink-700 dark:text-dark-textMuted hover:text-ink-900 dark:text-dark-text font-medium transition-colors shrink-0">
+          <Icon name="arrL" className="w-4 h-4" /> Wróć
+        </button>
+        <div className="w-px h-4 bg-ink-300 dark:bg-dark-border shrink-0"></div>
+        <div className="flex items-center gap-1.5 text-[13px] text-ink-700 dark:text-dark-textMuted">
+          <button onClick={onBack} className="hover:text-ink-900 dark:hover:text-dark-text transition-colors">Klienci</button>
+          <Icon name="chevR" className="w-3.5 h-3.5 opacity-40" stroke={2} />
+          <button onClick={onBack} className="hover:text-ink-900 dark:hover:text-dark-text transition-colors">Karolina Szafrańska</button>
+          <Icon name="chevR" className="w-3.5 h-3.5 opacity-40" stroke={2} />
+          <span className="font-semibold text-ink-900 dark:text-dark-text">Nowa współpraca</span>
         </div>
       </div>
 
-      <div className="max-w-[1320px] mx-auto px-8 py-10">
+      <div className="flex-1 overflow-y-auto">
+      <div className="max-w-[900px] mx-auto px-8 py-12">
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-dark-surface border border-brand-300 dark:border-brand/30 text-brand rounded-full text-xs font-semibold mb-5 shadow-brand-sm">
             <Icon name="sparkles" className="w-3.5 h-3.5" stroke={2} /> Nowa współpraca z Karoliną
           </div>
-          <h1 className="text-[34px] font-semibold text-ink-900 dark:text-dark-text mb-3 leading-[1.15] tracking-tight">Co chcesz dać klientowi?</h1>
-          <p className="text-[15px] text-ink-700 dark:text-dark-textMuted max-w-xl mx-auto leading-relaxed">
-            Wybierz ścieżkę która pasuje do Twojego podejścia. Zawsze możesz rozbudować współpracę później.
+          <h1 className="text-[36px] font-bold text-ink-900 dark:text-dark-text mb-4 leading-[1.1] tracking-tight">Jak chcesz rozpocząć?</h1>
+          <p className="text-[15px] text-ink-700 dark:text-dark-textMuted max-w-[560px] mx-auto leading-relaxed">
+            Każda ścieżka tworzy program żywieniowy — różnią się tylko początkowym poziomem szczegółowości. Zawsze możesz rozbudować współpracę później.
           </p>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+        <div className="grid grid-cols-2 gap-4">
           {options.map((o) => (
-            <button key={o.id} onClick={() => handlePick(o.id)}
-              className={`card-hover group text-left bg-white dark:bg-dark-surface border rounded-lg p-5 relative flex flex-col ${
-                o.badge ? 'border-brand-300 dark:border-brand/30 shadow-brand-sm' :
-                o.accent === 'template' ? 'border-info/30 shadow-e1' :
-                'border-ink-200 dark:border-dark-border shadow-e1'
-              }`}>
-              {o.badge && (
-                <div className="absolute -top-3 left-5 px-2.5 py-1 bg-gradient-brand text-white text-[10px] font-semibold rounded-full tracking-wider flex items-center gap-1 shadow-brand-md">
-                  <Icon name="sparkles" className="w-3 h-3" stroke={2.5} /> {o.badge}
-                </div>
-              )}
-              {o.accent === 'template' && (
-                <div className="absolute -top-3 left-5 px-2.5 py-1 bg-info text-white text-[10px] font-semibold rounded-full tracking-wider flex items-center gap-1 shadow-e2">
-                  <Icon name="folder" className="w-3 h-3" stroke={2.5} /> SZYBKI START
-                </div>
-              )}
-              <div className="flex items-start justify-between mb-4">
-                <div className={`w-11 h-11 rounded-md flex items-center justify-center transition-all ${
-                  o.badge ? 'bg-gradient-brand text-white shadow-brand-md' :
-                  o.accent === 'template' ? 'bg-info-light dark:bg-info/10 text-info-dark dark:text-info-bright group-hover:bg-info group-hover:text-white' :
-                  'bg-brand-400 dark:bg-brand/15 text-brand group-hover:bg-brand group-hover:text-white'
+            <div key={o.id} className={`bg-white dark:bg-dark-surface rounded-xl border p-5 flex flex-col ${
+              o.badge === 'REKOMENDOWANE' ? 'border-brand-300 dark:border-brand/30 shadow-brand-sm' : 'border-ink-200 dark:border-dark-border shadow-e1'
+            }`}>
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
+                  o.badge === 'REKOMENDOWANE' ? 'bg-gradient-brand text-white' : 'bg-ink-200 dark:bg-dark-elevated text-ink-700 dark:text-dark-textMuted'
                 }`}>
                   <Icon name={o.icon} className="w-5 h-5" stroke={2} />
                 </div>
-                <div className="text-[10px] font-semibold text-ink-700 dark:text-dark-textMuted uppercase tracking-wider flex items-center gap-1 bg-ink-200 dark:bg-dark-elevated rounded-full px-2 py-0.5">
-                  <Icon name="clock" className="w-3 h-3" /> {o.subtitle}
-                </div>
+                <span className="text-[12px] text-ink-600 dark:text-dark-textMuted flex items-center gap-1 shrink-0 mt-1">
+                  <Icon name="clock" className="w-3.5 h-3.5" stroke={2} /> {o.subtitle}
+                </span>
               </div>
-              <h3 className="text-[15px] font-semibold text-ink-900 dark:text-dark-text mb-2 leading-tight">{o.title}</h3>
-              <p className="text-[12px] text-ink-700 dark:text-dark-textMuted mb-4 leading-relaxed">{o.description}</p>
-              <ul className="space-y-1.5 mb-4 flex-1">
-                {o.bullets.map((b, i) => (
-                  <li key={i} className="flex items-start gap-2 text-[11px] text-ink-600 dark:text-dark-textMuted">
-                    <div className="w-3.5 h-3.5 rounded-full bg-success-light dark:bg-success/10 flex items-center justify-center shrink-0 mt-0.5">
-                      <Icon name="check" className="w-2 h-2 text-success-dark dark:text-success-bright" stroke={3} />
-                    </div>
-                    <span>{b}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className={`h-9 rounded-md font-medium text-[13px] flex items-center justify-center transition-all ${
-                o.badge ? 'btn-primary text-white' :
-                o.accent === 'template' ? 'bg-info-light dark:bg-info/10 text-info-dark dark:text-info-bright group-hover:bg-info group-hover:text-white' :
-                'bg-ink-200 dark:bg-dark-elevated text-ink-800 dark:text-dark-text group-hover:bg-brand group-hover:text-white'
-              }`}>
-                Wybieram <Icon name="arrR" className="w-4 h-4 ml-1.5" />
+              <div className="flex items-center gap-2 flex-wrap mb-2">
+                <span className="text-[15px] font-semibold text-ink-900 dark:text-dark-text">{o.title}</span>
+                {o.badge && (
+                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full tracking-wider ${
+                    o.badge === 'REKOMENDOWANE' ? 'bg-brand text-white' : 'bg-brand-400 dark:bg-brand/15 text-brand'
+                  }`}>{o.badge}</span>
+                )}
               </div>
-            </button>
+              <p className="text-[13px] text-ink-700 dark:text-dark-textMuted leading-relaxed flex-1">{o.description}</p>
+              <div className="mt-4">
+                <button onClick={() => handlePick(o.id)} className={`w-full h-9 rounded-lg font-semibold text-[13px] flex items-center justify-center gap-2 btn-press transition-colors ${
+                  o.badge === 'REKOMENDOWANE' ? 'btn-primary text-white' : 'bg-ink-200 dark:bg-dark-elevated text-ink-900 dark:text-dark-text hover:bg-brand hover:text-white dark:hover:bg-brand'
+                }`}>
+                  Wybierz tę ścieżkę <Icon name="arrR" className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
           ))}
         </div>
-
-        {usePZ && (
-          <div className="bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border rounded-lg p-5 flex items-start gap-4 max-w-[900px] mx-auto shadow-e1">
-            <div className="w-9 h-9 rounded-md bg-gradient-brand-subtle dark:bg-dark-surfaceTint text-brand flex items-center justify-center shrink-0 shadow-brand-sm">
-              <Icon name="info" className="w-4 h-4" stroke={2} />
-            </div>
-            <div className="flex-1">
-              <h4 className="text-sm font-semibold text-ink-900 dark:text-dark-text mb-1">Wszystkie ścieżki tworzą program żywieniowy</h4>
-              <p className="text-[13px] text-ink-700 dark:text-dark-textMuted leading-relaxed">
-                Program to kontener na wszystko co wysyłasz klientowi — założenia, jadłospis, zbiory przepisów, materiały. Różnią się tylko poziomem szczegółowości.
-              </p>
-            </div>
-          </div>
-        )}
+      </div>
       </div>
 
       {/* Template picker modal */}
@@ -2366,14 +2300,16 @@ const TemplatePicker = ({ templates, onClose, onPick }) => {
 // DAY TYPE EDITOR — reusable pattern (lewa kolumna: lista, prawa: edytor)
 // This is the CORE component reused across Setup & Recipes screens
 // ============================================================
-const DayTypesList = ({ dayTypes, activeId, onSelect, onAddDayType, onManage, compact = false }) => {
+const DayTypesList = ({ dayTypes, activeId, onSelect, onAddDayType, onManage, compact = false, hideActions = false }) => {
   return (
     <div className="bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border rounded-md overflow-hidden">
       <div className="px-4 py-3 border-b border-ink-200 dark:border-dark-border flex items-center justify-between">
         <span className="text-[11px] font-semibold text-ink-700 dark:text-dark-textMuted uppercase tracking-wider">Typy dni</span>
-        <button onClick={onManage} className="w-6 h-6 rounded-sm hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-600 dark:text-dark-textMuted">
-          <Icon name="settings" className="w-3.5 h-3.5" />
-        </button>
+        {!hideActions && (
+          <button onClick={onManage} className="w-6 h-6 rounded-sm hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-600 dark:text-dark-textMuted">
+            <Icon name="settings" className="w-3.5 h-3.5" />
+          </button>
+        )}
       </div>
       {dayTypes.map(dt => (
         <button key={dt.id} onClick={() => onSelect(dt.id)}
@@ -2394,9 +2330,11 @@ const DayTypesList = ({ dayTypes, activeId, onSelect, onAddDayType, onManage, co
           )}
         </button>
       ))}
-      <button onClick={onAddDayType} className="w-full px-4 py-3 text-sm text-brand font-medium flex items-center gap-1.5 hover:bg-brand-400/30 border-t border-ink-200 dark:border-dark-border">
-        <Icon name="plus" className="w-4 h-4" /> Dodaj typ dnia
-      </button>
+      {!hideActions && (
+        <button onClick={onAddDayType} className="w-full px-4 py-3 text-sm text-brand font-medium flex items-center gap-1.5 hover:bg-brand-400/30 border-t border-ink-200 dark:border-dark-border">
+          <Icon name="plus" className="w-4 h-4" /> Dodaj typ dnia
+        </button>
+      )}
     </div>
   );
 };
@@ -3127,37 +3065,45 @@ const DayTypeEditor = ({ dayType, onUpdate, mode = 'full', showMacros = false, o
 
   return (
     <div className="space-y-4">
-      {/* Header with day type identity */}
-      <div className="flex items-center justify-between flex-wrap gap-3">
-        <div className="flex items-center gap-3 flex-wrap">
-          <div className="flex items-center gap-2 bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border rounded-md px-3 py-1.5 shadow-e1">
-            <div className="w-2.5 h-2.5 rounded-full" style={{ background: dayType.color }}></div>
-            <h3 className="text-[14px] font-semibold text-ink-900 dark:text-dark-text">{dayType.name}</h3>
-          </div>
+      {/* TYP DNIA card */}
+      <div className="bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border rounded-lg shadow-e1">
+        <div className="flex items-center justify-between px-5 py-3 border-b border-ink-200 dark:border-dark-border">
+          <span className="text-[10px] font-semibold text-ink-500 dark:text-dark-textMuted uppercase tracking-[0.12em]">Typ dnia</span>
           <div className="flex items-center gap-1">
+            <button className="w-8 h-8 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-600 dark:text-dark-textMuted btn-press transition-colors" title="Usuń"><Icon name="trash" className="w-4 h-4" /></button>
+            <button className="w-8 h-8 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-600 dark:text-dark-textMuted btn-press transition-colors" title="Duplikuj"><Icon name="copy" className="w-4 h-4" /></button>
+            <button className="w-8 h-8 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-600 dark:text-dark-textMuted btn-press transition-colors" title="Zapisz jako szablon"><Icon name="save" className="w-4 h-4" /></button>
+            <div className="w-px h-4 bg-ink-200 dark:bg-dark-border mx-1"></div>
+            <button className="h-8 px-3 rounded-md bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border hover:border-brand hover:text-brand text-xs font-medium text-ink-800 dark:text-dark-text flex items-center gap-1.5 btn-press transition-all">
+              <Icon name="swap" className="w-3.5 h-3.5" /> Wybierz z szablonu
+            </button>
+          </div>
+        </div>
+        <div className="flex items-center gap-4 px-5 py-3">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="w-3 h-3 rounded-full shrink-0" style={{ background: dayType.color }}></div>
+            <span className="text-[15px] font-semibold text-ink-900 dark:text-dark-text truncate">{dayType.name}</span>
+          </div>
+          <div className="flex items-center gap-1 ml-2">
             {['Pn','Wt','Śr','Cz','Pt','Sb','Nd'].map(d => {
               const isActive = dayType.days.includes(d);
               return (
-                <button key={d} className={`w-7 h-7 rounded-md text-[10px] font-semibold transition-all chip-press ${isActive ? 'bg-gradient-brand text-white shadow-brand-sm' : 'bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border text-ink-600 dark:text-dark-textMuted hover:border-brand'}`}>
+                <button key={d} className={`w-8 h-8 rounded-full text-[11px] font-semibold transition-all chip-press ${isActive ? 'bg-gradient-brand text-white shadow-brand-sm' : 'bg-ink-100 dark:bg-dark-elevated text-ink-600 dark:text-dark-textMuted hover:bg-brand-400/30 hover:text-brand'}`}>
                   {d}
                 </button>
               );
             })}
           </div>
         </div>
-        <div className="flex items-center gap-1">
-          <button className="w-8 h-8 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-600 dark:text-dark-textMuted btn-press transition-colors" title="Usuń"><Icon name="trash" className="w-4 h-4" /></button>
-          <button className="w-8 h-8 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-600 dark:text-dark-textMuted btn-press transition-colors" title="Duplikuj"><Icon name="copy" className="w-4 h-4" /></button>
-          <button className="h-8 px-3 rounded-md bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border hover:border-brand hover:text-brand text-xs font-medium text-ink-800 dark:text-dark-text flex items-center gap-1.5 btn-press transition-all">
-            <Icon name="swap" className="w-3.5 h-3.5" /> Wybierz z szablonu
-          </button>
-        </div>
       </div>
 
       {/* Assumptions section */}
       <div className="bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border rounded-lg p-5 shadow-e1">
         <div className="flex items-center justify-between mb-4">
-          <h4 className="text-[13px] font-semibold text-ink-900 dark:text-dark-text">Energetyczność i makro</h4>
+          <div className="flex items-center gap-3">
+            <span className="text-[10px] font-semibold text-ink-500 dark:text-dark-textMuted uppercase tracking-[0.12em]">Energetyczność i makroskładniki</span>
+            <button className="text-[11px] text-brand font-medium hover:underline flex items-center gap-1">Zobacz realizację <Icon name="arrR" className="w-3 h-3" /></button>
+          </div>
           <div className="flex items-center gap-0.5 text-xs bg-ink-200 dark:bg-dark-elevated rounded-md p-0.5">
             {[
               { key: 'g',   label: 'Gramy (g)' },
@@ -3379,17 +3325,15 @@ const DayTypeEditor = ({ dayType, onUpdate, mode = 'full', showMacros = false, o
 };
 
 // ============================================================
-// EKRAN 2 — SETUP (adaptive per flow)
+// EKRAN 1b — SETTINGS (podstawowe informacje + rotacja dni)
 // ============================================================
-const SetupScreen = ({ flow, state, setState, onNext, onFinish, onBack }) => {
+const SettingsScreen = ({ flow, state, setState, onNext, onBack }) => {
   const { usePZ } = React.useContext(NamingContext);
-  const [activeDayTypeId, setActiveDayTypeId] = useState('d1');
-  const [showMacrosPerMeal, setShowMacrosPerMeal] = useState(false);
-  const [dayTypesManagerOpen, setDayTypesManagerOpen] = useState(false);
-  // Cover & message — opcjonalne rozszerzenia sekcji "Podstawowe informacje"
   const [coverOpen, setCoverOpen] = useState(!!state.program.cover);
   const [messageOpen, setMessageOpen] = useState(!!state.program.welcomeMessage);
   const MAX_MSG = 160;
+  const DAYS = ['Pn','Wt','Śr','Cz','Pt','Sb','Nd'];
+
   const coverGradients = [
     'linear-gradient(135deg, #7448D0 0%, #5915B2 100%)',
     'linear-gradient(135deg, #3AB795 0%, #2A856C 100%)',
@@ -3397,6 +3341,279 @@ const SetupScreen = ({ flow, state, setState, onNext, onFinish, onBack }) => {
     'linear-gradient(135deg, #EC407A 0%, #B53A45 100%)',
     'linear-gradient(135deg, #5252E5 0%, #4242B8 100%)',
   ];
+
+  const updateProgram = (patch) => setState(s => ({ ...s, program: { ...s.program, ...patch } }));
+
+  const activeDayTypes = state.program.hasMultipleDayTypes
+    ? state.program.dayTypesMulti
+    : state.program.dayTypes;
+
+  const toggleDay = (dtId, day) => {
+    const updated = activeDayTypes.map(dt => {
+      if (dt.id !== dtId) return dt;
+      const hasDay = dt.days.includes(day);
+      return { ...dt, days: hasDay ? dt.days.filter(d => d !== day) : [...dt.days, day] };
+    });
+    if (state.program.hasMultipleDayTypes) {
+      updateProgram({ dayTypesMulti: updated });
+    } else {
+      updateProgram({ dayTypes: updated });
+    }
+  };
+
+  const addDayType = () => {
+    const colors = ['#7448D0','#5252E5','#3AB795','#E5A117','#EC407A','#E57373'];
+    const existing = state.program.hasMultipleDayTypes ? state.program.dayTypesMulti : state.program.dayTypes;
+    const newDt = makeDayType(`d${Date.now()}`, 'Nowy typ', colors[existing.length % colors.length], [], 2000);
+    if (state.program.hasMultipleDayTypes) {
+      updateProgram({ dayTypesMulti: [...state.program.dayTypesMulti, newDt] });
+    } else {
+      updateProgram({ hasMultipleDayTypes: true, dayTypesMulti: [...state.program.dayTypesMulti, newDt] });
+    }
+  };
+
+  const removeDayType = (dtId) => {
+    const existing = state.program.hasMultipleDayTypes ? state.program.dayTypesMulti : state.program.dayTypes;
+    if (existing.length <= 1) return;
+    const updated = existing.filter(dt => dt.id !== dtId);
+    if (state.program.hasMultipleDayTypes) {
+      updateProgram({ dayTypesMulti: updated });
+    } else {
+      updateProgram({ dayTypes: updated });
+    }
+  };
+
+  const flowConfig = {
+    assumptions: { steps: ['Ustawienia', 'Założenia', 'Materiały'], current: 1, totalSteps: 3, title: 'Ustawienia', subtitle: 'Skonfiguruj parametry i szczegóły współpracy z klientem.' },
+    mealplan:    { steps: ['Ustawienia', 'Założenia', 'Jadłospis', 'Materiały'], current: 1, totalSteps: 4, title: 'Ustawienia', subtitle: 'Skonfiguruj parametry i szczegóły współpracy z klientem.' },
+    expert:      { steps: ['Ustawienia', 'Założenia', 'Przepisy', 'Jadłospis', 'Materiały'], current: 1, totalSteps: 5, title: 'Ustawienia', subtitle: 'Skonfiguruj parametry i szczegóły współpracy z klientem.' },
+  };
+  const cfg = flowConfig[flow];
+
+  return (
+    <div className="flex-1 flex flex-col bg-ink-200/30 dark:bg-dark-elevated/30 overflow-hidden">
+      {/* Breadcrumb header */}
+      <div className="h-14 bg-white dark:bg-dark-surface border-b border-ink-200 dark:border-dark-border flex items-center px-8 gap-4 shrink-0">
+        <button onClick={onBack} className="flex items-center gap-1.5 text-[13px] text-ink-700 dark:text-dark-textMuted hover:text-ink-900 dark:hover:text-dark-text font-medium transition-colors shrink-0">
+          <Icon name="arrL" className="w-4 h-4" /> Wróć
+        </button>
+        <div className="w-px h-4 bg-ink-300 dark:bg-dark-border shrink-0"></div>
+        <div className="flex items-center gap-1.5 text-[13px] text-ink-700 dark:text-dark-textMuted">
+          <button onClick={onBack} className="hover:text-ink-900 dark:hover:text-dark-text transition-colors">Klienci</button>
+          <Icon name="chevR" className="w-3.5 h-3.5 opacity-40" stroke={2} />
+          <button onClick={onBack} className="hover:text-ink-900 dark:hover:text-dark-text transition-colors">Karolina Szafrańska</button>
+          <Icon name="chevR" className="w-3.5 h-3.5 opacity-40" stroke={2} />
+          <span className="font-semibold text-ink-900 dark:text-dark-text">Nowa współpraca</span>
+        </div>
+      </div>
+
+      <FlowProgress steps={cfg.totalSteps} current={cfg.current} />
+      <StepperBar labels={cfg.steps} current={cfg.current} onBack={onBack} clientPreferences={state.program.clientPreferences} />
+
+      {/* Scrollable content */}
+      <div className="flex-1 overflow-y-auto pb-20">
+        <div className="max-w-[680px] mx-auto px-6 py-8">
+
+          <div className="mb-6">
+            <div className="text-xs text-ink-700 dark:text-dark-textMuted mb-1">Krok {cfg.current} z {cfg.totalSteps}</div>
+            <h1 className="text-2xl font-semibold text-ink-900 dark:text-dark-text mb-1">{cfg.title}</h1>
+            <p className="text-sm text-ink-700 dark:text-dark-textMuted">{cfg.subtitle}</p>
+          </div>
+
+          {/* ── USTAWIENIA PROGRAMU ── */}
+          <div className="bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border rounded-xl p-6 shadow-e1 mb-5">
+            <div className="text-[10px] font-semibold text-ink-500 dark:text-dark-textMuted uppercase tracking-[0.12em] mb-5">Ustawienia programu</div>
+
+            {/* Name — underline style */}
+            <div className="mb-6">
+              <label className="text-[11px] font-medium text-ink-600 dark:text-dark-textMuted block mb-1.5">Nazwa {usePZ ? 'programu' : 'współpracy'}</label>
+              <input
+                type="text"
+                value={state.program.name}
+                onChange={e => updateProgram({ name: e.target.value })}
+                className="w-full pb-2 bg-transparent border-0 border-b-2 border-ink-200 dark:border-dark-border text-ink-900 dark:text-dark-text text-[16px] font-semibold focus:outline-none focus:border-brand transition-colors"
+              />
+            </div>
+
+            {/* Cover — collapsible */}
+            {!coverOpen ? (
+              <button onClick={() => setCoverOpen(true)} className="mb-6 text-[12px] text-brand hover:text-brand-dark font-medium flex items-center gap-1.5 transition-colors">
+                <Icon name="plus" className="w-3.5 h-3.5" stroke={2.5} /> Dodaj okładkę
+              </button>
+            ) : (
+              <div className="mb-6 fade-in">
+                <div className="flex items-center justify-between mb-2">
+                  <label className="text-[11px] font-medium text-ink-600 dark:text-dark-textMuted">Okładka <span className="text-ink-400 dark:text-dark-textDim">(opcjonalna)</span></label>
+                  <button onClick={() => { setCoverOpen(false); updateProgram({ cover: null }); }} className="text-[11px] text-ink-500 hover:text-ink-800 dark:text-dark-textMuted dark:hover:text-dark-text transition-colors">Usuń</button>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-14 h-14 rounded-lg border border-ink-200 dark:border-dark-border shrink-0 overflow-hidden flex items-center justify-center" style={state.program.cover ? { background: state.program.cover } : { background: '#F7F5FF' }}>
+                    {!state.program.cover && <Icon name="gallery" className="w-5 h-5 text-brand/30" />}
+                  </div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {coverGradients.map((g, i) => (
+                      <button key={i} onClick={() => updateProgram({ cover: g })} className="w-8 h-8 rounded-md border-2 transition-all hover:scale-110" style={{ background: g, borderColor: state.program.cover === g ? '#7448D0' : 'transparent' }} />
+                    ))}
+                    <button className="w-8 h-8 rounded-md border border-dashed border-ink-300 dark:border-dark-border hover:border-brand text-ink-400 flex items-center justify-center transition-all">
+                      <Icon name="plus" className="w-3.5 h-3.5" stroke={2.5} />
+                    </button>
+                  </div>
+                </div>
+                <p className="text-[11px] text-ink-500 dark:text-dark-textMuted mt-2">Klient zobaczy tę okładkę w aplikacji mobilnej.</p>
+              </div>
+            )}
+
+            {/* Dates — split chips */}
+            <div className="grid grid-cols-2 gap-5 mb-6">
+              <div>
+                <label className="text-[11px] font-medium text-ink-600 dark:text-dark-textMuted block mb-1.5">Start</label>
+                <div className="h-10 px-3 border border-ink-200 dark:border-dark-border rounded-lg text-[13px] flex items-center gap-2 text-ink-900 dark:text-dark-text bg-white dark:bg-dark-elevated cursor-pointer hover:border-brand/50 transition-colors mb-2">
+                  <Icon name="calendar" className="w-4 h-4 text-ink-400 dark:text-dark-textMuted" />
+                  <span>{state.program.start}</span>
+                </div>
+                <div className="flex gap-1.5 flex-wrap">
+                  {['Dziś', 'Jutro', 'Kolejny Pon.'].map(d => (
+                    <button key={d} className="chip-press px-2.5 py-1 text-[11px] font-medium rounded-full border border-ink-200 dark:border-dark-border text-ink-600 dark:text-dark-textMuted hover:border-brand hover:text-brand bg-white dark:bg-dark-surface transition-all">{d}</button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="text-[11px] font-medium text-ink-600 dark:text-dark-textMuted block mb-1.5">Koniec</label>
+                <div className="h-10 px-3 border border-ink-200 dark:border-dark-border rounded-lg text-[13px] flex items-center gap-2 text-ink-900 dark:text-dark-text bg-white dark:bg-dark-elevated cursor-pointer hover:border-brand/50 transition-colors mb-2">
+                  <Icon name="calendar" className="w-4 h-4 text-ink-400 dark:text-dark-textMuted" />
+                  <span>{state.program.end}</span>
+                </div>
+                <div className="flex gap-1.5 flex-wrap">
+                  {['2 tyg.', '4 tyg.', 'Bezterminowo'].map((d, i) => (
+                    <button key={d} className={`chip-press px-2.5 py-1 text-[11px] font-medium rounded-full border transition-all ${i === 1 ? 'bg-brand-400 dark:bg-brand/15 border-brand text-brand shadow-brand-sm' : 'border-ink-200 dark:border-dark-border text-ink-600 dark:text-dark-textMuted hover:border-brand hover:text-brand bg-white dark:bg-dark-surface'}`}>{d}</button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Share toggle */}
+            <div className="flex items-center justify-between py-4 border-t border-ink-200 dark:border-dark-border">
+              <div>
+                <div className="text-[13px] font-medium text-ink-900 dark:text-dark-text">Udostępnij w dniu startu</div>
+                <div className="text-[11px] text-ink-500 dark:text-dark-textMuted mt-0.5">Klient zobaczy {usePZ ? 'program' : 'współpracę'} w aplikacji {state.program.start}</div>
+              </div>
+              <div className="w-11 h-6 bg-gradient-brand rounded-full relative cursor-pointer shrink-0 shadow-brand-sm ml-6">
+                <div className="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-white dark:bg-dark-surface shadow-e1"></div>
+              </div>
+            </div>
+
+            {/* Welcome message — collapsible */}
+            {!messageOpen ? (
+              <button onClick={() => setMessageOpen(true)} className="mt-1 text-[12px] text-brand hover:text-brand-dark font-medium flex items-center gap-1.5 transition-colors">
+                <Icon name="plus" className="w-3.5 h-3.5" stroke={2.5} /> Dodaj wiadomość dla klienta
+              </button>
+            ) : (
+              <div className="mt-4 fade-in">
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="text-[11px] font-medium text-ink-600 dark:text-dark-textMuted">Wiadomość powitalna <span className="text-ink-400 dark:text-dark-textDim">(opcjonalna)</span></label>
+                  <button onClick={() => { setMessageOpen(false); updateProgram({ welcomeMessage: '' }); }} className="text-[11px] text-ink-500 hover:text-ink-800 dark:text-dark-textMuted dark:hover:text-dark-text transition-colors">Usuń</button>
+                </div>
+                <textarea
+                  value={state.program.welcomeMessage || ''}
+                  onChange={e => updateProgram({ welcomeMessage: e.target.value.slice(0, MAX_MSG) })}
+                  rows={2}
+                  placeholder="np. Cześć! Twój nowy program jest gotowy. Zaczynamy 26 stycznia 💪"
+                  className="w-full px-3 py-2.5 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated text-[13px] text-ink-900 dark:text-dark-text placeholder-ink-400 focus:border-brand focus:ring-2 focus:ring-brand/15 outline-none transition-all resize-none"
+                />
+                <div className="flex items-center justify-between mt-1">
+                  <p className="text-[11px] text-ink-500 dark:text-dark-textMuted">Wyślemy jako push w aplikacji klienta.</p>
+                  <span className={`text-[11px] font-medium tabular-nums ${(state.program.welcomeMessage || '').length >= MAX_MSG ? 'text-warning-dark' : 'text-ink-500 dark:text-dark-textMuted'}`}>
+                    {(state.program.welcomeMessage || '').length}/{MAX_MSG}
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* ── TYPY DNI ── */}
+          <div className="bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border rounded-xl p-6 shadow-e1">
+            <div className="text-[10px] font-semibold text-ink-500 dark:text-dark-textMuted uppercase tracking-[0.12em] mb-2">Typy dni</div>
+            <p className="text-[12px] text-ink-500 dark:text-dark-textMuted mb-5 leading-relaxed">Jeśli pracujesz z jadłospisem rotacyjnym, stwórz typy dni, nadaj im własne nazwy oraz przypisz dni tygodnia.</p>
+
+            {/* Column headers */}
+            <div className="flex items-center px-3 mb-2">
+              <div className="flex-1 text-[10px] font-semibold text-ink-400 dark:text-dark-textMuted uppercase tracking-[0.08em]">Nazwa</div>
+              <div className="flex gap-1 shrink-0">
+                {DAYS.map(d => (
+                  <div key={d} className="w-8 text-center text-[10px] font-semibold text-ink-400 dark:text-dark-textMuted uppercase tracking-[0.04em]">{d[0]}</div>
+                ))}
+              </div>
+            </div>
+
+            {/* Day type rows */}
+            <div className="space-y-2 mb-4">
+              {activeDayTypes.map(dt => (
+                <div key={dt.id} className="flex items-center gap-3 py-2.5 px-3 rounded-xl border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface shadow-e1 group">
+                  <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: dt.color }}></div>
+                  <span className="flex-1 text-[13px] font-medium text-ink-900 dark:text-dark-text truncate min-w-0">{dt.name}</span>
+                  <div className="flex items-center gap-1 shrink-0">
+                    {DAYS.map(day => {
+                      const active = dt.days.includes(day);
+                      return (
+                        <button
+                          key={day}
+                          onClick={() => toggleDay(dt.id, day)}
+                          className={`w-8 h-8 rounded-full text-[10px] font-semibold transition-all chip-press ${active ? 'bg-brand-400 dark:bg-brand/20 text-brand border border-brand' : 'border border-ink-200 dark:border-dark-border text-ink-400 dark:text-dark-textMuted hover:border-brand/50 hover:text-brand/60'}`}
+                        >
+                          {day[0]}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {activeDayTypes.length > 1 && (
+                    <button
+                      onClick={() => removeDayType(dt.id)}
+                      className="opacity-0 group-hover:opacity-100 w-7 h-7 rounded-md flex items-center justify-center text-ink-400 dark:text-dark-textMuted hover:bg-error-light dark:hover:bg-error/10 hover:text-error-dark dark:hover:text-error-bright transition-all btn-press shrink-0"
+                      title="Usuń typ dnia"
+                    >
+                      <Icon name="trash" className="w-3.5 h-3.5" stroke={1.75} />
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <button onClick={addDayType} className="flex items-center gap-1.5 text-[12px] text-brand hover:text-brand-dark font-medium transition-colors">
+              <Icon name="plus" className="w-3.5 h-3.5" stroke={2.5} /> Dodaj typ dnia
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      {/* Sticky footer */}
+      <div className="shrink-0 bg-white dark:bg-dark-surface border-t border-ink-200 dark:border-dark-border flex items-center px-8 py-3 gap-3">
+        <div className="flex items-center gap-1.5 text-[11px] text-ink-400 dark:text-dark-textMuted flex-1">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <circle cx="7" cy="7" r="6" stroke="currentColor" strokeWidth="1.2"/>
+            <path d="M4.5 7l1.8 1.8L9.5 5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          Automatyczne zapisywanie
+        </div>
+        <button onClick={onBack} className="h-9 px-4 rounded-lg border border-ink-200 dark:border-dark-border text-[13px] font-medium text-ink-700 dark:text-dark-textMuted hover:bg-ink-100 dark:hover:bg-dark-elevated transition-all">
+          Anuluj
+        </button>
+        <button onClick={onNext} className="h-9 px-5 rounded-lg btn-primary btn-press text-white font-medium text-[13px] flex items-center gap-2">
+          Dodaj założenia <Icon name="arrR" className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// ============================================================
+// EKRAN 2 — SETUP (adaptive per flow)
+// ============================================================
+const SetupScreen = ({ flow, state, setState, onNext, onFinish, onBack }) => {
+  const { usePZ } = React.useContext(NamingContext);
+  const [activeDayTypeId, setActiveDayTypeId] = useState('d1');
+  const [showMacrosPerMeal, setShowMacrosPerMeal] = useState(false);
+  const [dayTypesManagerOpen, setDayTypesManagerOpen] = useState(false);
 
   const currentDayTypes = state.program.hasMultipleDayTypes ? state.program.dayTypesMulti : state.program.dayTypes;
   const activeDayType = currentDayTypes.find(d => d.id === activeDayTypeId) || currentDayTypes[0];
@@ -3411,7 +3628,7 @@ const SetupScreen = ({ flow, state, setState, onNext, onFinish, onBack }) => {
   // Flow config
   const flowConfig = {
     assumptions: {
-      steps: ['Wybór', 'Założenia', 'Materiały'],
+      steps: ['Ustawienia', 'Założenia', 'Materiały'],
       current: 2,
       totalSteps: 3,
       title: 'Ustaw założenia',
@@ -3423,7 +3640,7 @@ const SetupScreen = ({ flow, state, setState, onNext, onFinish, onBack }) => {
       secondaryAction: () => onNext('bags'),
     },
     mealplan: {
-      steps: ['Wybór', 'Założenia', 'Jadłospis', 'Materiały'],
+      steps: ['Ustawienia', 'Założenia', 'Jadłospis', 'Materiały'],
       current: 2,
       totalSteps: 4,
       title: 'Ustaw założenia jadłospisu',
@@ -3434,7 +3651,7 @@ const SetupScreen = ({ flow, state, setState, onNext, onFinish, onBack }) => {
       secondaryCta: null,
     },
     expert: {
-      steps: ['Wybór', 'Założenia', 'Przepisy', 'Jadłospis', 'Materiały'],
+      steps: ['Ustawienia', 'Założenia', 'Przepisy', 'Jadłospis', 'Materiały'],
       current: 2,
       totalSteps: 5,
       title: 'Ustaw założenia programu',
@@ -3450,7 +3667,21 @@ const SetupScreen = ({ flow, state, setState, onNext, onFinish, onBack }) => {
   const isShort = flow === 'assumptions';
 
   return (
-    <div className="flex-1 overflow-y-auto bg-ink-200/30 dark:bg-dark-elevated/30">
+    <div className="flex-1 flex flex-col bg-ink-200/30 dark:bg-dark-elevated/30 overflow-hidden">
+      {/* Breadcrumb header */}
+      <div className="h-14 bg-white dark:bg-dark-surface border-b border-ink-200 dark:border-dark-border flex items-center px-8 gap-4 shrink-0">
+        <button onClick={onBack} className="flex items-center gap-1.5 text-[13px] text-ink-700 dark:text-dark-textMuted hover:text-ink-900 dark:hover:text-dark-text font-medium transition-colors shrink-0">
+          <Icon name="arrL" className="w-4 h-4" /> Wróć
+        </button>
+        <div className="w-px h-4 bg-ink-300 dark:bg-dark-border shrink-0"></div>
+        <div className="flex items-center gap-1.5 text-[13px] text-ink-700 dark:text-dark-textMuted">
+          <button onClick={onBack} className="hover:text-ink-900 dark:hover:text-dark-text transition-colors">Klienci</button>
+          <Icon name="chevR" className="w-3.5 h-3.5 opacity-40" stroke={2} />
+          <button onClick={onBack} className="hover:text-ink-900 dark:hover:text-dark-text transition-colors">Karolina Szafrańska</button>
+          <Icon name="chevR" className="w-3.5 h-3.5 opacity-40" stroke={2} />
+          <span className="font-semibold text-ink-900 dark:text-dark-text">Nowa współpraca</span>
+        </div>
+      </div>
       <FlowProgress steps={cfg.totalSteps} current={cfg.current} />
       <StepperBar
         labels={cfg.steps}
@@ -3459,9 +3690,9 @@ const SetupScreen = ({ flow, state, setState, onNext, onFinish, onBack }) => {
         clientPreferences={state.program.clientPreferences}
       />
 
-      <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-5 md:py-7">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5 lg:gap-6">
-          {/* LEFT: form */}
+      <div className="flex-1 overflow-y-auto">
+      <div className="max-w-[1440px] mx-auto px-6 py-6">
+        <div>
           <div className="space-y-5">
             <div>
               <div className="text-xs text-ink-700 dark:text-dark-textMuted mb-1">Krok {cfg.current} z {cfg.totalSteps}</div>
@@ -3469,213 +3700,8 @@ const SetupScreen = ({ flow, state, setState, onNext, onFinish, onBack }) => {
               <p className="text-sm text-ink-700 dark:text-dark-textMuted">{cfg.subtitle}</p>
             </div>
 
-            {/* Section 1: basics */}
-            <section className="bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border rounded-lg p-6 shadow-e1">
-              <div className="flex items-center gap-2 mb-5">
-                <div className="w-7 h-7 rounded-md bg-brand-400 dark:bg-brand/15 text-brand flex items-center justify-center text-[11px] font-semibold">1</div>
-                <h2 className="text-[14px] font-semibold text-ink-900 dark:text-dark-text">Podstawowe informacje</h2>
-              </div>
-              <div className="grid grid-cols-2 gap-4 mb-4">
-                <div className="col-span-2">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <label className="text-[11px] font-medium text-ink-700 dark:text-dark-textMuted">Nazwa {usePZ ? 'programu' : 'współpracy'}</label>
-                    {!coverOpen && (
-                      <button
-                        onClick={() => setCoverOpen(true)}
-                        className="text-[11px] text-brand hover:text-brand-dark font-medium flex items-center gap-1 transition-colors"
-                      >
-                        <Icon name="plus" className="w-3 h-3" stroke={2.5} /> Dodaj okładkę
-                      </button>
-                    )}
-                  </div>
-                  <input type="text" value={state.program.name}
-                    onChange={e => updateProgram({ name: e.target.value })}
-                    className="w-full h-10 px-3 bg-white dark:bg-dark-elevated text-ink-900 dark:text-dark-text border border-ink-200 dark:border-dark-border rounded-md text-[13px] focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition-all" />
-
-                  {/* Cover — collapsible */}
-                  {coverOpen && (
-                    <div className="mt-3 fade-in">
-                      <div className="flex items-center justify-between mb-1.5">
-                        <label className="text-[11px] font-medium text-ink-700 dark:text-dark-textMuted">Okładka <span className="text-ink-500 dark:text-dark-textDim">(opcjonalna)</span></label>
-                        <button
-                          onClick={() => { setCoverOpen(false); updateProgram({ cover: null }); }}
-                          className="text-[11px] text-ink-600 dark:text-dark-textMuted hover:text-ink-900 dark:hover:text-dark-text transition-colors"
-                        >
-                          Usuń
-                        </button>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        {/* Mini preview */}
-                        <div
-                          className="w-16 h-16 rounded-md border border-ink-200 dark:border-dark-border shrink-0 relative overflow-hidden"
-                          style={state.program.cover
-                            ? { background: state.program.cover }
-                            : { background: 'linear-gradient(135deg, #F7F5FF 0%, #F5F1FE 100%)' }
-                          }
-                        >
-                          {!state.program.cover && (
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <Icon name="gallery" className="w-5 h-5 text-brand/40" />
-                            </div>
-                          )}
-                        </div>
-                        {/* Picker */}
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          {coverGradients.map((g, i) => (
-                            <button
-                              key={i}
-                              onClick={() => updateProgram({ cover: g })}
-                              className="w-7 h-7 rounded-md border-2 transition-all hover:scale-110"
-                              style={{ background: g, borderColor: state.program.cover === g ? '#7448D0' : 'transparent' }}
-                              aria-label={`Okładka ${i + 1}`}
-                            />
-                          ))}
-                          <button
-                            className="w-7 h-7 rounded-md border border-dashed border-ink-300 dark:border-dark-border hover:border-brand hover:text-brand text-ink-600 dark:text-dark-textMuted flex items-center justify-center transition-all"
-                            title="Wgraj własne zdjęcie"
-                          >
-                            <Icon name="plus" className="w-3.5 h-3.5" stroke={2.5} />
-                          </button>
-                        </div>
-                      </div>
-                      <p className="text-[11px] text-ink-600 dark:text-dark-textMuted mt-2">
-                        Klient zobaczy tę okładkę w aplikacji mobilnej.
-                      </p>
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <label className="text-[11px] font-medium text-ink-700 dark:text-dark-textMuted mb-1.5 block">Start</label>
-                  <div className="h-10 px-3 border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated text-ink-900 dark:text-dark-text rounded-md text-[13px] flex items-center gap-2 hover:border-brand-300 dark:border-brand/30 transition-colors cursor-pointer">
-                    <Icon name="calendar" className="w-4 h-4 text-ink-600 dark:text-dark-textMuted" />
-                    <span>{state.program.start}</span>
-                  </div>
-                </div>
-                <div>
-                  <label className="text-[11px] font-medium text-ink-700 dark:text-dark-textMuted mb-1.5 block">Koniec</label>
-                  <div className="h-10 px-3 border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated text-ink-900 dark:text-dark-text rounded-md text-[13px] flex items-center gap-2 hover:border-brand-300 dark:border-brand/30 transition-colors cursor-pointer">
-                    <Icon name="calendar" className="w-4 h-4 text-ink-600 dark:text-dark-textMuted" />
-                    <span>{state.program.end}</span>
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {['Dziś', 'Jutro', 'Kolejny Pon.', '2 tyg.', '4 tyg.', 'Bezterminowo'].map((d, i) => (
-                  <button key={i} className={`chip-press px-3 py-1.5 text-xs font-medium rounded-full border transition-all ${d === '4 tyg.' ? 'bg-brand-400 dark:bg-brand/15 border-brand text-brand shadow-brand-sm' : 'border-ink-200 dark:border-dark-border text-ink-700 dark:text-dark-textMuted hover:border-brand hover:text-brand bg-white dark:bg-dark-surface hover:shadow-e1'}`}>
-                    {d}
-                  </button>
-                ))}
-              </div>
-
-              <div className="pt-5 mt-5 border-t border-ink-200 dark:border-dark-border">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-sm font-medium text-ink-900 dark:text-dark-text">Udostępnij w dniu startu</div>
-                    <div className="text-xs text-ink-700 dark:text-dark-textMuted mt-0.5">Klient zobaczy {usePZ ? 'program' : 'współpracę'} w aplikacji {state.program.start}</div>
-                  </div>
-                  <div className="w-11 h-6 bg-gradient-brand rounded-full relative cursor-pointer shrink-0 shadow-brand-sm">
-                    <div className="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-white dark:bg-dark-surface shadow-e1"></div>
-                  </div>
-                </div>
-
-                {/* Dodaj wiadomość — collapsible */}
-                {!messageOpen && (
-                  <button
-                    onClick={() => setMessageOpen(true)}
-                    className="mt-3 text-[12px] text-brand hover:text-brand-dark font-medium flex items-center gap-1 transition-colors"
-                  >
-                    <Icon name="plus" className="w-3.5 h-3.5" stroke={2.5} /> Dodaj wiadomość dla klienta
-                  </button>
-                )}
-                {messageOpen && (
-                  <div className="mt-3 fade-in">
-                    <div className="flex items-center justify-between mb-1.5">
-                      <label className="text-[11px] font-medium text-ink-700 dark:text-dark-textMuted">Wiadomość <span className="text-ink-500 dark:text-dark-textDim">(opcjonalna)</span></label>
-                      <button
-                        onClick={() => { setMessageOpen(false); updateProgram({ welcomeMessage: '' }); }}
-                        className="text-[11px] text-ink-600 dark:text-dark-textMuted hover:text-ink-900 dark:hover:text-dark-text transition-colors"
-                      >
-                        Usuń
-                      </button>
-                    </div>
-                    <textarea
-                      value={state.program.welcomeMessage || ''}
-                      onChange={e => updateProgram({ welcomeMessage: e.target.value.slice(0, MAX_MSG) })}
-                      rows={2}
-                      placeholder="np. Cześć! Twój nowy program jest gotowy. Zaczynamy 26 stycznia 💪"
-                      className="w-full px-3 py-2 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-elevated text-[13px] text-ink-900 dark:text-dark-text placeholder-ink-500 focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none transition-all resize-none"
-                    />
-                    <div className="flex items-center justify-between mt-1">
-                      <p className="text-[11px] text-ink-600 dark:text-dark-textMuted">
-                        Wyślemy jako push w aplikacji klienta.
-                      </p>
-                      <span className={`text-[11px] font-medium tabular-nums ${(state.program.welcomeMessage || '').length >= MAX_MSG ? 'text-warning-dark' : 'text-ink-600 dark:text-dark-textMuted'}`}>
-                        {(state.program.welcomeMessage || '').length}/{MAX_MSG}
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </section>
-
-            {/* Section 2: day types rotation */}
-            <section className="bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border rounded-lg p-6 shadow-e1">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-md bg-brand-400 dark:bg-brand/15 text-brand flex items-center justify-center text-[11px] font-semibold">2</div>
-                  <h2 className="text-[14px] font-semibold text-ink-900 dark:text-dark-text">Rotacja dni</h2>
-                </div>
-                <label className="flex items-center gap-2 text-xs text-ink-700 dark:text-dark-textMuted cursor-pointer">
-                  <input type="checkbox"
-                    checked={state.program.hasMultipleDayTypes}
-                    onChange={e => updateProgram({ hasMultipleDayTypes: e.target.checked })}
-                    className="w-4 h-4 accent-brand" />
-                  <span>Różne typy dni <span className="text-ink-500 dark:text-dark-textDim">(np. treningowe vs nietreningowe)</span></span>
-                </label>
-              </div>
-
-              {!state.program.hasMultipleDayTypes ? (
-                <div className="bg-gradient-brand-subtle dark:bg-dark-surfaceTint border border-brand-300 dark:border-brand/30 rounded-md p-4 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-md bg-white dark:bg-dark-surface text-brand flex items-center justify-center shrink-0 shadow-brand-sm">
-                    <Icon name="calendar" className="w-4 h-4" stroke={2} />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-sm font-semibold text-ink-900 dark:text-dark-text">Codziennie to samo</div>
-                    <div className="flex items-center gap-1 mt-1">
-                      {['Pn','Wt','Śr','Cz','Pt','Sb','Nd'].map(d => (
-                        <span key={d} className="text-[10px] font-medium text-brand bg-white dark:bg-dark-surface rounded px-1.5 py-0.5 border border-brand-300 dark:border-brand/30">{d}</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="text-xs text-ink-800 dark:text-dark-text bg-info-light dark:bg-info/10 border border-info/20 rounded-md p-3.5 flex items-start gap-2.5">
-                  <Icon name="info" className="w-4 h-4 text-info shrink-0 mt-0.5" stroke={2} />
-                  <span>Ustawisz osobne założenia dla każdego typu dnia w sekcji poniżej. Kliknij typ dnia z listy po lewej.</span>
-                </div>
-              )}
-            </section>
-
-            {/* Section 3: assumptions per day type */}
+            {/* Section 1: assumptions */}
             <section>
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-md bg-brand-400 dark:bg-brand/15 text-brand flex items-center justify-center text-[11px] font-semibold">3</div>
-                  <div>
-                    <h2 className="text-[14px] font-semibold text-ink-900 dark:text-dark-text">
-                      {state.program.hasMultipleDayTypes ? 'Założenia per typ dnia' : 'Założenia'}
-                    </h2>
-                    {state.program.hasMultipleDayTypes && (
-                      <p className="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Wybierz typ dnia z listy po lewej</p>
-                    )}
-                  </div>
-                </div>
-                <button onClick={() => setDayTypesManagerOpen(true)}
-                  className="btn-press h-8 px-3 rounded-md bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border hover:border-brand hover:text-brand text-ink-800 dark:text-dark-text text-[12px] font-semibold flex items-center gap-1.5 transition-all">
-                  <Icon name="settings" className="w-3.5 h-3.5" stroke={2} /> Zarządzaj typami dni
-                </button>
-              </div>
-
               {/* Bilans energetyczny banner */}
               <div className="bg-gradient-brand-subtle dark:bg-dark-surfaceTint border border-brand-300 dark:border-brand/30 rounded-md p-3.5 mb-4 flex items-center gap-3 shadow-brand-sm">
                 <div className="w-9 h-9 rounded-md bg-white dark:bg-dark-surface text-brand flex items-center justify-center shrink-0 shadow-e1">
@@ -3690,27 +3716,19 @@ const SetupScreen = ({ flow, state, setState, onNext, onFinish, onBack }) => {
                 </button>
               </div>
 
-              {state.program.hasMultipleDayTypes ? (
-                <div className="grid grid-cols-[240px_1fr] gap-4">
-                  <DayTypesList
-                    dayTypes={currentDayTypes}
-                    activeId={activeDayTypeId}
-                    onSelect={setActiveDayTypeId}
-                    onAddDayType={() => setDayTypesManagerOpen(true)}
-                    onManage={() => setDayTypesManagerOpen(true)} />
-                  <DayTypeEditor
-                    dayType={activeDayType}
-                    mode={cfg.editorMode === 'full' ? 'full' : 'assumptions-only'}
-                    showMacros={showMacrosPerMeal}
-                    onToggleMacros={e => setShowMacrosPerMeal(e.target.checked)} />
-                </div>
-              ) : (
+              <div className="grid grid-cols-[280px_1fr] gap-5">
+                <DayTypesList
+                  dayTypes={currentDayTypes}
+                  activeId={activeDayTypeId}
+                  onSelect={setActiveDayTypeId}
+                  onAddDayType={() => setDayTypesManagerOpen(true)}
+                  onManage={() => setDayTypesManagerOpen(true)} />
                 <DayTypeEditor
                   dayType={activeDayType}
                   mode={cfg.editorMode === 'full' ? 'full' : 'assumptions-only'}
                   showMacros={showMacrosPerMeal}
                   onToggleMacros={e => setShowMacrosPerMeal(e.target.checked)} />
-              )}
+              </div>
             </section>
 
             {/* Bottom tip for assumptions flow */}
@@ -3727,84 +3745,28 @@ const SetupScreen = ({ flow, state, setState, onNext, onFinish, onBack }) => {
             )}
           </div>
 
-          {/* RIGHT: sticky summary */}
-          <aside>
-            <div className="lg:sticky lg:top-20 space-y-3">
-              <div className="bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border rounded-lg p-5 shadow-e2">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-1.5 h-1.5 rounded-full bg-gradient-brand"></div>
-                  <div className="text-[10px] font-semibold text-ink-700 dark:text-dark-textMuted uppercase tracking-[0.08em]">Podsumowanie</div>
-                </div>
-
-                <h3 className="text-[15px] font-semibold text-ink-900 dark:text-dark-text mb-4 leading-tight">{state.program.name}</h3>
-
-                <div className="space-y-2.5 pb-4 mb-4 border-b border-ink-200 dark:border-dark-border">
-                  <div className="flex items-center gap-2 text-xs">
-                    <Icon name="calendar" className="w-3.5 h-3.5 text-ink-600 dark:text-dark-textMuted shrink-0" stroke={2} />
-                    <span className="text-ink-800 dark:text-dark-text">{state.program.start} — {state.program.end}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-xs">
-                    <Icon name="flame" className="w-3.5 h-3.5 text-ink-600 dark:text-dark-textMuted shrink-0" stroke={2} />
-                    <span className="text-ink-800 dark:text-dark-text">
-                      {state.program.hasMultipleDayTypes
-                        ? `${currentDayTypes.length} typy dni · różne kcal`
-                        : `${activeDayType.kcal} kcal · ${activeDayType.protein}/${activeDayType.fat}/${activeDayType.carbs} g`}
-                    </span>
-                  </div>
-                  {cfg.editorMode === 'full' && (
-                    <div className="flex items-center gap-2 text-xs">
-                      <Icon name="clock" className="w-3.5 h-3.5 text-ink-600 dark:text-dark-textMuted shrink-0" stroke={2} />
-                      <span className="text-ink-800 dark:text-dark-text">{activeDayType.meals.length} posiłki dziennie</span>
-                    </div>
-                  )}
-                </div>
-
-                <div className="mb-5">
-                  <div className="text-[10px] font-semibold text-ink-700 dark:text-dark-textMuted uppercase tracking-[0.08em] mb-2.5">Co otrzyma klient</div>
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-xs text-ink-800 dark:text-dark-text">
-                      <div className="w-4 h-4 rounded bg-success-light dark:bg-success/10 text-success-dark dark:text-success-bright flex items-center justify-center shrink-0"><Icon name="check" className="w-2.5 h-2.5" stroke={3.5} /></div>
-                      Założenia kcal i makro
-                    </div>
-                    {flow === 'assumptions' && (
-                      <>
-                        <div className="flex items-center gap-2 text-xs text-ink-800 dark:text-dark-text">
-                          <div className="w-4 h-4 rounded bg-success-light dark:bg-success/10 text-success-dark dark:text-success-bright flex items-center justify-center shrink-0"><Icon name="check" className="w-2.5 h-2.5" stroke={3.5} /></div>
-                          Rozkład posiłków z godzinami
-                        </div>
-                        <div className="flex items-center gap-2 text-xs text-ink-700 dark:text-dark-textMuted">
-                          <div className="w-4 h-4 rounded bg-ink-200 dark:bg-dark-elevated flex items-center justify-center shrink-0"><Icon name="plus" className="w-2.5 h-2.5" stroke={2.5} /></div>
-                          Zbiory przepisów (opcjonalnie)
-                        </div>
-                      </>
-                    )}
-                    {(flow === 'mealplan' || flow === 'expert') && (
-                      <div className="flex items-center gap-2 text-xs text-ink-700 dark:text-dark-textMuted">
-                        <div className="w-4 h-4 rounded bg-brand-400 dark:bg-brand/15 text-brand flex items-center justify-center shrink-0"><Icon name="sparkles" className="w-2.5 h-2.5" /></div>
-                        Jadłospis (w kolejnych krokach)
-                      </div>
-                    )}
-                    <div className="flex items-center gap-2 text-xs text-ink-700 dark:text-dark-textMuted">
-                      <div className="w-4 h-4 rounded bg-ink-200 dark:bg-dark-elevated flex items-center justify-center shrink-0"><Icon name="plus" className="w-2.5 h-2.5" stroke={2.5} /></div>
-                      Materiały edukacyjne
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <button onClick={cfg.primaryAction} className="w-full btn-primary btn-press h-10 rounded-md text-white font-medium text-sm flex items-center justify-center gap-2">
-                    {cfg.primaryCta} <Icon name="arrR" className="w-4 h-4" />
-                  </button>
-                  {cfg.secondaryCta && (
-                    <button onClick={cfg.secondaryAction} className="w-full btn-press h-10 rounded-md border border-brand-300 dark:border-brand/30 bg-white dark:bg-dark-surface hover:bg-brand-400 dark:bg-brand/15 text-brand font-medium text-sm transition-all">
-                      {cfg.secondaryCta}
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-          </aside>
         </div>
+      </div>
+      </div>
+
+      {/* Sticky footer */}
+      <div className="shrink-0 bg-white dark:bg-dark-surface border-t border-ink-200 dark:border-dark-border flex items-center px-8 py-3 gap-3">
+        <div className="flex items-center gap-2 text-[12px] text-ink-500 dark:text-dark-textMuted">
+          <Icon name="save" className="w-3.5 h-3.5" />
+          <span>Automatyczne zapisywanie</span>
+        </div>
+        <div className="flex-1"></div>
+        <button onClick={onBack} className="h-9 px-4 rounded-lg btn-press border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface hover:bg-ink-100 dark:hover:bg-dark-elevated text-ink-700 dark:text-dark-textMuted font-medium text-[13px] transition-all flex items-center gap-1.5">
+          <Icon name="arrL" className="w-4 h-4" /> Wróć do ustawień
+        </button>
+        {cfg.secondaryCta && (
+          <button onClick={cfg.secondaryAction} className="h-9 px-4 rounded-lg btn-press border border-brand-300 dark:border-brand/30 bg-white dark:bg-dark-surface hover:bg-brand-400 dark:hover:bg-brand/15 text-brand font-medium text-[13px] transition-all">
+            {cfg.secondaryCta}
+          </button>
+        )}
+        <button onClick={cfg.primaryAction} className="h-9 px-5 rounded-lg btn-primary btn-press text-white font-medium text-[13px] flex items-center gap-2">
+          {cfg.primaryCta} <Icon name="arrR" className="w-4 h-4" />
+        </button>
       </div>
 
       {/* Day types manager modal */}
@@ -7379,48 +7341,41 @@ const RecipesScreen = ({ flow, state, setState, onNext, onBack, onProducts }) =>
 
   // Stepper config
   const stepperConfig = {
-    expert: { labels: ['Wybór', 'Założenia', 'Przepisy', 'Jadłospis', 'Materiały'], current: 3, total: 5 },
+    expert: { labels: ['Ustawienia', 'Założenia', 'Przepisy', 'Jadłospis', 'Materiały'], current: 3, total: 5, title: 'Dobierz przepisy', subtitle: 'Wybierz przepisy na każdy posiłek w dniu standardowym.' },
   };
   const stepCfg = stepperConfig[flow] || stepperConfig.expert;
 
   return (
-    <ProgramShell
-      program={state.program}
-      activeTab="recipes"
-      onBack={onBack}
-      onTabChange={(tab) => {
-        if (tab === 'assumptions') onBack();
-        if (tab === 'products') onProducts && onProducts();
-        if (tab === 'mealplan') onNext();
-      }}
-      shareState={state.program.shared ? 'shared' : 'draft'}
-      onShareInApp={() => setState(s => ({ ...s, program: { ...s.program, shared: true } }))}
-      onShareEmail={() => {}}
-      onUnshare={() => setState(s => ({ ...s, program: { ...s.program, shared: false } }))}
-      primaryAction={{
-        label: 'Autogeneruj wszystkie posiłki',
-        icon: 'sparkles',
-        onClick: () => { setAutogenScope('all'); setAutogenMealType(null); setOnboardingOpen(true); },
-      }}>
-
-      <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-5 md:py-7">
-        {/* Tab toolbar: Przepisy actions */}
-        <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
-          <div className="text-[13px] text-ink-700 dark:text-dark-textMuted">
-            Zdefiniuj przepisy dla każdego typu dnia. Możesz też przejść od razu do Jadłospisu.
-          </div>
-          <TabActionsMenu
-            label="Akcje przepisów"
-            items={[
-              { heading: 'Przepisy' },
-              { icon: 'sparkles', label: 'Autogeneruj wszystkie posiłki', onClick: () => { setAutogenScope('all'); setAutogenMealType(null); setOnboardingOpen(true); } },
-              { icon: 'save', label: 'Zapisz worek do bazy', onClick: handleSaveToLibrary },
-              { icon: 'book', label: 'Dodaj z biblioteki', onClick: () => {} },
-              { separator: true },
-              { icon: 'trash', label: 'Wyczyść wszystkie przepisy', onClick: () => {}, danger: true },
-            ]} />
+    <div className="flex-1 flex flex-col bg-ink-200/30 dark:bg-dark-elevated/30 overflow-hidden">
+      {/* Breadcrumb header */}
+      <div className="h-14 bg-white dark:bg-dark-surface border-b border-ink-200 dark:border-dark-border flex items-center px-8 gap-4 shrink-0">
+        <button onClick={onBack} className="flex items-center gap-1.5 text-[13px] text-ink-700 dark:text-dark-textMuted hover:text-ink-900 dark:hover:text-dark-text font-medium transition-colors shrink-0">
+          <Icon name="arrL" className="w-4 h-4" /> Wróć
+        </button>
+        <div className="w-px h-4 bg-ink-300 dark:bg-dark-border shrink-0"></div>
+        <div className="flex items-center gap-1.5 text-[13px] text-ink-700 dark:text-dark-textMuted">
+          <button onClick={onBack} className="hover:text-ink-900 dark:hover:text-dark-text transition-colors">Klienci</button>
+          <Icon name="chevR" className="w-3.5 h-3.5 opacity-40" stroke={2} />
+          <button onClick={onBack} className="hover:text-ink-900 dark:hover:text-dark-text transition-colors">Karolina Szafrańska</button>
+          <Icon name="chevR" className="w-3.5 h-3.5 opacity-40" stroke={2} />
+          <span className="font-semibold text-ink-900 dark:text-dark-text">Nowa współpraca</span>
         </div>
+      </div>
+      <FlowProgress steps={stepCfg.total} current={stepCfg.current} />
+      <StepperBar
+        labels={stepCfg.labels}
+        current={stepCfg.current}
+        onBack={onBack}
+        clientPreferences={state.program.clientPreferences}
+      />
 
+      <div className="flex-1 overflow-y-auto">
+      <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-5 md:py-7">
+        <div className="mb-5">
+          <div className="text-xs text-ink-700 dark:text-dark-textMuted mb-1">Krok {stepCfg.current} z {stepCfg.total}</div>
+          <h1 className="text-2xl font-semibold text-ink-900 dark:text-dark-text mb-1">{stepCfg.title}</h1>
+          <p className="text-sm text-ink-700 dark:text-dark-textMuted">{stepCfg.subtitle}</p>
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-4">
           {/* LEFT: Day types list */}
           <aside>
@@ -7429,7 +7384,8 @@ const RecipesScreen = ({ flow, state, setState, onNext, onBack, onProducts }) =>
               activeId={activeDayTypeId}
               onSelect={setActiveDayTypeId}
               onAddDayType={() => setDayTypesManagerOpen(true)}
-              onManage={() => setDayTypesManagerOpen(true)} />
+              onManage={() => setDayTypesManagerOpen(true)}
+              hideActions />
           </aside>
 
           {/* RIGHT: Summary + meals */}
@@ -7483,11 +7439,12 @@ const RecipesScreen = ({ flow, state, setState, onNext, onBack, onProducts }) =>
               </div>
             </div>
 
-            {/* Meals list */}
-            <div>
-              <div className="flex items-center justify-between mb-3">
+            {/* Meals list card */}
+            <div className="bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border rounded-lg shadow-e1">
+              {/* Card header */}
+              <div className="flex items-center justify-between px-5 py-3 border-b border-ink-200 dark:border-dark-border">
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-semibold text-ink-700 dark:text-dark-textMuted uppercase tracking-[0.08em]">Przepisy</span>
+                  <span className="text-[10px] font-semibold text-ink-500 dark:text-dark-textMuted uppercase tracking-[0.12em]">Przepisy</span>
                   <span className="text-[11px] text-ink-600 dark:text-dark-textMuted">· {activeDayType.name}</span>
                   {/* Demo: toggle empty state */}
                   <button
@@ -7506,82 +7463,92 @@ const RecipesScreen = ({ flow, state, setState, onNext, onBack, onProducts }) =>
                     {isEmptyDayType ? 'Demo: wypełnij' : 'Demo: wyczyść'}
                   </button>
                 </div>
-                {!isEmptyDayType && (
-                  <button onClick={() => { setAutogenScope('all'); setAutogenMealType(null); setOnboardingOpen(true); }} className="btn-press h-8 px-3 rounded-md bg-white dark:bg-dark-surface border border-brand-300 dark:border-brand/30 text-brand hover:bg-brand-200 dark:bg-brand/20 text-[12px] font-semibold flex items-center gap-1.5 transition-all">
-                    <Icon name="sparkles" className="w-3.5 h-3.5" /> Autogeneruj wszystkie posiłki
-                  </button>
-                )}
+                <TabActionsMenu
+                  label="Akcje przepisów"
+                  items={[
+                    { heading: 'Przepisy' },
+                    { icon: 'sparkles', label: 'Autogeneruj wszystkie posiłki', onClick: () => { setAutogenScope('all'); setAutogenMealType(null); setOnboardingOpen(true); } },
+                    { icon: 'save', label: 'Zapisz worek do bazy', onClick: handleSaveToLibrary },
+                    { icon: 'book', label: 'Dodaj z biblioteki', onClick: () => {} },
+                    { separator: true },
+                    { icon: 'trash', label: 'Wyczyść wszystkie przepisy', onClick: () => {}, danger: true },
+                  ]} />
               </div>
 
-              {/* Empty state — wszystkie posiłki puste */}
-              {isEmptyDayType && (
-                <div className="mb-4 rounded-lg border-2 border-dashed border-brand/30 bg-gradient-to-br from-brand-400/30 to-brand-200/20 dark:from-brand/10 dark:to-brand/5 p-5 fade-in">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-md bg-gradient-brand text-white flex items-center justify-center shadow-brand-sm shrink-0">
-                      <Icon name="sparkles" className="w-5 h-5" stroke={2} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-[15px] font-semibold text-ink-900 dark:text-dark-text mb-1">
-                        Pusty zbiór przepisów dla typu dnia "{activeDayType.name}"
-                      </h3>
-                      <p className="text-[12px] text-ink-700 dark:text-dark-textMuted mb-3">
-                        Dobierz przepisy automatycznie z bazy, albo dodawaj je ręcznie do każdego posiłku osobno.
-                      </p>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <button
-                          onClick={() => { setAutogenScope('all'); setAutogenMealType(null); setOnboardingOpen(true); }}
-                          className="btn-primary btn-press h-9 px-4 rounded-md text-white font-medium text-[13px] flex items-center gap-2 shadow-brand-sm"
-                        >
-                          <Icon name="sparkles" className="w-3.5 h-3.5" /> Autogeneruj wszystkie posiłki
-                        </button>
-                        <button
-                          onClick={() => { setAddPanelMeal(meals[0].name); setAddPanelOpen(true); }}
-                          className="btn-press h-9 px-4 rounded-md bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border hover:border-brand hover:text-brand text-ink-800 dark:text-dark-text text-[13px] font-medium flex items-center gap-2 transition-all"
-                        >
-                          <Icon name="plus" className="w-3.5 h-3.5" /> Dodaj ręcznie
-                        </button>
+              {/* Card body */}
+              <div className="p-4">
+                {/* Empty state — wszystkie posiłki puste */}
+                {isEmptyDayType && (
+                  <div className="mb-4 rounded-lg border-2 border-dashed border-brand/30 bg-gradient-to-br from-brand-400/30 to-brand-200/20 dark:from-brand/10 dark:to-brand/5 p-5 fade-in">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-md bg-gradient-brand text-white flex items-center justify-center shadow-brand-sm shrink-0">
+                        <Icon name="sparkles" className="w-5 h-5" stroke={2} />
                       </div>
-                      <div className="flex items-center gap-1.5 mt-3 pt-3 border-t border-brand/10 text-[11px] text-ink-700 dark:text-dark-textMuted">
-                        <Icon name="info" className="w-3 h-3 text-info shrink-0" />
-                        Możesz też dobrać przepisy do każdego posiłku osobno — kliknij <Icon name="sparkles" className="w-3 h-3 text-brand inline" /> przy posiłku poniżej.
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-[15px] font-semibold text-ink-900 dark:text-dark-text mb-1">
+                          Pusty zbiór przepisów dla typu dnia "{activeDayType.name}"
+                        </h3>
+                        <p className="text-[12px] text-ink-700 dark:text-dark-textMuted mb-3">
+                          Dobierz przepisy automatycznie z bazy, albo dodawaj je ręcznie do każdego posiłku osobno.
+                        </p>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <button
+                            onClick={() => { setAutogenScope('all'); setAutogenMealType(null); setOnboardingOpen(true); }}
+                            className="btn-primary btn-press h-9 px-4 rounded-md text-white font-medium text-[13px] flex items-center gap-2 shadow-brand-sm"
+                          >
+                            <Icon name="sparkles" className="w-3.5 h-3.5" /> Autogeneruj wszystkie posiłki
+                          </button>
+                          <button
+                            onClick={() => { setAddPanelMeal(meals[0].name); setAddPanelOpen(true); }}
+                            className="btn-press h-9 px-4 rounded-md bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border hover:border-brand hover:text-brand text-ink-800 dark:text-dark-text text-[13px] font-medium flex items-center gap-2 transition-all"
+                          >
+                            <Icon name="plus" className="w-3.5 h-3.5" /> Dodaj ręcznie
+                          </button>
+                        </div>
+                        <div className="flex items-center gap-1.5 mt-3 pt-3 border-t border-brand/10 text-[11px] text-ink-700 dark:text-dark-textMuted">
+                          <Icon name="info" className="w-3 h-3 text-info shrink-0" />
+                          Możesz też dobrać przepisy do każdego posiłku osobno — kliknij <Icon name="sparkles" className="w-3 h-3 text-brand inline" /> przy posiłku poniżej.
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              <div className="space-y-2">
-                {meals.map(meal => (
-                  <MealRow key={meal.key}
-                    meal={meal}
-                    recipes={recipesByMeal[meal.key] || []}
-                    products={productsByMeal[meal.key] || []}
-                    expanded={isEmptyDayType ? true : !!expandedMeals[meal.key]}
-                    onToggle={() => toggleMeal(meal.key)}
-                    onRemoveRecipe={(rId) => removeRecipe(meal.key, rId)}
-                    onRemoveProduct={(pId) => removeProduct(meal.key, pId)}
-                    onAutogen={() => { setAutogenScope('single'); setAutogenMealType(meal.name); setOnboardingOpen(true); }}
-                    onAddManual={() => { setAddPanelMeal(meal.name); setAddPanelOpen(true); }} />
-                ))}
+                <div className="space-y-2">
+                  {meals.map(meal => (
+                    <MealRow key={meal.key}
+                      meal={meal}
+                      recipes={recipesByMeal[meal.key] || []}
+                      products={productsByMeal[meal.key] || []}
+                      expanded={isEmptyDayType ? true : !!expandedMeals[meal.key]}
+                      onToggle={() => toggleMeal(meal.key)}
+                      onRemoveRecipe={(rId) => removeRecipe(meal.key, rId)}
+                      onRemoveProduct={(pId) => removeProduct(meal.key, pId)}
+                      onAutogen={() => { setAutogenScope('single'); setAutogenMealType(meal.name); setOnboardingOpen(true); }}
+                      onAddManual={() => { setAddPanelMeal(meal.name); setAddPanelOpen(true); }} />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="sticky bottom-0 mt-8 bg-white dark:bg-dark-surface border-t border-ink-200 dark:border-dark-border -mx-8 px-8 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs text-ink-700 dark:text-dark-textMuted">
-            <Icon name="save" className="w-3.5 h-3.5" stroke={2} /> Automatyczne zapisywanie
-          </div>
-          <div className="flex items-center gap-2">
-            <button onClick={onBack} className="btn-press h-10 px-3 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface hover:border-brand text-ink-800 dark:text-dark-text text-sm font-medium transition-all">
-              Wróć do założeń
-            </button>
-            <button onClick={onNext} className="btn-press h-10 px-5 rounded-md btn-primary text-white font-medium text-sm flex items-center gap-2">
-              Przejdź do jadłospisu <Icon name="arrR" className="w-4 h-4" />
-            </button>
-          </div>
+      </div>
+      </div>
+
+      {/* Sticky footer */}
+      <div className="shrink-0 bg-white dark:bg-dark-surface border-t border-ink-200 dark:border-dark-border flex items-center px-8 py-3 gap-3">
+        <div className="flex items-center gap-2 text-[12px] text-ink-500 dark:text-dark-textMuted">
+          <Icon name="save" className="w-3.5 h-3.5" />
+          <span>Automatyczne zapisywanie</span>
         </div>
+        <div className="flex-1"></div>
+        <button onClick={onBack} className="h-9 px-4 rounded-lg btn-press border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface hover:bg-ink-100 dark:hover:bg-dark-elevated text-ink-700 dark:text-dark-textMuted font-medium text-[13px] transition-all flex items-center gap-1.5">
+          <Icon name="arrL" className="w-4 h-4" /> Wróć do założeń
+        </button>
+        <button onClick={onNext} className="h-9 px-5 rounded-lg btn-primary btn-press text-white font-medium text-[13px] flex items-center gap-2">
+          Przejdź do jadłospisu <Icon name="arrR" className="w-4 h-4" />
+        </button>
       </div>
 
       {/* Save to library toast */}
@@ -7644,7 +7611,7 @@ const RecipesScreen = ({ flow, state, setState, onNext, onBack, onProducts }) =>
           // Tu po prostu zamykamy
         }}
       />
-    </ProgramShell>
+    </div>
   );
 };
 
@@ -7670,8 +7637,8 @@ const MealplanScreen = ({ flow, state, onFinish, onBack }) => {
 
   // Flow-specific stepper
   const stepperConfig = {
-    mealplan: { labels: ['Wybór', 'Założenia', 'Jadłospis', 'Materiały'], current: 3, total: 4 },
-    expert:   { labels: ['Wybór', 'Założenia', 'Przepisy', 'Jadłospis', 'Materiały'], current: 4, total: 5 },
+    mealplan: { labels: ['Ustawienia', 'Założenia', 'Jadłospis', 'Materiały'], current: 3, total: 4, title: 'Jadłospis', subtitle: 'Generuj lub ułóż ręcznie jadłospis tygodniowy dla klienta.' },
+    expert:   { labels: ['Ustawienia', 'Założenia', 'Przepisy', 'Jadłospis', 'Materiały'], current: 4, total: 5, title: 'Jadłospis', subtitle: 'Ułóż jadłospis bazując na dobranych wcześniej przepisach.' },
   };
   const stepCfg = stepperConfig[flow] || stepperConfig.expert;
 
@@ -7696,27 +7663,36 @@ const MealplanScreen = ({ flow, state, onFinish, onBack }) => {
   const [autofillGaps, setAutofillGaps] = useState(true);
 
   return (
-    <ProgramShell
-      program={state.program}
-      activeTab="mealplan"
-      onBack={onBack}
-      onTabChange={(tab) => {
-        if (tab === 'assumptions' || tab === 'recipes' || tab === 'products') onBack();
-        if (tab === 'materials') onFinish();
-      }}
-      shareState={state.program.shared ? 'shared' : 'draft'}
-      onShareInApp={() => {}}
-      onShareEmail={() => {}}
-      onUnshare={() => {}}
-      primaryAction={
-        flow === 'mealplan' && !mealplanGenerated
-          ? { label: 'Autogeneruj jadłospis', icon: 'sparkles', onClick: () => setOnboardingOpen(true) }
-          : flow === 'expert' && !mealplanGenerated
-            ? { label: 'Ułóż jadłospis', icon: 'sparkles', onClick: () => setOnboardingOpen(true) }
-            : null
-      }>
+    <div className="flex-1 flex flex-col bg-ink-200/30 dark:bg-dark-elevated/30 overflow-hidden">
+      {/* Breadcrumb header */}
+      <div className="h-14 bg-white dark:bg-dark-surface border-b border-ink-200 dark:border-dark-border flex items-center px-8 gap-4 shrink-0">
+        <button onClick={onBack} className="flex items-center gap-1.5 text-[13px] text-ink-700 dark:text-dark-textMuted hover:text-ink-900 dark:hover:text-dark-text font-medium transition-colors shrink-0">
+          <Icon name="arrL" className="w-4 h-4" /> Wróć
+        </button>
+        <div className="w-px h-4 bg-ink-300 dark:bg-dark-border shrink-0"></div>
+        <div className="flex items-center gap-1.5 text-[13px] text-ink-700 dark:text-dark-textMuted">
+          <button onClick={onBack} className="hover:text-ink-900 dark:hover:text-dark-text transition-colors">Klienci</button>
+          <Icon name="chevR" className="w-3.5 h-3.5 opacity-40" stroke={2} />
+          <button onClick={onBack} className="hover:text-ink-900 dark:hover:text-dark-text transition-colors">Karolina Szafrańska</button>
+          <Icon name="chevR" className="w-3.5 h-3.5 opacity-40" stroke={2} />
+          <span className="font-semibold text-ink-900 dark:text-dark-text">Nowa współpraca</span>
+        </div>
+      </div>
+      <FlowProgress steps={stepCfg.total} current={stepCfg.current} />
+      <StepperBar
+        labels={stepCfg.labels}
+        current={stepCfg.current}
+        onBack={onBack}
+        clientPreferences={state.program.clientPreferences}
+      />
 
+      <div className="flex-1 overflow-y-auto">
       <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-5 md:py-7">
+        <div className="mb-5">
+          <div className="text-xs text-ink-700 dark:text-dark-textMuted mb-1">Krok {stepCfg.current} z {stepCfg.total}</div>
+          <h1 className="text-2xl font-semibold text-ink-900 dark:text-dark-text mb-1">{stepCfg.title}</h1>
+          <p className="text-sm text-ink-700 dark:text-dark-textMuted">{stepCfg.subtitle}</p>
+        </div>
         {/* Show empty/loading state before mealplan is generated (mealplan flow) */}
         {flow === 'mealplan' && !mealplanGenerated ? (
           <div className="text-center py-16">
@@ -7731,21 +7707,6 @@ const MealplanScreen = ({ flow, state, onFinish, onBack }) => {
           </div>
         ) : (
         <>
-        {/* Shopping list — compact strip (32px) */}
-        <button onClick={() => setShoppingListOpen(true)}
-          className="w-full h-8 flex items-center gap-2 px-3 mb-3 bg-gradient-brand-subtle dark:bg-dark-surfaceTint border border-brand-300 dark:border-brand/30 rounded-md hover:border-brand transition-all text-left btn-press group">
-          <Icon name="bags" className="w-3.5 h-3.5 text-brand shrink-0" stroke={2} />
-          <span className="text-[12px] font-semibold text-ink-900 dark:text-dark-text shrink-0">Lista zakupów</span>
-          <span className="text-[11px] text-ink-700 dark:text-dark-textMuted truncate">28 produktów · {view} dni · {view === '7' ? '22.06 — 29.06' : view === '14' ? '22.06 — 05.07' : '22.06 — 19.07'}</span>
-          <div className="flex-1"></div>
-          <span className="hidden sm:flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold text-warning-dark dark:text-warning-bright bg-warning-light dark:bg-warning/10 shrink-0">
-            <Icon name="warning" className="w-3 h-3" stroke={2} /> 2
-          </span>
-          <span className="text-[11px] text-brand font-medium flex items-center gap-1 shrink-0">
-            Zobacz <Icon name="arrR" className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
-          </span>
-        </button>
-
         {/* Global suggestions bar — only for mealplan flow after generation */}
         {flow === 'mealplan' && mealplanGenerated && (
           <SmartSuggestionsBar
@@ -7755,67 +7716,102 @@ const MealplanScreen = ({ flow, state, onFinish, onBack }) => {
             scope="global" />
         )}
 
-        {/* Mealplan toolbar — view range / date picker / view mode / show images */}
-        <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
-          <div className="flex items-center gap-3 flex-wrap">
-            <div className="flex items-center gap-1.5">
-              <div className="text-xs text-ink-700 dark:text-dark-textMuted font-medium">Widok:</div>
-              <div className="flex items-center gap-0.5 bg-ink-200 dark:bg-dark-elevated rounded-md p-0.5">
-                {[{v:'7',l:'7 dni'},{v:'14',l:'14 dni'},{v:'28',l:'28 dni'}].map(v => (
-                  <button key={v.v} onClick={() => setView(v.v)}
-                    className={`chip-press px-2.5 py-1 text-[11px] font-semibold rounded transition-all ${
-                      view===v.v ? 'bg-white dark:bg-dark-surface text-brand shadow-e1' : 'text-ink-700 dark:text-dark-textMuted hover:text-ink-900 dark:hover:text-dark-text'
-                    }`}>{v.l}</button>
-                ))}
-              </div>
-            </div>
-            <div className="flex items-center gap-1 bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border rounded-md px-2 py-1">
-              <button className="w-5 h-5 rounded hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-600 dark:text-dark-textMuted btn-press"><Icon name="chevL" className="w-3.5 h-3.5" stroke={2.5} /></button>
-              <span className="text-[11px] font-medium text-ink-900 dark:text-dark-text px-1">22.06.2023 — 29.07.2023</span>
-              <button className="w-5 h-5 rounded hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-600 dark:text-dark-textMuted btn-press"><Icon name="chevR" className="w-3.5 h-3.5" stroke={2.5} /></button>
-            </div>
+        {/* Mealplan toolbar */}
+        <div className="flex items-center gap-2 mb-4 flex-wrap">
+          {/* "Widok:" label */}
+          <span className="text-[12px] text-ink-600 dark:text-dark-textMuted font-medium shrink-0">Widok:</span>
+
+          {/* View tabs — plain pill with subtle active bg */}
+          <div className="flex items-center gap-0.5 bg-ink-100 dark:bg-dark-elevated rounded-lg p-0.5">
+            {[{v:'7',l:'7 dni'},{v:'14',l:'14 dni'},{v:'28',l:'28 dni'}].map(v => (
+              <button key={v.v} onClick={() => setView(v.v)}
+                className={`chip-press px-3 py-1.5 text-[12px] font-semibold rounded-md transition-all ${
+                  view===v.v
+                    ? 'bg-white dark:bg-dark-surface text-brand shadow-sm'
+                    : 'text-ink-600 dark:text-dark-textMuted hover:text-ink-900 dark:hover:text-dark-text'
+                }`}>{v.l}</button>
+            ))}
           </div>
-          <div className="flex items-center gap-3">
-            {flow === 'mealplan' && mealplanGenerated && (
-              <div className="text-[11px] text-ink-700 dark:text-dark-textMuted flex items-center gap-1">
-                <Icon name="info" className="w-3 h-3" /> Chipy zmieniają cały jadłospis
-              </div>
-            )}
-            <label className="flex items-center gap-2 text-xs cursor-pointer">
-              <div className="w-8 h-4 bg-brand rounded-full relative cursor-pointer">
-                <div className="absolute top-0.5 right-0.5 w-3 h-3 rounded-full bg-white shadow-e1"></div>
-              </div>
-              Pokaż zdjęcia
-            </label>
-            {mealplanGenerated && (
-              <button onClick={() => setOnboardingOpen(true)}
-                className="btn-press h-9 px-3 rounded-md bg-gradient-brand text-white text-[12px] font-semibold flex items-center gap-1.5 shadow-brand-sm hover:shadow-brand-md transition-all">
-                <Icon name="sparkles" className="w-3.5 h-3.5" /> Rozłóż przepisy
-              </button>
-            )}
-            <TabActionsMenu
-              label="Akcje jadłospisu"
-              items={[
-                { heading: 'Jadłospis' },
-                { icon: 'sparkles', label: 'Autogeneruj jadłospis', onClick: () => setOnboardingOpen(true) },
-                { separator: true },
-                { heading: 'Powiel zakres' },
-                { icon: 'copy', label: '7 dni', onClick: () => {} },
-                { icon: 'copy', label: '14 dni', onClick: () => {} },
-                { icon: 'copy', label: '28 dni', onClick: () => {} },
-                { separator: true },
-                {
-                  icon: 'sparkles',
-                  label: 'Autouzupełniaj luki',
-                  toggle: autofillGaps,
-                  info: 'Algorytm wypełni puste dni podobnymi przepisami',
-                  onClick: () => setAutofillGaps(!autofillGaps),
-                },
-                { icon: 'settings', label: 'Reguły autogenerowania', onClick: () => {} },
-                { separator: true },
-                { icon: 'trash', label: 'Wyczyść jadłospis', onClick: () => {}, danger: true },
-              ]} />
+
+          {/* Date navigator */}
+          <div className="flex items-center bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border rounded-lg overflow-hidden">
+            <button className="w-8 h-8 flex items-center justify-center text-ink-500 dark:text-dark-textMuted hover:bg-ink-100 dark:hover:bg-dark-elevated transition-colors btn-press border-r border-ink-200 dark:border-dark-border">
+              <Icon name="chevL" className="w-3.5 h-3.5" stroke={2.5} />
+            </button>
+            <span className="text-[12px] font-medium text-ink-900 dark:text-dark-text px-3 whitespace-nowrap">22.06.2023 - 29.07.2023</span>
+            <button className="w-8 h-8 flex items-center justify-center text-ink-500 dark:text-dark-textMuted hover:bg-ink-100 dark:hover:bg-dark-elevated transition-colors btn-press border-l border-ink-200 dark:border-dark-border">
+              <Icon name="chevR" className="w-3.5 h-3.5" stroke={2.5} />
+            </button>
           </div>
+
+          {/* View mode icon buttons — column (active/purple) + list */}
+          <div className="flex items-center gap-1">
+            <button className="w-8 h-8 rounded-lg bg-brand text-white flex items-center justify-center btn-press shadow-brand-sm" title="Widok kolumnowy">
+              {/* 3 vertical bars — column/week view */}
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <rect x="1" y="3" width="3" height="8" rx="0.75" fill="currentColor"/>
+                <rect x="5.5" y="3" width="3" height="8" rx="0.75" fill="currentColor"/>
+                <rect x="10" y="3" width="3" height="8" rx="0.75" fill="currentColor"/>
+              </svg>
+            </button>
+            <button className="w-8 h-8 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface text-brand flex items-center justify-center btn-press hover:bg-ink-100 dark:hover:bg-dark-elevated" title="Widok listowy">
+              {/* horizontal stacked bars — list view */}
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <rect x="1" y="2.5" width="12" height="2.5" rx="0.75" fill="currentColor"/>
+                <rect x="1" y="5.75" width="12" height="2.5" rx="0.75" fill="currentColor"/>
+                <rect x="1" y="9" width="12" height="2.5" rx="0.75" fill="currentColor"/>
+              </svg>
+            </button>
+          </div>
+
+          {/* Spacer */}
+          <div className="flex-1 min-w-[8px]" />
+
+          {/* Shopping list pill */}
+          <button onClick={() => setShoppingListOpen(true)}
+            className="btn-press flex items-center gap-2 px-3 h-9 rounded-lg border border-brand/25 dark:border-brand/20 bg-white dark:bg-dark-surface hover:bg-brand-400/10 dark:hover:bg-brand/10 transition-all">
+            <Icon name="bags" className="w-3.5 h-3.5 text-brand shrink-0" stroke={2} />
+            <span className="text-[12px] text-brand font-medium whitespace-nowrap">Lista zakupów (28 produktów) / 2 niewykorzystane</span>
+          </button>
+
+          {/* Pokaż zdjęcia toggle */}
+          <label className="flex items-center gap-2.5 text-[13px] font-medium text-ink-700 dark:text-dark-textMuted cursor-pointer select-none shrink-0">
+            {/* toggle track */}
+            <div className="relative w-10 h-[22px] bg-brand rounded-full flex-shrink-0">
+              {/* thumb — right = ON */}
+              <div className="absolute top-[3px] right-[3px] w-4 h-4 rounded-full bg-white shadow-sm"></div>
+            </div>
+            Pokaż zdjęcia
+          </label>
+
+          {mealplanGenerated && (
+            <button onClick={() => setOnboardingOpen(true)}
+              className="btn-press h-9 px-3 rounded-lg bg-gradient-brand text-white text-[12px] font-semibold flex items-center gap-1.5 shadow-brand-sm hover:shadow-brand-md transition-all shrink-0">
+              <Icon name="sparkles" className="w-3.5 h-3.5" /> Rozłóż przepisy
+            </button>
+          )}
+          <TabActionsMenu
+            label="Akcje jadłospisu"
+            items={[
+              { heading: 'Jadłospis' },
+              { icon: 'sparkles', label: 'Autogeneruj jadłospis', onClick: () => setOnboardingOpen(true) },
+              { separator: true },
+              { heading: 'Powiel zakres' },
+              { icon: 'copy', label: '7 dni', onClick: () => {} },
+              { icon: 'copy', label: '14 dni', onClick: () => {} },
+              { icon: 'copy', label: '28 dni', onClick: () => {} },
+              { separator: true },
+              {
+                icon: 'sparkles',
+                label: 'Autouzupełniaj luki',
+                toggle: autofillGaps,
+                info: 'Algorytm wypełni puste dni podobnymi przepisami',
+                onClick: () => setAutofillGaps(!autofillGaps),
+              },
+              { icon: 'settings', label: 'Reguły autogenerowania', onClick: () => {} },
+              { separator: true },
+              { icon: 'trash', label: 'Wyczyść jadłospis', onClick: () => {}, danger: true },
+            ]} />
         </div>
 
         <div className={`bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border rounded-lg overflow-x-auto shadow-e1 transition-opacity ${isRegenerating ? 'opacity-60' : 'opacity-100'}`}>
@@ -7823,36 +7819,33 @@ const MealplanScreen = ({ flow, state, onFinish, onBack }) => {
             {['Pon (24.06)','Wt (25.06)','Śr (26.06)','Czw (27.06)','Pt (28.06)','Sb (29.06)','Nd (30.06)'].map((day, i) => {
               const isWarning = i === 2 || i === 4;
               const dayKcal = isWarning ? macroAdjust.kcal + 400 : macroAdjust.kcal;
-              const kcalPct = Math.min(120, (dayKcal / macroAdjust.kcal) * 100);
               const isTraining = i === 1 || i === 3;
               const dayTypeColor = isTraining ? '#5252E5' : '#7448D0';
               const dayTypeLabel = isTraining ? 'Trening' : 'Standard';
               return (
-                <div key={i} className="border-r border-ink-200 dark:border-dark-border last:border-r-0">
-                  {/* Day header — progress bar + type chip */}
-                  <div className="px-3 py-3 border-b border-ink-200 dark:border-dark-border bg-ink-200/30 dark:bg-dark-elevated/30">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="text-[12px] font-semibold text-ink-900 dark:text-dark-text">{day}</div>
-                      <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded" style={{ background: `${dayTypeColor}18`, color: dayTypeColor }}>{dayTypeLabel}</span>
-                    </div>
-                    <div className="mb-1.5">
-                      <div className="flex items-baseline justify-between mb-1">
-                        <div className="flex items-baseline gap-1">
-                          <span className={`text-[13px] font-bold ${isWarning ? 'text-warning-dark dark:text-warning-bright' : 'text-ink-900 dark:text-dark-text'}`}>{dayKcal}</span>
-                          <span className="text-[10px] text-ink-600 dark:text-dark-textMuted">/ {macroAdjust.kcal} kcal</span>
+                <div key={i} className="border-r border-ink-200 dark:border-dark-border last:border-r-0 flex flex-col">
+                  {/* Day header card — green top border per Figma */}
+                  <div className="border-b border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface" style={{ borderTop: `2px solid ${isWarning ? '#c78c1a' : '#2a856c'}` }}>
+                    <div className="px-3 pt-2.5 pb-2.5">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="text-[13px] font-bold text-ink-900 dark:text-dark-text">{day}</div>
+                        <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded" style={{ background: `${dayTypeColor}18`, color: dayTypeColor }}>{dayTypeLabel}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 mb-1.5">
+                        <Icon name="flame" className="w-3.5 h-3.5 text-warning shrink-0" />
+                        <span className={`text-[13px] font-bold ${isWarning ? 'text-warning-dark dark:text-warning-bright' : 'text-ink-900 dark:text-dark-text'}`}>{dayKcal}</span>
+                        <span className="text-[11px] text-ink-500 dark:text-dark-textMuted">/ {macroAdjust.kcal} kcal</span>
+                        <div className="ml-auto">
+                          {isWarning ? <Icon name="warning" className="w-3.5 h-3.5 text-warning" /> : <Icon name="check" className="w-3.5 h-3.5 text-success" stroke={3} />}
                         </div>
-                        {isWarning ? <Icon name="warning" className="w-3.5 h-3.5 text-warning" /> : <Icon name="check" className="w-3.5 h-3.5 text-success" stroke={3} />}
                       </div>
-                      <div className="h-1 bg-ink-200 dark:bg-dark-elevated rounded-full overflow-hidden">
-                        <div className={`h-full rounded-full transition-all duration-500 ${isWarning ? 'bg-warning' : 'bg-success'}`} style={{ width: `${Math.min(100, kcalPct)}%` }}></div>
+                      <div className="flex items-center gap-2 text-[10px] text-ink-600 dark:text-dark-textMuted">
+                        <span><span className="font-semibold text-ink-800 dark:text-dark-text">B</span> {macroAdjust.B}g</span>
+                        <span className="text-ink-300 dark:text-dark-textDim">·</span>
+                        <span><span className="font-semibold text-ink-800 dark:text-dark-text">T</span> {macroAdjust.T}g</span>
+                        <span className="text-ink-300 dark:text-dark-textDim">·</span>
+                        <span><span className="font-semibold text-ink-800 dark:text-dark-text">W</span> {macroAdjust.W}g</span>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-1.5 text-[10px] text-ink-700 dark:text-dark-textMuted">
-                      <span><span className="font-semibold text-ink-900 dark:text-dark-text">B</span> {macroAdjust.B}</span>
-                      <span className="text-ink-400 dark:text-dark-textDim">·</span>
-                      <span><span className="font-semibold text-ink-900 dark:text-dark-text">T</span> {macroAdjust.T}</span>
-                      <span className="text-ink-400 dark:text-dark-textDim">·</span>
-                      <span><span className="font-semibold text-ink-900 dark:text-dark-text">W</span> {macroAdjust.W}</span>
                     </div>
                   </div>
                   {/* Meals */}
@@ -7881,37 +7874,43 @@ const MealplanScreen = ({ flow, state, onFinish, onBack }) => {
                         'linear-gradient(135deg, #D0E8FF 0%, #A8CFFF 50%, #80B7FF 100%)',
                       ][mi];
                       return (
-                        <div key={mi} className="p-2 border-b border-ink-200 dark:border-dark-border last:border-0 hover:bg-brand-200/20 dark:hover:bg-brand/5 transition-colors cursor-pointer group">
-                          {/* Meal header */}
-                          <div className="flex items-center justify-between mb-1.5">
-                            <div className="text-[10px] font-semibold text-ink-700 dark:text-dark-textMuted uppercase tracking-wider">{meal.name}</div>
-                            <div className="text-[9px] text-ink-600 dark:text-dark-textMuted font-medium">{meal.time}</div>
-                          </div>
-                          {/* Image with hover actions */}
-                          <div className="relative h-20 rounded-md mb-1.5 overflow-hidden group-hover:shadow-e1 transition-shadow" style={{ background: imageGradient }}>
-                            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/10"></div>
-                            {/* Hover actions */}
-                            <div className="absolute top-1 right-1 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                              <button className="w-5 h-5 rounded bg-white/90 dark:bg-dark-surface/90 text-ink-700 dark:text-dark-text hover:bg-white hover:text-brand flex items-center justify-center shadow-e1 btn-press" title="Wymień"><Icon name="swap" className="w-2.5 h-2.5" /></button>
-                              <button className="w-5 h-5 rounded bg-white/90 dark:bg-dark-surface/90 text-ink-700 dark:text-dark-text hover:bg-error-light dark:hover:bg-error/20 hover:text-error-dark flex items-center justify-center shadow-e1 btn-press" title="Usuń"><Icon name="trash" className="w-2.5 h-2.5" /></button>
+                        /* Meal slot outer — light purple tinted bg per Figma */
+                        <div key={mi} className="p-1.5 border-b border-ink-200 dark:border-dark-border last:border-0 bg-[#faf7ff] dark:bg-brand/5 cursor-pointer group">
+                          {/* White inner card */}
+                          <div className="bg-white dark:bg-dark-surface rounded-lg overflow-hidden shadow-e1 hover:shadow-e2 transition-shadow">
+                            {/* Meal name + time header */}
+                            <div className="flex items-center justify-between px-2.5 py-2 border-b border-ink-100 dark:border-dark-border">
+                              <div className="text-[11px] font-semibold text-ink-700 dark:text-dark-textMuted uppercase tracking-[0.08em]">{meal.name}</div>
+                              <div className="text-[10px] text-ink-500 dark:text-dark-textMuted font-medium">{meal.time}</div>
                             </div>
-                          </div>
-                          {/* Recipe name */}
-                          <div className="text-[11px] text-ink-900 dark:text-dark-text leading-tight font-semibold mb-1 line-clamp-2 min-h-[2.2em]">{recipeName}</div>
-                          {/* Kcal + tag */}
-                          <div className="flex items-center justify-between mb-1">
-                            <div className="flex items-center gap-0.5 text-[10px] text-ink-700 dark:text-dark-textMuted font-semibold">
-                              <Icon name="flame" className="w-2.5 h-2.5 text-warning" /> {mealKcal} kcal
+                            {/* Recipe photo */}
+                            <div className="relative h-[120px] overflow-hidden" style={{ background: imageGradient }}>
+                              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/10"></div>
+                              {/* Hover actions */}
+                              <div className="absolute top-1.5 right-1.5 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button className="w-6 h-6 rounded-md bg-white/90 dark:bg-dark-surface/90 text-ink-700 dark:text-dark-text hover:bg-white hover:text-brand flex items-center justify-center shadow-e1 btn-press" title="Wymień"><Icon name="swap" className="w-3 h-3" /></button>
+                                <button className="w-6 h-6 rounded-md bg-white/90 dark:bg-dark-surface/90 text-ink-700 dark:text-dark-text hover:bg-error-light dark:hover:bg-error/20 hover:text-error-dark flex items-center justify-center shadow-e1 btn-press" title="Usuń"><Icon name="trash" className="w-3 h-3" /></button>
+                              </div>
+                              <span className={`absolute bottom-1.5 left-1.5 text-[8px] font-semibold px-1.5 py-0.5 rounded-sm ${mealTag.color}`}>{mealTag.label}</span>
                             </div>
-                            <span className={`text-[8px] font-semibold px-1 py-0.5 rounded ${mealTag.color}`}>{mealTag.label}</span>
-                          </div>
-                          {/* BTW macros inline */}
-                          <div className="flex items-center gap-1 text-[9px] text-ink-600 dark:text-dark-textMuted">
-                            <span><span className="font-semibold text-ink-900 dark:text-dark-text">B</span>{mealMacros.b}g</span>
-                            <span className="text-ink-400 dark:text-dark-textDim">·</span>
-                            <span><span className="font-semibold text-ink-900 dark:text-dark-text">T</span>{mealMacros.t}g</span>
-                            <span className="text-ink-400 dark:text-dark-textDim">·</span>
-                            <span><span className="font-semibold text-ink-900 dark:text-dark-text">W</span>{mealMacros.w}g</span>
+                            {/* Recipe name on light green bg */}
+                            <div className="px-2.5 py-2" style={{ background: 'rgba(226,243,230,0.3)' }}>
+                              <div className="text-[11px] text-ink-900 dark:text-dark-text leading-snug font-semibold line-clamp-2 min-h-[2.4em]">{recipeName}</div>
+                            </div>
+                            {/* Kcal + macros */}
+                            <div className="px-2.5 py-2 border-t border-ink-100 dark:border-dark-border">
+                              <div className="flex items-center gap-1 mb-1">
+                                <Icon name="flame" className="w-3 h-3 text-warning shrink-0" />
+                                <span className="text-[11px] font-semibold text-ink-800 dark:text-dark-text">{mealKcal} kcal</span>
+                              </div>
+                              <div className="flex items-center gap-2 text-[10px] text-ink-600 dark:text-dark-textMuted">
+                                <span><span className="font-semibold text-ink-800 dark:text-dark-text">B</span> {mealMacros.b}g</span>
+                                <span className="text-ink-300 dark:text-dark-textDim">·</span>
+                                <span><span className="font-semibold text-ink-800 dark:text-dark-text">T</span> {mealMacros.t}g</span>
+                                <span className="text-ink-300 dark:text-dark-textDim">·</span>
+                                <span><span className="font-semibold text-ink-800 dark:text-dark-text">W</span> {mealMacros.w}g</span>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       );
@@ -7923,14 +7922,16 @@ const MealplanScreen = ({ flow, state, onFinish, onBack }) => {
                       { name: 'Przekąska', time: '16:00' },
                       { name: 'Kolacja', time: '19:00' },
                     ].map((meal, mi) => (
-                      <div key={mi} className="p-2 border-b border-ink-200 dark:border-dark-border last:border-0">
-                        <div className="flex items-center justify-between mb-1.5">
-                          <div className="text-[10px] font-semibold text-ink-700 dark:text-dark-textMuted uppercase tracking-wider">{meal.name}</div>
-                          <div className="text-[9px] text-ink-600 dark:text-dark-textMuted font-medium">{meal.time}</div>
-                        </div>
-                        <div className="border-2 border-dashed border-ink-300 dark:border-dark-borderLight h-20 rounded-md flex items-center justify-center gap-1 hover:border-brand hover:bg-brand-200/20 dark:hover:bg-brand/5 transition-colors cursor-pointer">
-                          <button className="w-7 h-7 rounded-full bg-brand-400 dark:bg-brand/15 text-brand hover:bg-brand hover:text-white flex items-center justify-center transition-colors btn-press"><Icon name="plus" className="w-3 h-3" /></button>
-                          <button className="w-7 h-7 rounded-full bg-gradient-brand text-white flex items-center justify-center shadow-brand-sm btn-press"><Icon name="sparkles" className="w-3 h-3" /></button>
+                      <div key={mi} className="p-1.5 border-b border-ink-200 dark:border-dark-border last:border-0 bg-[#faf7ff] dark:bg-brand/5">
+                        <div className="bg-white dark:bg-dark-surface rounded-lg overflow-hidden shadow-e1">
+                          <div className="flex items-center justify-between px-2.5 py-2 border-b border-ink-100 dark:border-dark-border">
+                            <div className="text-[11px] font-semibold text-ink-700 dark:text-dark-textMuted uppercase tracking-[0.08em]">{meal.name}</div>
+                            <div className="text-[10px] text-ink-500 dark:text-dark-textMuted font-medium">{meal.time}</div>
+                          </div>
+                          <div className="h-[120px] border-2 border-dashed border-ink-200 dark:border-dark-borderLight m-1.5 rounded-lg flex items-center justify-center gap-2 hover:border-brand hover:bg-brand-200/20 dark:hover:bg-brand/5 transition-colors cursor-pointer">
+                            <button className="w-7 h-7 rounded-full bg-brand-400 dark:bg-brand/15 text-brand hover:bg-brand hover:text-white flex items-center justify-center transition-colors btn-press"><Icon name="plus" className="w-3.5 h-3.5" /></button>
+                            <button className="w-7 h-7 rounded-full bg-gradient-brand text-white flex items-center justify-center shadow-brand-sm btn-press"><Icon name="sparkles" className="w-3.5 h-3.5" /></button>
+                          </div>
                         </div>
                       </div>
                     ))
@@ -7941,19 +7942,6 @@ const MealplanScreen = ({ flow, state, onFinish, onBack }) => {
           </div>
         </div>
 
-        <div className="sticky bottom-0 mt-6 bg-white dark:bg-dark-surface border-t border-ink-200 dark:border-dark-border -mx-8 px-8 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs text-ink-700 dark:text-dark-textMuted">
-            <Icon name="save" className="w-3.5 h-3.5" /> Automatyczne zapisywanie
-          </div>
-          <div className="flex items-center gap-2">
-            <button onClick={onBack} className="h-10 px-3 rounded-sm border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface hover:border-brand text-ink-800 dark:text-dark-text text-sm font-medium">
-              {flow === 'mealplan' ? 'Wróć do założeń' : 'Wróć do przepisów'}
-            </button>
-            <button onClick={onFinish} className="h-10 px-5 rounded-sm btn-primary text-white font-medium text-sm flex items-center gap-2">
-              Dalej: materiały <Icon name="arrR" className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
         </>
         )}
       </div>
@@ -8018,7 +8006,224 @@ const MealplanScreen = ({ flow, state, onFinish, onBack }) => {
         open={shoppingListOpen}
         onClose={() => setShoppingListOpen(false)}
         program={state.program} />
-    </ProgramShell>
+    </div>
+
+      {/* Footer */}
+      <div className="shrink-0 bg-white dark:bg-dark-surface border-t border-ink-200 dark:border-dark-border px-8 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-[12px] text-ink-600 dark:text-dark-textMuted">
+          <Icon name="save" className="w-3.5 h-3.5" /> Automatyczne zapisywanie
+        </div>
+        <div className="flex items-center gap-2">
+          <button onClick={onBack} className="h-10 px-4 rounded-lg border border-brand text-brand bg-white dark:bg-dark-surface hover:bg-brand-400/10 dark:hover:bg-brand/10 text-[13px] font-medium transition-colors">
+            Wróć do przepisów
+          </button>
+          <button onClick={onFinish} className="h-10 px-5 rounded-lg btn-primary text-white font-medium text-[13px] flex items-center gap-2">
+            Dodaj materiały <Icon name="arrR" className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ============================================================
+// ADD MATERIALS PANEL
+// ============================================================
+const MOCK_ADD_MATERIALS = [
+  { id: 'am1',  title: 'Kontrola glikemii',                        category: 'Informacje ogólne' },
+  { id: 'am2',  title: 'Dieta wege',                               category: 'Zdrowie' },
+  { id: 'am3',  title: 'Celiakia',                                 category: 'Styl życia' },
+  { id: 'am4',  title: 'Dieta paleo',                              category: 'Zdrowie' },
+  { id: 'am5',  title: 'Nietolerancja laktozy',                    category: 'Styl życia' },
+  { id: 'am6',  title: 'Dieta wegańska',                           category: 'Zdrowie' },
+  { id: 'am7',  title: 'Dieta niskowęglowodanowa',                 category: 'Styl życia' },
+  { id: 'am8',  title: 'Dieta śródziemnomorska',                   category: 'Zdrowie' },
+  { id: 'am9',  title: 'Dieta wysokobiałkowa',                     category: 'Styl życia' },
+  { id: 'am10', title: 'Dieta detoksykacyjna',                     category: 'Zdrowie' },
+  { id: 'am11', title: 'Dieta roślinna',                           category: 'Styl życia' },
+  { id: 'am12', title: 'Dieta makrobiotyczna',                     category: 'Zdrowie' },
+  { id: 'am13', title: 'Dieta optymalna',                          category: 'Styl życia' },
+  { id: 'am14', title: 'Indeks glikemiczny — podstawy',            category: 'Informacje ogólne' },
+  { id: 'am15', title: 'Tłuszcze nasycone i nienasycone',          category: 'Informacje ogólne' },
+  { id: 'am16', title: 'Produkty o niskim indeksie glikemicznym',  category: 'Sekcje PDF' },
+  { id: 'am17', title: 'Zdrowe gotowanie — poradnik PDF',          category: 'Sekcje PDF' },
+];
+
+const AddMaterialsPanel = ({ open, onClose, onAdd }) => {
+  const [search, setSearch] = useState('');
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [selected, setSelected] = useState(new Set());
+
+  if (!open) return null;
+
+  const categories = [
+    { key: 'all',               label: 'Wszystkie',        count: 128 },
+    { key: 'Sekcje PDF',        label: 'Sekcje PDF',       count: 5 },
+    { key: 'Informacje ogólne', label: 'Informacje ogólne', count: 8 },
+    { key: 'Zdrowie',           label: 'Zdrowie',          count: 3 },
+    { key: 'Styl życia',        label: 'Styl życia',       count: 9 },
+  ];
+
+  const categoryStyle = {
+    'Informacje ogólne': 'bg-brand-400 dark:bg-brand/15 text-brand dark:text-brand',
+    'Zdrowie':           'bg-success-light dark:bg-success/10 text-success-dark dark:text-success-bright',
+    'Styl życia':        'bg-info-light dark:bg-info/10 text-info-dark dark:text-info-bright',
+    'Sekcje PDF':        'bg-error-light dark:bg-error/10 text-error-dark dark:text-error-bright',
+  };
+
+  const filtered = MOCK_ADD_MATERIALS.filter(m => {
+    if (activeCategory !== 'all' && m.category !== activeCategory) return false;
+    if (search && !m.title.toLowerCase().includes(search.toLowerCase())) return false;
+    return true;
+  });
+
+  const toggleSelect = (id) => {
+    setSelected(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  const handleAdd = () => {
+    onAdd && onAdd(Array.from(selected));
+    setSelected(new Set());
+    onClose();
+  };
+
+  const n = selected.size;
+  const selectedLabel = n === 0
+    ? 'Brak zaznaczonych'
+    : n === 1 ? '1 materiał edukacyjny'
+    : `${n} materiały edukacyjne`;
+
+  return (
+    <div className="fixed inset-0 z-50 flex justify-end">
+      <div className="absolute inset-0 bg-deepviolet/40 backdrop-in" onClick={onClose}></div>
+      <div className="relative w-full sm:w-[560px] h-full bg-white dark:bg-dark-surface shadow-e4 flex flex-col slide-in-r">
+
+        {/* Header */}
+        <div className="px-5 py-4 border-b border-ink-200 dark:border-dark-border flex items-center justify-between gap-3 shrink-0">
+          <h2 className="text-[16px] font-semibold text-ink-900 dark:text-dark-text">Dodaj materiały edukacyjne</h2>
+          <button onClick={onClose} className="w-8 h-8 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-700 dark:text-dark-textMuted btn-press">
+            <Icon name="x" className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Search + actions row */}
+        <div className="px-4 pt-3 pb-2.5 shrink-0 flex items-center gap-2">
+          <div className="flex-1 flex items-center gap-2 border border-ink-200 dark:border-dark-border rounded-lg px-3 h-9 bg-white dark:bg-dark-surface focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/10 transition-all">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0 text-ink-500 dark:text-dark-textMuted">
+              <circle cx="6" cy="6" r="4" stroke="currentColor" strokeWidth="1.5"/>
+              <path d="M9.5 9.5L12 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
+            <input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Szukaj"
+              className="flex-1 bg-transparent border-none outline-none text-[13px] text-ink-900 dark:text-dark-text placeholder-ink-400 dark:placeholder-dark-textDim"
+            />
+          </div>
+          <button className="w-9 h-9 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface flex items-center justify-center text-ink-600 dark:text-dark-textMuted hover:border-brand hover:text-brand btn-press transition-all shrink-0" title="Filtry">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2 3.5h10M4 7h6M6 10.5h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
+          </button>
+          <button className="btn-press flex items-center gap-1 text-[12px] font-semibold text-brand hover:text-brand-dark transition-colors shrink-0 whitespace-nowrap">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M6 1.5v9M1.5 6h9" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round"/>
+            </svg>
+            Dodaj nowy
+          </button>
+        </div>
+
+        {/* Category pills */}
+        <div className="px-4 pb-3 shrink-0 flex items-center gap-1.5 overflow-x-auto" style={{scrollbarWidth:'none'}}>
+          {categories.map(cat => {
+            const isActive = activeCategory === cat.key;
+            return (
+              <button key={cat.key} onClick={() => setActiveCategory(cat.key)}
+                className={`btn-press shrink-0 flex items-center gap-1 px-3 h-7 rounded-full text-[12px] font-semibold whitespace-nowrap transition-all ${
+                  isActive
+                    ? 'bg-brand text-white shadow-brand-sm'
+                    : 'bg-ink-100 dark:bg-dark-elevated text-ink-700 dark:text-dark-textMuted hover:bg-ink-200 dark:hover:bg-dark-border'
+                }`}>
+                {isActive && (
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                    <path d="M2 5l2.5 2.5L8 2.5" stroke="white" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                )}
+                {cat.label} ({cat.count})
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="h-px bg-ink-200 dark:bg-dark-border shrink-0"></div>
+
+        {/* List */}
+        <div className="flex-1 overflow-y-auto">
+          {filtered.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full py-16 text-center px-8">
+              <div className="w-12 h-12 rounded-full bg-ink-200 dark:bg-dark-elevated flex items-center justify-center mb-3">
+                <Icon name="book" className="w-5 h-5 text-ink-500 dark:text-dark-textMuted" />
+              </div>
+              <p className="text-[14px] font-medium text-ink-900 dark:text-dark-text mb-1">Brak wyników</p>
+              <p className="text-[12px] text-ink-500 dark:text-dark-textMuted">Spróbuj innej frazy lub zmień kategorię.</p>
+            </div>
+          ) : filtered.map(m => {
+            const isChecked = selected.has(m.id);
+            return (
+              <div key={m.id} onClick={() => toggleSelect(m.id)}
+                className={`flex items-center gap-3 px-4 py-3 cursor-pointer border-b border-ink-100 dark:border-dark-border/60 transition-colors ${
+                  isChecked ? 'bg-brand-400/20 dark:bg-brand/10' : 'hover:bg-ink-100/80 dark:hover:bg-dark-elevated/60'
+                }`}>
+                {/* Checkbox */}
+                <div className={`w-[18px] h-[18px] rounded flex items-center justify-center shrink-0 border-2 transition-all ${
+                  isChecked ? 'bg-brand border-brand' : 'border-ink-300 dark:border-dark-border bg-white dark:bg-dark-surface'
+                }`}>
+                  {isChecked && (
+                    <svg width="9" height="9" viewBox="0 0 9 9" fill="none">
+                      <path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="white" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  )}
+                </div>
+                {/* Title */}
+                <span className="flex-1 text-[13px] font-medium text-ink-900 dark:text-dark-text truncate min-w-0">{m.title}</span>
+                {/* Category badge */}
+                <span className={`shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap ${categoryStyle[m.category] || 'bg-ink-200 text-ink-700'}`}>
+                  {m.category}
+                </span>
+                {/* Eye icon */}
+                <button onClick={e => e.stopPropagation()}
+                  className="w-7 h-7 rounded-md flex items-center justify-center text-ink-400 dark:text-dark-textDim hover:text-ink-700 dark:hover:text-dark-textMuted hover:bg-ink-200 dark:hover:bg-dark-elevated transition-colors shrink-0 btn-press">
+                  <Icon name="eye" className="w-4 h-4" stroke={1.75} />
+                </button>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Footer */}
+        <div className="px-5 py-3.5 border-t border-ink-200 dark:border-dark-border flex items-center justify-between gap-4 shrink-0">
+          <span className="text-[12px] text-ink-600 dark:text-dark-textMuted truncate">
+            <span className="font-semibold text-ink-900 dark:text-dark-text">Wybrano:</span> {selectedLabel}
+          </span>
+          <div className="flex items-center gap-2 shrink-0">
+            <button onClick={onClose} className="btn-press h-9 px-4 rounded-lg border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface hover:border-brand text-ink-800 dark:text-dark-text text-[13px] font-medium transition-all">
+              Anuluj
+            </button>
+            <button onClick={handleAdd} disabled={n === 0}
+              className={`btn-press h-9 px-4 rounded-lg text-white text-[13px] font-semibold transition-all ${
+                n === 0 ? 'bg-brand/40 cursor-not-allowed' : 'btn-primary'
+              }`}>
+              Dodaj{n > 0 ? ` (${n})` : ''}
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
   );
 };
 
@@ -8031,14 +8236,16 @@ const MaterialsScreen = ({ flow, state, setState, onFinish, onBack }) => {
   const [filter, setFilter] = useState('all'); // all | text | pdf | video
   const [searchQuery, setSearchQuery] = useState('');
   const [libraryOpen, setLibraryOpen] = useState(false);
+  const [libraryModalOpen, setLibraryModalOpen] = useState(false);
+  const [addDropdownOpen, setAddDropdownOpen] = useState(false);
 
   const materials = state.program.materials || [];
 
   // Stepper config per flow
   const stepperConfig = {
-    assumptions: { labels: ['Wybór', 'Założenia', 'Materiały', 'Gotowe'], current: 3, total: 4 },
-    mealplan:    { labels: ['Wybór', 'Założenia', 'Jadłospis', 'Materiały', 'Gotowe'], current: 4, total: 5 },
-    expert:      { labels: ['Wybór', 'Założenia', 'Przepisy', 'Jadłospis', 'Materiały', 'Gotowe'], current: 5, total: 6 },
+    assumptions: { labels: ['Ustawienia', 'Założenia', 'Materiały', 'Podsumowanie'], current: 3, total: 4, title: 'Materiały edukacyjne', subtitle: 'Zaplanuj kiedy klient zobaczy artykuły, PDFy i video w aplikacji. Możesz też dodać je później.' },
+    mealplan:    { labels: ['Ustawienia', 'Założenia', 'Jadłospis', 'Materiały', 'Podsumowanie'], current: 4, total: 5, title: 'Materiały edukacyjne', subtitle: 'Zaplanuj kiedy klient zobaczy artykuły, PDFy i video w aplikacji. Możesz też dodać je później.' },
+    expert:      { labels: ['Ustawienia', 'Założenia', 'Przepisy', 'Jadłospis', 'Materiały', 'Podsumowanie'], current: 5, total: 6, title: 'Materiały edukacyjne', subtitle: 'Zaplanuj kiedy klient zobaczy artykuły, PDFy i video w aplikacji. Możesz też dodać je później.' },
   };
   const stepCfg = stepperConfig[flow] || stepperConfig.expert;
 
@@ -8085,50 +8292,77 @@ const MaterialsScreen = ({ flow, state, setState, onFinish, onBack }) => {
   };
 
   return (
-    <ProgramShell
-      program={state.program}
-      activeTab="materials"
-      onBack={onBack}
-      onTabChange={(tab) => {
-        if (tab === 'assumptions' || tab === 'recipes' || tab === 'products' || tab === 'mealplan') onBack();
-      }}
-      shareState={state.program.shared ? 'shared' : 'draft'}
-      onShareInApp={() => setState(s => ({ ...s, program: { ...s.program, shared: true } }))}
-      onShareEmail={() => {}}
-      onUnshare={() => setState(s => ({ ...s, program: { ...s.program, shared: false } }))}
-      primaryAction={{
-        label: 'Dodaj materiał',
-        icon: 'plus',
-        onClick: () => setLibraryOpen(true),
-      }}>
+    <div className="flex-1 flex flex-col bg-ink-200/30 dark:bg-dark-elevated/30 overflow-hidden">
+      {/* Breadcrumb header */}
+      <div className="h-14 bg-white dark:bg-dark-surface border-b border-ink-200 dark:border-dark-border flex items-center px-8 gap-4 shrink-0">
+        <button onClick={onBack} className="flex items-center gap-1.5 text-[13px] text-ink-700 dark:text-dark-textMuted hover:text-ink-900 dark:hover:text-dark-text font-medium transition-colors shrink-0">
+          <Icon name="arrL" className="w-4 h-4" /> Wróć
+        </button>
+        <div className="w-px h-4 bg-ink-300 dark:bg-dark-border shrink-0"></div>
+        <div className="flex items-center gap-1.5 text-[13px] text-ink-700 dark:text-dark-textMuted">
+          <button onClick={onBack} className="hover:text-ink-900 dark:hover:text-dark-text transition-colors">Klienci</button>
+          <Icon name="chevR" className="w-3.5 h-3.5 opacity-40" stroke={2} />
+          <button onClick={onBack} className="hover:text-ink-900 dark:hover:text-dark-text transition-colors">Karolina Szafrańska</button>
+          <Icon name="chevR" className="w-3.5 h-3.5 opacity-40" stroke={2} />
+          <span className="font-semibold text-ink-900 dark:text-dark-text">Nowa współpraca</span>
+        </div>
+      </div>
+      <FlowProgress steps={stepCfg.total} current={stepCfg.current} />
+      <StepperBar
+        labels={stepCfg.labels}
+        current={stepCfg.current}
+        onBack={onBack}
+        clientPreferences={state.program.clientPreferences}
+      />
 
+      <div className="flex-1 overflow-y-auto">
       <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-5 md:py-7">
         {/* Section header with context */}
         <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
           <div>
-            <div className="flex items-center gap-3 flex-wrap">
-              <h2 className="text-[18px] font-semibold text-ink-900 dark:text-dark-text leading-tight">Materiały edukacyjne</h2>
-              <span className="ml-0.5 text-[10px] font-semibold text-ink-600 dark:text-dark-textMuted bg-ink-200 dark:bg-dark-elevated px-1.5 py-0.5 rounded">opcjonalne</span>
+            <div className="text-xs text-ink-700 dark:text-dark-textMuted mb-1">Krok {stepCfg.current} z {stepCfg.total}</div>
+            <div className="flex items-center gap-3 flex-wrap mb-1">
+              <h1 className="text-2xl font-semibold text-ink-900 dark:text-dark-text">{stepCfg.title}</h1>
+              <span className="text-[10px] font-semibold text-ink-600 dark:text-dark-textMuted bg-ink-200 dark:bg-dark-elevated px-1.5 py-0.5 rounded">opcjonalne</span>
               <span className="px-2.5 py-1 text-[11px] font-semibold bg-brand-400 dark:bg-brand/15 text-brand rounded-full flex items-center gap-1 border border-brand-300 dark:border-brand/30">
                 <Icon name="cap" className="w-3 h-3" stroke={2.5} /> {materials.length} {materials.length === 1 ? 'materiał' : 'materiałów'}
               </span>
             </div>
-            <p className="text-[13px] text-ink-700 dark:text-dark-textMuted mt-1.5 max-w-2xl">Zaplanuj kiedy klient zobaczy artykuły, PDFy i video w aplikacji. Wszystko opcjonalne — możesz też dodać później.</p>
+            <p className="text-sm text-ink-700 dark:text-dark-textMuted">{stepCfg.subtitle}</p>
           </div>
           <div className="flex items-center gap-2">
-            <button onClick={() => setLibraryOpen(true)} className="btn-press h-9 px-3 rounded-md bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border hover:border-brand hover:text-brand text-ink-800 dark:text-dark-text text-xs font-semibold flex items-center gap-1.5 transition-all shadow-e1">
+            <button onClick={() => setLibraryModalOpen(true)} className="btn-press h-9 px-3 rounded-md bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border hover:border-brand hover:text-brand text-ink-800 dark:text-dark-text text-xs font-semibold flex items-center gap-1.5 transition-all shadow-e1">
               <Icon name="book" className="w-3.5 h-3.5" /> Biblioteka
             </button>
-            <button className="btn-press h-9 px-3 rounded-md btn-primary text-white text-xs font-semibold flex items-center gap-1.5">
-              <Icon name="plus" className="w-3.5 h-3.5" stroke={2.5} /> Dodaj materiały
-            </button>
+            <div className="relative">
+              <button onClick={() => setAddDropdownOpen(o => !o)}
+                className={`btn-press h-9 px-3 rounded-md btn-primary text-white text-xs font-semibold flex items-center gap-1.5 ${addDropdownOpen ? 'opacity-90' : ''}`}>
+                <Icon name="plus" className="w-3.5 h-3.5" stroke={2.5} /> Dodaj materiały
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="ml-0.5 shrink-0">
+                  <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+              {addDropdownOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setAddDropdownOpen(false)}></div>
+                  <div className="absolute top-full mt-2 right-0 w-[200px] bg-white dark:bg-dark-surface rounded-lg shadow-e3 border border-ink-200 dark:border-dark-border overflow-hidden z-50 fade-in">
+                    <button onClick={() => { setAddDropdownOpen(false); setLibraryOpen(true); }}
+                      className="w-full px-3 py-2.5 flex items-center gap-2.5 hover:bg-ink-200 dark:hover:bg-dark-elevated transition-colors text-left">
+                      <Icon name="book" className="w-3.5 h-3.5 text-ink-700 dark:text-dark-textMuted" stroke={1.75} />
+                      <span className="text-[13px] text-ink-900 dark:text-dark-text">Dodaj z bazy</span>
+                    </button>
+                    <button onClick={() => { setAddDropdownOpen(false); }}
+                      className="w-full px-3 py-2.5 flex items-center gap-2.5 hover:bg-ink-200 dark:hover:bg-dark-elevated transition-colors text-left">
+                      <Icon name="upload" className="w-3.5 h-3.5 text-ink-700 dark:text-dark-textMuted" stroke={1.75} />
+                      <span className="text-[13px] text-ink-900 dark:text-dark-text">Importuj</span>
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
             <TabActionsMenu
               label="Akcje materiałów"
               items={[
-                { heading: 'Materiały' },
-                { icon: 'book', label: 'Otwórz bibliotekę', onClick: () => setLibraryOpen(true) },
-                { icon: 'plus', label: 'Importuj z pliku', onClick: () => {} },
-                { separator: true },
                 { icon: 'trash', label: 'Wyczyść wszystkie materiały', onClick: () => {}, danger: true },
               ]} />
           </div>
@@ -8313,29 +8547,34 @@ const MaterialsScreen = ({ flow, state, setState, onFinish, onBack }) => {
           </div>
         )}
 
-        {/* Footer actions */}
-        <div className="sticky bottom-0 mt-8 bg-white dark:bg-dark-surface border-t border-ink-200 dark:border-dark-border -mx-8 px-8 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs text-ink-700 dark:text-dark-textMuted">
-            <Icon name="save" className="w-3.5 h-3.5" stroke={2} /> Automatyczne zapisywanie
-          </div>
-          <div className="flex items-center gap-2">
-            <button onClick={onBack} className="btn-press h-10 px-3 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface hover:border-brand text-ink-800 dark:text-dark-text text-sm font-medium transition-all">
-              Wróć
-            </button>
-            <button onClick={onFinish} className="btn-press h-10 px-3 rounded-md border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface hover:border-brand text-ink-700 dark:text-dark-textMuted text-sm font-medium transition-all">
-              Pomiń ten krok
-            </button>
-            <button onClick={onFinish} className="btn-press h-10 px-5 rounded-md btn-primary text-white font-medium text-sm flex items-center gap-2">
-              Udostępnij klientowi <Icon name="arrR" className="w-4 h-4" />
-            </button>
-          </div>
+      </div>
+      </div>
+
+      {/* Footer actions */}
+      <div className="shrink-0 bg-white dark:bg-dark-surface border-t border-ink-200 dark:border-dark-border px-8 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-ink-700 dark:text-dark-textMuted">
+          <Icon name="save" className="w-3.5 h-3.5" stroke={2} /> Automatyczne zapisywanie
+        </div>
+        <div className="flex items-center gap-2">
+          <button onClick={onBack} className="btn-press h-10 px-4 rounded-lg text-ink-600 dark:text-dark-textMuted hover:text-ink-900 dark:hover:text-dark-text text-[13px] font-medium transition-colors">
+            Wróć do jadłospisu
+          </button>
+          <button onClick={onFinish} className="btn-press h-10 px-5 rounded-lg btn-primary text-white font-medium text-[13px] flex items-center gap-2">
+            Przejdź do podsumowania <Icon name="arrR" className="w-4 h-4" />
+          </button>
         </div>
       </div>
 
-      {/* Library modal */}
-      {libraryOpen && (
+      <AddMaterialsPanel
+        open={libraryOpen}
+        onClose={() => setLibraryOpen(false)}
+        onAdd={() => setLibraryOpen(false)}
+      />
+
+      {/* Library modal — opened via Biblioteka button */}
+      {libraryModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
-          <div className="absolute inset-0 bg-deepviolet/50 backdrop-in" onClick={() => setLibraryOpen(false)}></div>
+          <div className="absolute inset-0 bg-deepviolet/50 backdrop-in" onClick={() => setLibraryModalOpen(false)}></div>
           <div className="relative bg-white dark:bg-dark-surface rounded-lg shadow-e4 max-w-[640px] w-full max-h-[80vh] overflow-hidden modal-in flex flex-col">
             <div className="px-6 py-4 border-b border-ink-200 dark:border-dark-border flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -8347,7 +8586,7 @@ const MaterialsScreen = ({ flow, state, setState, onFinish, onBack }) => {
                   <p className="text-[11px] text-ink-700 dark:text-dark-textMuted">Wybierz gotowe materiały do programu</p>
                 </div>
               </div>
-              <button onClick={() => setLibraryOpen(false)} className="w-8 h-8 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-700 dark:text-dark-textMuted">
+              <button onClick={() => setLibraryModalOpen(false)} className="w-8 h-8 rounded-md hover:bg-ink-200 dark:hover:bg-dark-elevated flex items-center justify-center text-ink-700 dark:text-dark-textMuted">
                 <Icon name="x" className="w-4 h-4" />
               </button>
             </div>
@@ -8375,15 +8614,22 @@ const MaterialsScreen = ({ flow, state, setState, onFinish, onBack }) => {
           </div>
         </div>
       )}
-    </ProgramShell>
+    </div>
   );
 };
 
 // ============================================================
-// EKRAN 5 — DONE
+// EKRAN 5 — DONE / PODSUMOWANIE
 // ============================================================
-const DoneScreen = ({ flow, state, onDashboard }) => {
+const DoneScreen = ({ flow, state, onDashboard, onBack }) => {
   const { usePZ } = React.useContext(NamingContext);
+
+  const stepperConfig = {
+    assumptions: { labels: ['Ustawienia', 'Założenia', 'Materiały', 'Podsumowanie'], current: 4, total: 4 },
+    mealplan:    { labels: ['Ustawienia', 'Założenia', 'Jadłospis', 'Materiały', 'Podsumowanie'], current: 5, total: 5 },
+    expert:      { labels: ['Ustawienia', 'Założenia', 'Przepisy', 'Jadłospis', 'Materiały', 'Podsumowanie'], current: 6, total: 6 },
+  };
+  const stepCfg = stepperConfig[flow] || stepperConfig.expert;
 
   const msg = {
     assumptions: { title: 'Założenia udostępnione', sub: 'Karolina zobaczy kcal i makro w aplikacji. Komponuje posiłki sama.' },
@@ -8392,55 +8638,107 @@ const DoneScreen = ({ flow, state, onDashboard }) => {
   }[flow];
 
   return (
-    <div className="flex-1 overflow-y-auto bg-ink-200/30 dark:bg-dark-elevated/30">
-      <div className="max-w-[640px] mx-auto px-8 py-14">
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-full bg-success-light dark:bg-success/10 text-success-dark dark:text-success-bright flex items-center justify-center mx-auto mb-5">
-            <Icon name="check" className="w-8 h-8" stroke={2.5} />
-          </div>
-          <h1 className="text-2xl font-semibold text-ink-900 dark:text-dark-text mb-2">{msg.title}</h1>
-          <p className="text-sm text-ink-700 dark:text-dark-textMuted">{msg.sub}</p>
+    <div className="flex-1 flex flex-col bg-ink-200/30 dark:bg-dark-elevated/30 overflow-hidden">
+      {/* Breadcrumb header */}
+      <div className="h-14 bg-white dark:bg-dark-surface border-b border-ink-200 dark:border-dark-border flex items-center px-8 gap-4 shrink-0">
+        <button onClick={onBack} className="flex items-center gap-1.5 text-[13px] text-ink-700 dark:text-dark-textMuted hover:text-ink-900 dark:hover:text-dark-text transition-colors btn-press">
+          <Icon name="arrL" className="w-4 h-4" /> Wróć
+        </button>
+        <div className="w-px h-4 bg-ink-300 dark:bg-dark-border shrink-0"></div>
+        <div className="flex items-center gap-1.5 text-[13px] text-ink-700 dark:text-dark-textMuted">
+          <button onClick={onDashboard} className="hover:text-ink-900 dark:hover:text-dark-text transition-colors">Klienci</button>
+          <Icon name="chevR" className="w-3.5 h-3.5 opacity-40" stroke={2} />
+          <button onClick={onDashboard} className="hover:text-ink-900 dark:hover:text-dark-text transition-colors">Karolina Szafrańska</button>
+          <Icon name="chevR" className="w-3.5 h-3.5 opacity-40" stroke={2} />
+          <span className="font-semibold text-ink-900 dark:text-dark-text">Nowa współpraca</span>
         </div>
+      </div>
+      <FlowProgress steps={stepCfg.total} current={stepCfg.current} />
+      <StepperBar labels={stepCfg.labels} current={stepCfg.current} onBack={onBack} clientPreferences={state.program.clientPreferences} />
 
-        <div className="bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border rounded-md p-5 mb-4">
-          <div className="flex items-center justify-between mb-3 pb-3 border-b border-ink-200 dark:border-dark-border">
-            <div>
-              <div className="text-sm font-semibold text-ink-900 dark:text-dark-text">{state.program.name}</div>
-              <div className="text-[11px] text-ink-700 dark:text-dark-textMuted mt-0.5">Karolina Szafrańska · {state.program.start} — {state.program.end}</div>
+      {/* Scrollable content */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="max-w-[640px] mx-auto px-8 py-12">
+
+          {/* Hero */}
+          <div className="text-center mb-7">
+            <div className="w-16 h-16 rounded-full bg-success-light dark:bg-success/10 text-success-dark dark:text-success-bright flex items-center justify-center mx-auto mb-5">
+              <Icon name="check" className="w-8 h-8" stroke={2.5} />
             </div>
-            <span className="px-2 py-1 text-[11px] font-medium bg-brand-400 dark:bg-brand/15 text-brand rounded-full">Zaplanowany</span>
+            <h1 className="text-2xl font-semibold text-ink-900 dark:text-dark-text mb-1.5">{msg.title}</h1>
+            <p className="text-sm text-ink-700 dark:text-dark-textMuted">{msg.sub}</p>
           </div>
-          <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
-            <div className="flex items-center gap-1.5 text-ink-800 dark:text-dark-text"><Icon name="calendar" className="w-3.5 h-3.5 text-ink-600 dark:text-dark-textMuted" /> 30 dni · {state.program.hasMultipleDayTypes ? '3 typy dni' : '1 typ dnia'}</div>
-            <div className="flex items-center gap-1.5 text-ink-800 dark:text-dark-text"><Icon name="flame" className="w-3.5 h-3.5 text-ink-600 dark:text-dark-textMuted" /> 2000 kcal · 100/70/240 g</div>
-            <div className="flex items-center gap-1.5 text-ink-800 dark:text-dark-text"><Icon name="phone" className="w-3.5 h-3.5 text-ink-600 dark:text-dark-textMuted" /> Udostępniony w aplikacji</div>
-            {flow === 'assumptions' && (
-              <div className="flex items-center gap-1.5 text-ink-700 dark:text-dark-textMuted col-span-2"><Icon name="info" className="w-3.5 h-3.5" /> Bez jadłospisu — klient komponuje sam</div>
-            )}
-            {(flow === 'mealplan' || flow === 'expert') && (
-              <div className="flex items-center gap-1.5 col-span-2 text-success-dark dark:text-success-bright"><Icon name="check" className="w-3.5 h-3.5" stroke={2.5} /> 28 dni jadłospisu</div>
-            )}
-          </div>
-        </div>
 
-        <div className="bg-brand-400/40 border border-brand-300 dark:border-brand/30 rounded-md p-4 mb-5">
-          <h3 className="text-xs font-semibold text-ink-900 dark:text-dark-text mb-2 flex items-center gap-1.5">
-            <Icon name="sparkles" className="w-3.5 h-3.5 text-brand" /> Co dalej?
-          </h3>
-          <div className="space-y-1.5 text-xs text-ink-800 dark:text-dark-text">
-            <div className="flex items-start gap-2"><div className="w-4 h-4 rounded-full bg-white dark:bg-dark-surface text-brand flex items-center justify-center text-[9px] font-semibold shrink-0 mt-0.5">1</div> Karolina dostanie powiadomienie {state.program.start}</div>
-            <div className="flex items-start gap-2"><div className="w-4 h-4 rounded-full bg-white dark:bg-dark-surface text-brand flex items-center justify-center text-[9px] font-semibold shrink-0 mt-0.5">2</div> Dodaj materiały edukacyjne — wyślą się automatycznie według harmonogramu</div>
-            <div className="flex items-start gap-2"><div className="w-4 h-4 rounded-full bg-white dark:bg-dark-surface text-brand flex items-center justify-center text-[9px] font-semibold shrink-0 mt-0.5">3</div> Monitoruj realizację w zakładce "Monitoring"</div>
-          </div>
-        </div>
+          {/* Program card */}
+          <div className="bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border rounded-xl shadow-e1 overflow-hidden mb-3">
+            <div className="flex items-start justify-between px-5 pt-5 pb-4 border-b border-ink-200 dark:border-dark-border">
+              <div>
+                <div className="text-[15px] font-semibold text-ink-900 dark:text-dark-text">{state.program.name}</div>
+                <div className="text-[12px] text-ink-700 dark:text-dark-textMuted mt-0.5">Karolina Szafrańska · {state.program.start} — {state.program.end}</div>
+              </div>
+              <span className="mt-0.5 px-2.5 py-1 text-[11px] font-semibold bg-brand-400 dark:bg-brand/15 text-brand rounded-full shrink-0 ml-4">Zaplanowany</span>
+            </div>
+            <div className="px-5 py-4 space-y-2">
+              <div className="flex items-center gap-2 text-[13px] text-ink-800 dark:text-dark-text">
+                <Icon name="calendar" className="w-4 h-4 text-ink-500 dark:text-dark-textMuted shrink-0" />
+                30 dni · {state.program.hasMultipleDayTypes ? '3 typy dni' : '1 tyg dnia'}
+              </div>
+              <div className="flex items-center gap-2 text-[13px] text-ink-800 dark:text-dark-text">
+                <Icon name="flame" className="w-4 h-4 text-ink-500 dark:text-dark-textMuted shrink-0" />
+                2000 kcal · 100/70/240 g
+              </div>
+              <div className="flex items-center gap-2 text-[13px] text-ink-800 dark:text-dark-text">
+                <Icon name="phone" className="w-4 h-4 text-ink-500 dark:text-dark-textMuted shrink-0" />
+                Udostępniony w aplikacji
+              </div>
+              {flow === 'assumptions' && (
+                <div className="flex items-center gap-2 text-[13px] text-ink-600 dark:text-dark-textMuted">
+                  <Icon name="info" className="w-4 h-4 shrink-0" />
+                  Bez jadłospisu — klient komponuje sam
+                </div>
+              )}
+              {(flow === 'mealplan' || flow === 'expert') && (
+                <div className="flex items-center gap-2 text-[13px] text-success-dark dark:text-success-bright">
+                  <Icon name="check" className="w-4 h-4 shrink-0" stroke={2.5} />
+                  28 dni jadłospisu
+                </div>
+              )}
+            </div>
 
-        <div className="flex gap-2">
-          <button onClick={onDashboard} className="flex-1 h-10 rounded-sm btn-primary text-white font-medium text-sm">
-            Wróć do {usePZ ? 'profilu klienta' : 'listy współprac'}
-          </button>
-          <button className="h-10 px-4 rounded-sm border border-ink-200 dark:border-dark-border bg-white dark:bg-dark-surface hover:border-brand text-ink-800 dark:text-dark-text font-medium text-sm">
-            Dodaj materiały
-          </button>
+            {/* Co dalej? */}
+            <div className="px-5 py-4 bg-ink-100/60 dark:bg-dark-elevated/50 border-t border-ink-200 dark:border-dark-border">
+              <div className="flex items-center gap-1.5 text-[13px] font-semibold text-ink-900 dark:text-dark-text mb-3">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-brand">
+                  <circle cx="8" cy="8" r="6.5" stroke="currentColor" strokeWidth="1.4"/>
+                  <path d="M8 11V8M8 5.5h.007" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
+                Co dalej?
+              </div>
+              <div className="space-y-2">
+                {[
+                  `Karolina dostanie powiadomienie ${state.program.start}`,
+                  'Dodaj materiały edukacyjne — wyślą się automatycznie według harmonogramu',
+                  'Monitoruj realizację w zakładce "Monitoring"',
+                ].map((text, i) => (
+                  <div key={i} className="flex items-start gap-2.5 text-[13px] text-ink-800 dark:text-dark-text">
+                    <div className="w-5 h-5 rounded-full bg-white dark:bg-dark-surface border border-ink-200 dark:border-dark-border text-brand flex items-center justify-center text-[10px] font-semibold shrink-0 mt-0.5">{i + 1}</div>
+                    {text}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex items-center justify-center gap-2 mt-6">
+            <button onClick={onDashboard} className="btn-press h-10 px-5 rounded-lg border border-brand text-brand bg-white dark:bg-dark-surface hover:bg-brand-200/30 text-[13px] font-medium transition-all">
+              Zapisz jako szkic
+            </button>
+            <button onClick={onDashboard} className="btn-press h-10 px-5 rounded-lg btn-primary text-white text-[13px] font-medium">
+              Udostępnij klientowi
+            </button>
+          </div>
+
         </div>
       </div>
     </div>
@@ -9144,11 +9442,11 @@ const App = () => {
   const pickFlow = (flow, template = null) => {
     if (flow === 'template' && template) {
       // Template picked → behave like expert flow but with prefilled data
-      // Apply template's metadata to program name and move to setup
+      // Apply template's metadata to program name and move to settings
       setState(s => ({
         ...s,
         flow: 'expert', // template uses expert flow structure
-        screen: 'setup',
+        screen: 'settings',
         fromTemplate: template,
         program: {
           ...s.program,
@@ -9157,7 +9455,7 @@ const App = () => {
         },
       }));
     } else {
-      setState(s => ({ ...s, flow, screen: 'setup', fromTemplate: null }));
+      setState(s => ({ ...s, flow, screen: 'settings', fromTemplate: null }));
     }
   };
   const reset = () => setState(s => ({ ...s, screen: 'dashboard', flow: null, program: initialProgram }));
@@ -9167,12 +9465,13 @@ const App = () => {
     const screenLabel = {
       dashboard: null,
       intent: 'Nowa współpraca',
+      settings: 'Ustawienia',
       setup: 'Założenia',
       recipes: 'Przepisy',
       products: 'Produkty',
       mealplan: 'Jadłospis',
       materials: 'Materiały',
-      done: 'Gotowe',
+      done: 'Podsumowanie',
     }[state.screen];
 
     if (state.screen === 'dashboard') return ['Klienci', 'Karolina Szafrańska'];
@@ -9195,12 +9494,17 @@ const App = () => {
     <ThemeContext.Provider value={{ theme, setTheme }}>
     <NamingContext.Provider value={{ usePZ }}>
       <div className="h-screen flex bg-ink-200 dark:bg-dark-bg overflow-hidden">
-        <Sidebar mobileOpen={mobileSidebarOpen} setMobileOpen={setMobileSidebarOpen} />
+        {!['intent', 'settings', 'setup', 'recipes', 'products', 'mealplan', 'materials', 'done'].includes(state.screen) && <Sidebar mobileOpen={mobileSidebarOpen} setMobileOpen={setMobileSidebarOpen} />}
         <div className="flex-1 flex flex-col min-w-0">
-          <Topbar breadcrumb={breadcrumb} onMenuClick={() => setMobileSidebarOpen(true)} />
+          {!['intent', 'settings', 'setup', 'recipes', 'products', 'mealplan', 'materials', 'done'].includes(state.screen) && <Topbar breadcrumb={breadcrumb} onMenuClick={() => setMobileSidebarOpen(true)} />}
           <div className="flex-1 overflow-hidden flex">
             {state.screen === 'dashboard' && <Dashboard onStart={() => goTo('intent')} />}
             {state.screen === 'intent' && <IntentScreen onPick={pickFlow} onBack={() => goTo('dashboard')} />}
+            {state.screen === 'settings' && (
+              <SettingsScreen flow={state.flow} state={state} setState={setState}
+                onNext={() => goTo('setup')}
+                onBack={() => goTo('intent')} />
+            )}
             {state.screen === 'setup' && (
               <SetupScreen flow={state.flow} state={state} setState={setState}
                 onNext={(target) => {
@@ -9213,7 +9517,7 @@ const App = () => {
                   return goTo('recipes');
                 }}
                 onFinish={() => goTo('materials')}
-                onBack={() => goTo('intent')} />
+                onBack={() => goTo('settings')} />
             )}
             {state.screen === 'recipes' && (
               <RecipesScreen flow={state.flow} state={state} setState={setState}
@@ -9241,7 +9545,7 @@ const App = () => {
                   return goTo('mealplan'); // expert
                 }} />
             )}
-            {state.screen === 'done' && <DoneScreen flow={state.flow} state={state} onDashboard={reset} />}
+            {state.screen === 'done' && <DoneScreen flow={state.flow} state={state} onDashboard={reset} onBack={() => goTo('materials')} />}
           </div>
         </div>
       </div>

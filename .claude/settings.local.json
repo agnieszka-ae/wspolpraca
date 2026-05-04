@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(cp \"/Users/krzysztof/.claude/projects/-Users-krzysztof-Documents-GitHub-wspolpraca/7d3734ac-51ae-45da-bd24-165f1a695e73/tool-results/webfetch-1777387934960-853adl.bin\" /tmp/design.gz)",
+      "Read(//tmp/**)",
+      "Bash(gunzip -c /tmp/design.gz)",
+      "Bash(tar -tf /tmp/design_extracted)",
+      "Bash(mkdir -p /tmp/design_files)",
+      "Bash(tar -xf /tmp/design_extracted -C /tmp/design_files)",
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "Bash(afplay /System/Library/Sounds/Glass.aiff)",
+      "Bash(afplay /System/Library/Sounds/Funk.aiff)",
+      "Read(//private/tmp/design_files/**)",
+      "Bash(python3 -m http.server 8080)",
+      "Bash(grep -n \"function \\\\|const.*=.*{$\\\\|// ===\\\\|// ---\\\\|// SCREEN\\\\|// PAGE\\\\|// MODAL\\\\|// PANEL\\\\|Screen\\\\|Modal\\\\|Panel\" \"/Users/krzysztof/Documents/GitHub/wspolpraca/prototype.html\")",
+      "Bash(bash \"/Users/krzysztof/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.7/skills/brainstorming/scripts/start-server.sh\" --project-dir \"/Users/krzysztof/Documents/GitHub/wspolpraca\")",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(node -e \"const fs = require\\('fs'\\); const html = fs.readFileSync\\('prototype.html', 'utf8'\\); if \\(html.includes\\('const Sidebar'\\) && html.includes\\('const Topbar'\\) && html.includes\\('DS TOKEN SYSTEM'\\)\\) { console.log\\('✓ All major sections present'\\); } else { console.log\\('✗ Missing sections'\\); }\")",
+      "Bash(git commit -m 'Task 1: Shell — DS Token System + Sidebar + Topbar *)",
+      "Bash(grep -E \"#[0-9A-Fa-f]{3,6}|rgba\\\\\\(|var\\\\\\(--\")",
+      "Bash(node -e \"const fs = require\\('fs'\\); const content = fs.readFileSync\\('prototype.html', 'utf-8'\\); if \\(content.match\\(/color:\\\\s*#141414/\\)\\) { console.log\\('ERROR: Still has hardcoded color'\\); } else { console.log\\('OK: color changed to var\\(--ink\\)'\\); }\")",
+      "Bash(git commit *)",
+      "Bash(grep -n \"className=\\\\`\" /Users/krzysztof/Documents/GitHub/wspolpraca/prototype.html)",
+      "Bash(node -c /Users/krzysztof/Documents/GitHub/wspolpraca/prototype.html)",
+      "mcp__plugin_figma_figma__get_design_context",
+      "mcp__plugin_figma_figma__get_screenshot",
+      "Bash(lsof -iTCP -sTCP:LISTEN -n -P)"
+    ]
+  }
+}

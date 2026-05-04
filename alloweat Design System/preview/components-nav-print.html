@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+@font-face { font-family: 'Figtree'; src: url('../fonts/Figtree-Regular.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Figtree'; src: url('../fonts/Figtree-Medium.ttf') format('truetype'); font-weight: 500; }
+@font-face { font-family: 'Figtree'; src: url('../fonts/Figtree-SemiBold.ttf') format('truetype'); font-weight: 600; }
+@font-face { font-family: 'Figtree'; src: url('../fonts/Figtree-Bold.ttf') format('truetype'); font-weight: 700; }
+</style>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  @page { size: A4 landscape; margin: 1.5cm; }
+  @media print {
+    body { background: #F7F7FB !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .no-print { display: none !important; }
+  }
+
+  body {
+    font-family: 'Figtree', sans-serif;
+    background: #F7F7FB;
+    padding: 32px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  /* Page header */
+  .page-header { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+  .page-header-logo { display: flex; align-items: center; }
+  .page-header-title { font-size: 11px; font-weight: 600; color: #4A4A5A; text-transform: uppercase; letter-spacing: 0.06em; }
+  .page-header-divider { flex: 1; height: 1px; background: rgba(20,20,20,0.10); }
+
+  /* Two columns side by side */
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .col-label { font-size: 11px; font-weight: 600; color: #4A4A5A; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+
+  /* Frame */
+  .frame { border: 1px solid rgba(20,20,20,0.10); border-radius: 12px; overflow: hidden; display: flex; height: 380px; background: #fff; }
+
+  /* Sidebar base */
+  .sidebar {
+    background: #fff;
+    border-right: 1px solid rgba(20,20,20,0.10);
+    display: flex; flex-direction: column;
+    padding: 12px 8px;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+  .sidebar-collapsed { width: 52px; align-items: center; }
+  .sidebar-expanded  { width: 220px; }
+
+  /* Collapse hint badge */
+  .collapse-hint {
+    position: relative;
+  }
+  .collapse-hint-btn {
+    position: absolute;
+    top: 50%;
+    right: -12px;
+    transform: translateY(-50%);
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: #7448D0;
+    border: 1px solid #7448D0;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    box-shadow: 0 1px 4px rgba(20,20,20,0.14);
+    z-index: 2;
+  }
+
+  .logo-mark { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-bottom: 6px; }
+  .logo-full  { display: flex; align-items: center; padding: 4px 8px 10px; }
+  .divider { height: 1px; background: rgba(20,20,20,0.08); margin: 4px 0; flex-shrink: 0; }
+  .sidebar-collapsed .divider { width: 36px; }
+  .sidebar-expanded  .divider { width: 100%; }
+
+  /* Collapsed icon nav */
+  .nav-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(5,5,5,0.45); flex-shrink: 0;
+  }
+  .nav-icon.active { background: #F5F1FE; color: #7448D0; }
+
+  /* Expanded row nav */
+  .nav-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 0 8px; height: 36px; border-radius: 8px;
+    color: rgba(5,5,5,0.55); flex-shrink: 0;
+  }
+  .nav-row.active { background: #F5F1FE; color: #7448D0; }
+  .nav-row .icon { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .nav-row .nav-label { font-size: 13px; font-weight: 500; }
+  .nav-row.active .nav-label { font-weight: 600; }
+
+  .spacer { flex: 1; }
+
+  /* Topbar + content */
+  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .topbar { height: 56px; background: #fff; border-bottom: 1px solid rgba(20,20,20,0.10); display: flex; align-items: center; padding: 0 16px; gap: 8px; flex-shrink: 0; }
+  .topbar-title { font-size: 15px; font-weight: 600; color: #050505; flex: 1; }
+  .search { display: flex; align-items: center; gap: 7px; border: 1px solid rgba(20,20,20,0.12); border-radius: 8px; padding: 0 10px; height: 30px; width: 160px; }
+  .search-text { font-size: 12px; color: rgba(5,5,5,0.35); }
+  .topbar-btn { width: 30px; height: 30px; border-radius: 50%; background: #fff; border: 1px solid rgba(20,20,20,0.10); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .avatar { width: 30px; height: 30px; border-radius: 50%; background: #7448D0; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; }
+  .content { flex: 1; background: #F7F7FB; padding: 20px; }
+  .content-title { font-size: 18px; font-weight: 700; color: #050505; }
+  .content-sub { font-size: 12px; color: #4A4A5A; margin-top: 3px; }
+
+  /* Annotation */
+  .annotation {
+    background: #fff;
+    border: 1px solid rgba(20,20,20,0.08);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .ann-dot { width: 8px; height: 8px; border-radius: 50%; background: #7448D0; flex-shrink: 0; margin-top: 4px; }
+  .ann-text { font-size: 12px; color: #2D2D3A; line-height: 1.5; }
+  .ann-text strong { font-weight: 600; color: #050505; }
+</style>
+</head>
+<body>
+
+<!-- SVG symbols -->
+<svg width="0" height="0" style="display:none">
+  <symbol id="ic-dashboard" viewBox="0 0 18 18"><rect x="2" y="2" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="10" y="2" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="2" y="10" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="10" y="10" width="6" height="6" rx="1.5" fill="currentColor"/></symbol>
+  <symbol id="ic-people" viewBox="0 0 18 18"><circle cx="7" cy="6" r="2.5" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M2 15c0-2.761 2.239-4 5-4s5 1.239 5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/><circle cx="13" cy="7" r="2" stroke="currentColor" stroke-width="1.4" fill="none"/><path d="M13 12c1.657 0 3 .895 3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="ic-calendar" viewBox="0 0 18 18"><rect x="2" y="3.5" width="14" height="12.5" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M6 2v3M12 2v3M2 8.5h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="ic-finance" viewBox="0 0 18 18"><rect x="2" y="4" width="14" height="11" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M2 8h14" stroke="currentColor" stroke-width="1.5"/><path d="M6 12h2M10 12h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="ic-reports" viewBox="0 0 18 18"><rect x="3" y="2" width="9" height="14" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M6 6h6M6 9h6M6 12h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="ic-integrations" viewBox="0 0 18 18"><rect x="2" y="2" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="10" y="2" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="10" y="10" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5 8v1a2 2 0 002 2h1M13 8v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="ic-settings" viewBox="0 0 18 18"><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M9 2v1.5M9 14.5V16M2 9h1.5M14.5 9H16M3.636 3.636l1.06 1.06M13.304 13.304l1.06 1.06M3.636 14.364l1.06-1.06M13.304 4.696l1.06-1.06" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="logo-icon" viewBox="0 0 36 30"><path d="M16.327 14.205C15.8675 14.6431 15.8675 15.3549 16.3269 15.793L25.8574 24.8829C26.3186 25.3228 26.3191 26.0416 25.8221 26.4443C23.7743 28.1038 21.3097 29.2373 18.6615 29.7271C15.6253 30.2887 12.4832 29.9793 9.6304 28.8378C6.77756 27.6963 4.34126 25.7736 2.62774 23.3115C0.914225 20.8493 0 17.9577 0 15C0 12.0423 0.914225 9.15065 2.62774 6.68854C4.34126 4.22642 6.77756 2.30374 9.6304 1.16222C12.4832 0.0207016 15.6253 -0.288705 18.6615 0.272896C21.3097 0.762729 23.7742 1.89612 25.8221 3.55564C26.3191 3.9584 26.3185 4.6772 25.8572 5.1171L16.327 14.205Z" fill="#7448D0"/><path d="M36 14.5491C36 10.3399 32.884 7.36709 28.8294 6.65941C28.157 6.54205 27.4831 6.79312 26.9991 7.25471L19.7121 14.2049C19.2527 14.643 19.2527 15.3546 19.712 15.7928L26.8029 22.557C27.2586 22.9918 27.883 23.2408 28.5219 23.1652C30.7484 22.9016 32.8399 21.9679 34.4867 20.4865L31.6868 17.2096C30.4914 18.2412 28.945 18.8223 27.3351 18.845C26.4709 18.9179 25.6061 18.7125 24.878 18.2614C24.15 17.8102 23.6004 17.1393 23.3168 16.3551H35.9273C35.9636 15.5722 36 14.9927 36 14.5491ZM23.2827 13.388C23.4884 12.5982 23.9774 11.9026 24.6645 11.4223C25.3515 10.9421 26.193 10.7077 27.0423 10.7601C28.9969 10.7601 30.507 11.818 30.5818 13.388H23.2827Z" fill="#050505"/></symbol>
+</svg>
+
+<!-- Page header -->
+<div class="page-header">
+  <div class="page-header-logo">
+    <svg width="80" height="17" viewBox="0 0 129 27" fill="none">
+      <path d="M83.4481 12.6718C83.0562 13.0625 83.0561 13.6972 83.448 14.088L91.577 22.1945C91.9704 22.5868 91.9708 23.2278 91.5469 23.587C89.8002 25.067 87.698 26.0778 85.4392 26.5146C82.8495 27.0155 80.1695 26.7395 77.7362 25.7215C75.3029 24.7035 73.2248 22.9888 71.7633 20.793C70.3018 18.5973 69.522 16.0184 69.522 13.3807C69.522 10.7431 70.3018 8.16423 71.7633 5.96847C73.2248 3.77272 75.3029 2.05805 77.7362 1.04002C80.1695 0.022002 82.8495 -0.253932 85.4392 0.246913C87.698 0.683753 89.8002 1.69453 91.5468 3.17451C91.9708 3.5337 91.9703 4.17474 91.5768 4.56705L83.4481 12.6718Z" fill="#7448D0"/>
+      <path d="M18.6076 18.6846V2.154C18.6076 1.418 19.148 1.418 19.343 1.418H22.525C23.261 1.418 23.261 1.959 23.261 2.154V20.671H20.594C18.826 20.671 18.608 19.205 18.608 18.685L18.6076 18.6846Z" fill="#2D1D51"/>
+      <path d="M25.1828 18.6846V2.154C25.1828 1.418 25.723 1.418 25.918 1.418H29.1C29.836 1.418 29.836 1.959 29.836 2.154V20.671H27.17C25.4 20.671 25.183 19.206 25.183 18.685L25.1828 18.6846Z" fill="#2D1D51"/>
+      <path d="M31.6998 13.4809C31.6998 9.055 35.4726 6.125 39.6538 6.125C43.835 6.125 47.6397 9.055 47.6397 13.4809C47.6397 17.877 43.836 20.807 39.6538 20.807C35.4717 20.807 31.6998 17.877 31.6998 13.4809Z" fill="#2D1D51"/>
+      <path d="M64.6784 6.26422H69.0428L64.6182 20.6664H60.8618L58.3277 10.4655L55.9131 20.6664H52.1566L47.5835 6.26422H51.9479L54.2431 13.5902L56.5384 6.26422H60.0861L62.3813 13.5902L64.6784 6.26422Z" fill="#2D1D51"/>
+      <path d="M128.979 7.034L129 10.982H127.181V20.413H122.532V10.982H120.716V7.034H122.532V0.917C122.532 0.077 123.5 0 123.5 0L125.967 0.207C127 0.077 127.246 0.637 127.246 0.917V7.035L128.979 7.034Z" fill="#2D1D51"/>
+      <path d="M100.228 12.9785C100.228 9.225 97.5702 6.574 94.1118 5.942C93.538 5.838 92.963 6.062 92.551 6.473L86.335 12.672C85.943 13.062 85.943 13.697 86.335 14.088L92.383 20.12C92.772 20.508 93.305 20.73 93.85 20.663C95.749 20.427 97.533 19.595 98.937 18.274L96.549 15.351C95.53 16.271 94.21 16.79 92.837 16.81C91.17 16.81 89.67 15.883 89.41 14.589H100.166C100.197 13.891 100.228 13.374 100.228 12.979V12.9785ZM89.38 11.943C89.72 10.555 91 9.599 92.588 9.599C94.255 9.599 95.543 10.543 95.607 11.943H89.38Z" fill="#2D1D51"/>
+      <path d="M11.664 6.131H16.313V20.752H11.664V18.564C10.4 19.803 8.8 20.755 7.041 20.752C2.921 20.752 0 17.731 0 13.396C0 9.031 2.892 6.131 7.074 6.131C8.797 6.104 10.384 6.952 11.665 8.111L11.664 6.131Z" fill="#2D1D51"/>
+      <path d="M113.777 6.131H118.426V20.752H113.777V18.565C112.513 19.803 110.039 20.755 109.154 20.752C105.036 20.752 102.113 17.731 102.113 13.396C102.113 9.031 105.006 6.131 109.188 6.131C110.91 6.267 112.497 6.952 113.778 8.111L113.777 6.131Z" fill="#2D1D51"/>
+    </svg>
+  </div>
+  <div class="page-header-divider"></div>
+  <div class="page-header-title">Navigation — Design System</div>
+</div>
+
+<!-- Two states side by side -->
+<div class="cols">
+
+  <!-- COLLAPSED STATE -->
+  <div>
+    <p class="col-label">Collapsed (52px)</p>
+    <div class="frame">
+      <div class="sidebar sidebar-collapsed collapse-hint">
+        <div class="collapse-hint-btn">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M3.5 2L6.5 5l-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="logo-mark"><svg width="34" height="28"><use href="#logo-icon"/></svg></div>
+        <div class="divider"></div>
+        <div class="nav-icon active"><svg width="18" height="18"><use href="#ic-dashboard"/></svg></div>
+        <div class="nav-icon"><svg width="18" height="18"><use href="#ic-people"/></svg></div>
+        <div class="nav-icon"><svg width="18" height="18"><use href="#ic-calendar"/></svg></div>
+        <div class="nav-icon"><svg width="18" height="18"><use href="#ic-finance"/></svg></div>
+        <div class="divider"></div>
+        <div class="nav-icon"><svg width="18" height="18"><use href="#ic-reports"/></svg></div>
+        <div class="nav-icon"><svg width="18" height="18"><use href="#ic-integrations"/></svg></div>
+        <div class="spacer"></div>
+        <div class="nav-icon"><svg width="18" height="18"><use href="#ic-settings"/></svg></div>
+      </div>
+      <div class="main">
+        <div class="topbar">
+          <div class="topbar-title">Pulpit</div>
+          <div class="search"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="5.5" cy="5.5" r="4" stroke="#727272" stroke-width="1.3"/><path d="M9 9l2.5 2.5" stroke="#727272" stroke-width="1.3" stroke-linecap="round"/></svg><span class="search-text">Szukaj...</span></div>
+          <div class="topbar-btn"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.5C5.067 1.5 3.5 3.067 3.5 5v2.5l-1 2h9l-1-2V5C10.5 3.067 8.933 1.5 7 1.5z" stroke="#050505" stroke-width="1.3" stroke-linejoin="round"/><path d="M5.5 9.5c0 .828.672 1.5 1.5 1.5s1.5-.672 1.5-1.5" stroke="#050505" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+          <div class="avatar">AK</div>
+        </div>
+        <div class="content">
+          <div class="content-title">Pulpit</div>
+          <div class="content-sub">Podsumowanie · kwiecień 2026</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPANDED STATE -->
+  <div>
+    <p class="col-label">Expanded (220px)</p>
+    <div class="frame">
+      <div class="sidebar sidebar-expanded collapse-hint">
+        <div class="collapse-hint-btn">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M6.5 2L3.5 5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="logo-full">
+          <svg width="100" height="21" viewBox="0 0 129 27" fill="none">
+            <path d="M83.4481 12.6718C83.0562 13.0625 83.0561 13.6972 83.448 14.088L91.577 22.1945C91.9704 22.5868 91.9708 23.2278 91.5469 23.587C89.8002 25.067 87.698 26.0778 85.4392 26.5146C82.8495 27.0155 80.1695 26.7395 77.7362 25.7215C75.3029 24.7035 73.2248 22.9888 71.7633 20.793C70.3018 18.5973 69.522 16.0184 69.522 13.3807C69.522 10.7431 70.3018 8.16423 71.7633 5.96847C73.2248 3.77272 75.3029 2.05805 77.7362 1.04002C80.1695 0.022002 82.8495 -0.253932 85.4392 0.246913C87.698 0.683753 89.8002 1.69453 91.5468 3.17451C91.9708 3.5337 91.9703 4.17474 91.5768 4.56705L83.4481 12.6718Z" fill="#7448D0"/>
+            <path d="M18.6076 18.6846V2.154C18.6076 1.418 19.148 1.418 19.343 1.418H22.525C23.261 1.418 23.261 1.959 23.261 2.154V20.671H20.594C18.826 20.671 18.608 19.205 18.608 18.685L18.6076 18.6846Z" fill="#2D1D51"/>
+            <path d="M25.1828 18.6846V2.154C25.1828 1.418 25.723 1.418 25.918 1.418H29.1C29.836 1.418 29.836 1.959 29.836 2.154V20.671H27.17C25.4 20.671 25.183 19.206 25.183 18.685L25.1828 18.6846Z" fill="#2D1D51"/>
+            <path d="M31.6998 13.4809C31.6998 9.055 35.4726 6.125 39.6538 6.125C43.835 6.125 47.6397 9.055 47.6397 13.4809C47.6397 17.877 43.836 20.807 39.6538 20.807C35.4717 20.807 31.6998 17.877 31.6998 13.4809Z" fill="#2D1D51"/>
+            <path d="M64.6784 6.26422H69.0428L64.6182 20.6664H60.8618L58.3277 10.4655L55.9131 20.6664H52.1566L47.5835 6.26422H51.9479L54.2431 13.5902L56.5384 6.26422H60.0861L62.3813 13.5902L64.6784 6.26422Z" fill="#2D1D51"/>
+            <path d="M128.979 7.034V0.917C128.979 0.077 127.5 0 127.5 0L125.967 0.207C124.5 0.077 122.532 0.637 122.532 0.917V7.034H120.716V10.982H122.532V20.413H127.181V10.982H129L128.979 7.034Z" fill="#2D1D51"/>
+            <path d="M100.228 12.979C100.228 9.225 97.57 6.574 94.112 5.942C93.538 5.838 92.963 6.062 92.551 6.473L86.335 12.672C85.943 13.062 85.943 13.697 86.335 14.088L92.383 20.12C92.772 20.508 93.305 20.73 93.85 20.663C95.749 20.427 97.533 19.595 98.937 18.274L96.549 15.351C95.53 16.271 94.21 16.79 92.837 16.81C89.67 15.883 89.41 14.589H100.166C100.197 13.891 100.228 13.374 100.228 12.979ZM89.38 11.943C89.72 10.555 91 9.599 92.588 9.599C94.255 9.599 95.543 10.543 95.607 11.943H89.38Z" fill="#2D1D51"/>
+            <path d="M11.664 6.131H16.313V20.752H11.664V18.564C10.4 19.803 8.8 20.755 7.041 20.752C2.921 20.752 0 17.731 0 13.396C0 9.031 2.892 6.131 7.074 6.131C8.797 6.104 10.384 6.952 11.665 8.111L11.664 6.131Z" fill="#2D1D51"/>
+            <path d="M113.777 6.131H118.426V20.752H113.777V18.565C112.513 19.803 110.039 20.755 109.154 20.752C105.036 20.752 102.113 17.731 102.113 13.396C102.113 9.031 105.006 6.131 109.188 6.131C110.91 6.267 112.497 6.952 113.778 8.111L113.777 6.131Z" fill="#2D1D51"/>
+          </svg>
+        </div>
+        <div class="divider"></div>
+        <div class="nav-row active"><span class="icon"><svg width="18" height="18"><use href="#ic-dashboard"/></svg></span><span class="nav-label">Pulpit</span></div>
+        <div class="nav-row"><span class="icon"><svg width="18" height="18"><use href="#ic-people"/></svg></span><span class="nav-label">Pracownicy</span></div>
+        <div class="nav-row"><span class="icon"><svg width="18" height="18"><use href="#ic-calendar"/></svg></span><span class="nav-label">Kalendarz</span></div>
+        <div class="nav-row"><span class="icon"><svg width="18" height="18"><use href="#ic-finance"/></svg></span><span class="nav-label">Finanse</span></div>
+        <div class="divider"></div>
+        <div class="nav-row"><span class="icon"><svg width="18" height="18"><use href="#ic-reports"/></svg></span><span class="nav-label">Raporty</span></div>
+        <div class="nav-row"><span class="icon"><svg width="18" height="18"><use href="#ic-integrations"/></svg></span><span class="nav-label">Integracje</span></div>
+        <div class="spacer"></div>
+        <div class="nav-row"><span class="icon"><svg width="18" height="18"><use href="#ic-settings"/></svg></span><span class="nav-label">Ustawienia</span></div>
+      </div>
+      <div class="main">
+        <div class="topbar">
+          <div class="topbar-title">Pulpit</div>
+          <div class="search"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="5.5" cy="5.5" r="4" stroke="#727272" stroke-width="1.3"/><path d="M9 9l2.5 2.5" stroke="#727272" stroke-width="1.3" stroke-linecap="round"/></svg><span class="search-text">Szukaj...</span></div>
+          <div class="topbar-btn"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.5C5.067 1.5 3.5 3.067 3.5 5v2.5l-1 2h9l-1-2V5C10.5 3.067 8.933 1.5 7 1.5z" stroke="#050505" stroke-width="1.3" stroke-linejoin="round"/><path d="M5.5 9.5c0 .828.672 1.5 1.5 1.5s1.5-.672 1.5-1.5" stroke="#050505" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+          <div class="avatar">AK</div>
+        </div>
+        <div class="content">
+          <div class="content-title">Pulpit</div>
+          <div class="content-sub">Podsumowanie · kwiecień 2026</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Annotations -->
+<div class="cols">
+  <div class="annotation">
+    <div class="ann-dot"></div>
+    <div class="ann-text"><strong>Collapsed sidebar</strong> — 52px width, icon-only navigation. Equal 8px padding on both sides. Active item uses <code style="background:rgba(116,72,208,0.08);padding:1px 4px;border-radius:3px;font-size:11px">#F5F1FE</code> tint background with purple icon.</div>
+  </div>
+  <div class="annotation">
+    <div class="ann-dot" style="background:#2D1D51"></div>
+    <div class="ann-text"><strong>Expanded sidebar</strong> — 220px width with full wordmark and labelled nav rows. Collapse toggle (circle button) appears on hover at sidebar edge. 200ms ease transition between states.</div>
+  </div>
+</div>
+
+<script>
+  document.fonts.ready.then(() => {
+    setTimeout(() => window.print(), 500);
+  });
+</script>
+</body>
+</html>

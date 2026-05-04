@@ -1,0 +1,961 @@
+<frame id="199:10520" name="Krok 2 / 1 typ dnia" x="2907" y="1349" width="1440" height="990">
+  <frame id="199:10521" name="Frame 2147224006" x="0" y="0" width="1440" height="88">
+    <frame id="199:10522" name="Top nav" x="0" y="0" width="1440" height="44">
+      <frame id="199:10523" name="Frame 2147224004" x="24" y="10" width="356" height="24">
+        <instance id="199:10524" name="Button" x="0" y="0" width="24" height="24" />
+        <text id="199:10525" name="Klienci" x="32" y="0" width="42" height="24" />
+        <text id="199:10526" name="/" x="82" y="0" width="6" height="24" />
+        <text id="199:10527" name="Karolina Szafrańska" x="96" y="0" width="123" height="24" />
+        <text id="199:10528" name="/" x="227" y="0" width="6" height="24" />
+        <text id="199:10529" name="Nowa współpraca" x="241" y="0" width="115" height="24" />
+      </frame>
+      <frame id="199:10530" name="Frame 2147223923" x="1277" y="10" width="139" height="24">
+        <instance id="199:10531" name="Toggle" x="0" y="4" width="28" height="16" />
+        <text id="199:10532" name="Pokaż instrukcje" x="36" y="0" width="103" height="24" />
+      </frame>
+    </frame>
+    <frame id="199:10533" name="Top nav" x="0" y="44" width="1440" height="44">
+      <frame id="199:10534" name="Frame 2147223514" x="24" y="10" width="1392" height="24">
+        <vector id="199:10535" name="Vector 1" x="-5.684341886080802e-14" y="12" width="370" height="0.00003234642986171821" />
+        <vector id="199:12317" name="Vector 2" x="370" y="12" width="904" height="0.00007903019650257193" />
+        <frame id="199:10536" name="Frame 2147223725" x="0" y="0" width="184" height="24">
+          <frame id="199:10537" name="Button" x="8" y="0" width="24" height="24">
+            <instance id="199:10538" name="Icon / interface / check, success" x="4.460602760314941" y="4.53918981552124" width="15.078794479370117" height="14.92162036895752" />
+            <instance id="199:10539" name="Icon / arrows / chevron-down" x="148" y="8" width="24" height="24" hidden="true" />
+          </frame>
+          <text id="199:10540" name="Button" x="40" y="0" width="136" height="24" />
+        </frame>
+        <frame id="199:10541" name="Frame 2147223728" x="349.5" y="0" width="110" height="24">
+          <frame id="199:10542" name="Button" x="8" y="0" width="24" height="24">
+            <text id="199:10543" name="1" x="8" y="2" width="8" height="20" />
+            <instance id="199:10544" name="Icon / arrows / chevron-down" x="148" y="8" width="24" height="24" hidden="true" />
+          </frame>
+          <text id="199:10545" name="Button" x="40" y="0" width="62" height="24" />
+        </frame>
+        <frame id="199:10546" name="Frame 2147223729" x="625" y="0" width="102" height="24">
+          <frame id="199:10547" name="Button" x="8" y="0" width="24" height="24">
+            <text id="199:10548" name="1" x="8" y="2" width="8" height="20" />
+            <instance id="199:10549" name="Icon / arrows / chevron-down" x="148" y="8" width="24" height="24" hidden="true" />
+          </frame>
+          <text id="199:10550" name="Button" x="40" y="0" width="54" height="24" />
+        </frame>
+        <frame id="199:10551" name="Frame 2147223730" x="892.5" y="0" width="151" height="24">
+          <frame id="199:10552" name="Button" x="8" y="0" width="24" height="24">
+            <text id="199:10553" name="1" x="7.5" y="2" width="9" height="20" />
+            <instance id="199:10554" name="Icon / arrows / chevron-down" x="148" y="8" width="24" height="24" hidden="true" />
+          </frame>
+          <text id="199:10555" name="Button" x="40" y="0" width="103" height="24" />
+        </frame>
+        <frame id="199:12312" name="Frame 2147223731" x="1209" y="0" width="183" height="24">
+          <frame id="199:12313" name="Button" x="8" y="0" width="24" height="24">
+            <text id="199:12314" name="1" x="7.5" y="2" width="9" height="20" />
+            <instance id="199:12315" name="Icon / arrows / chevron-down" x="148" y="8" width="24" height="24" hidden="true" />
+          </frame>
+          <text id="199:12316" name="Button" x="40" y="0" width="135" height="24" />
+        </frame>
+      </frame>
+    </frame>
+  </frame>
+  <frame id="199:11307" name="Frame 2147223925" x="50" y="112" width="1340" height="824">
+    <frame id="199:12482" name="Section / Days list" x="0" y="0" width="280" height="280">
+      <frame id="199:12483" name="Frame 2147223934" x="0" y="0" width="280" height="56">
+        <frame id="199:12484" name="Frame 2147223932" x="16" y="16" width="248" height="24">
+          <text id="199:12485" name="TYPY DNI" x="0" y="0" width="62" height="24" />
+          <instance id="199:12486" name="Icon/ interface /Settins" x="224" y="0" width="24" height="24" />
+        </frame>
+      </frame>
+      <frame id="199:12487" name="Frame 2147223935" x="0" y="56" width="280" height="224">
+        <frame id="199:12488" name="Frame 2147223920" x="0" y="0" width="280" height="208">
+          <text id="199:12489" name="Dni wykorzystane w programie:" x="0" y="0" width="199" height="24" hidden="true" />
+          <frame id="199:12490" name="Frame 2147223925" x="0" y="0" width="280" height="64">
+            <instance id="199:12491" name="Checkbox" x="8" y="8" width="24" height="24" hidden="true" />
+            <frame id="199:12492" name="Frame 2147223933" x="12" y="8" width="256" height="48">
+              <frame id="199:12493" name="Frame 2147223913" x="0" y="0" width="256" height="24">
+                <text id="199:12494" name="Trening siłowy" x="0" y="0" width="92" height="24" />
+                <frame id="199:12495" name="Tags" x="212" y="2" width="44" height="20">
+                  <instance id="199:12496" name="Badge" x="0" y="0" width="20" height="20" />
+                  <instance id="199:12497" name="Badge" x="24" y="0" width="20" height="20" />
+                </frame>
+              </frame>
+              <frame id="199:12498" name="Details/Kcal" x="0" y="28" width="113" height="20">
+                <instance id="199:12499" name="Icon / interface / plus" x="0" y="2" width="16" height="16" />
+                <frame id="199:12500" name="Frame 1171276100" x="22" y="0" width="91" height="20">
+                  <instance id="199:12501" name="Icon / interface / plus" x="0" y="0" width="24" height="24" hidden="true" />
+                  <text id="199:12502" name="1800" x="0" y="0" width="28" height="20" />
+                  <text id="199:12503" name="/ 1800 kcal" x="28" y="0" width="63" height="20" />
+                  <ellipse id="199:12504" name="Ellipse 2189" x="182" y="8" width="4" height="4" hidden="true" />
+                </frame>
+                <frame id="199:12505" name="Frame 1171276103" x="126" y="0" width="142" height="24" hidden="true" />
+              </frame>
+            </frame>
+          </frame>
+          <frame id="199:12506" name="Frame 2147223920" x="0" y="72" width="280" height="64">
+            <frame id="199:12507" name="Frame 2147223916" x="0" y="0" width="280" height="64">
+              <instance id="199:12508" name="Checkbox" x="8" y="8" width="24" height="24" hidden="true" />
+              <frame id="199:12509" name="Frame 2147223914" x="12" y="8" width="256" height="48">
+                <frame id="199:12510" name="Frame 2147223913" x="0" y="0" width="256" height="24">
+                  <text id="199:12511" name="Placeholder" x="0" y="0" width="92" height="24" />
+                  <frame id="199:12512" name="Tags" x="188" y="2" width="68" height="20">
+                    <instance id="199:12513" name="Badge" x="0" y="0" width="20" height="20" />
+                    <instance id="199:12514" name="Badge" x="24" y="0" width="20" height="20" />
+                    <instance id="199:12515" name="Badge" x="48" y="0" width="20" height="20" />
+                  </frame>
+                </frame>
+                <frame id="199:12516" name="Details/Kcal" x="0" y="28" width="117" height="20">
+                  <instance id="199:12517" name="Icon / interface / plus" x="0" y="2" width="16" height="16" />
+                  <frame id="199:12518" name="Frame 1171276100" x="22" y="0" width="95" height="20">
+                    <instance id="199:12519" name="Icon / interface / plus" x="0" y="0" width="24" height="24" hidden="true" />
+                    <text id="199:12520" name="2000" x="0" y="0" width="30" height="20" />
+                    <text id="199:12521" name="/ 2000 kcal" x="30" y="0" width="65" height="20" />
+                    <ellipse id="199:12522" name="Ellipse 2189" x="182" y="8" width="4" height="4" hidden="true" />
+                  </frame>
+                  <frame id="199:12523" name="Frame 1171276103" x="126" y="0" width="142" height="24" hidden="true" />
+                </frame>
+              </frame>
+            </frame>
+          </frame>
+          <frame id="199:12524" name="Frame 2147223922" x="0" y="144" width="280" height="64">
+            <instance id="199:12525" name="Checkbox" x="8" y="8" width="24" height="24" hidden="true" />
+            <frame id="199:12526" name="Frame 2147223933" x="12" y="8" width="256" height="48">
+              <frame id="199:12527" name="Frame 2147223913" x="0" y="0" width="256" height="24">
+                <text id="199:12528" name="Regeneracja" x="0" y="0" width="79" height="24" />
+                <frame id="199:12529" name="Tags" x="212" y="2" width="44" height="20">
+                  <instance id="199:12530" name="Badge" x="0" y="0" width="20" height="20" />
+                  <instance id="199:12531" name="Badge" x="24" y="0" width="20" height="20" />
+                </frame>
+              </frame>
+              <frame id="199:12532" name="Details/Kcal" x="0" y="28" width="113" height="20">
+                <instance id="199:12533" name="Icon / interface / plus" x="0" y="2" width="16" height="16" />
+                <frame id="199:12534" name="Frame 1171276100" x="22" y="0" width="91" height="20">
+                  <instance id="199:12535" name="Icon / interface / plus" x="0" y="0" width="24" height="24" hidden="true" />
+                  <text id="199:12536" name="1600" x="0" y="0" width="28" height="20" />
+                  <text id="199:12537" name="/ 1600 kcal" x="28" y="0" width="63" height="20" />
+                  <ellipse id="199:12538" name="Ellipse 2189" x="182" y="8" width="4" height="4" hidden="true" />
+                </frame>
+                <frame id="199:12539" name="Frame 1171276103" x="126" y="0" width="142" height="24" hidden="true" />
+              </frame>
+            </frame>
+          </frame>
+        </frame>
+      </frame>
+    </frame>
+    <frame id="199:11340" name="Frame 2147223924" x="296" y="0" width="1044" height="824">
+      <frame id="199:11341" name="Day" x="0" y="0" width="1044" height="112">
+        <frame id="199:11342" name="Frame 1171276279" x="24" y="24" width="1242" height="44" hidden="true">
+          <frame id="199:11343" name="Input" x="0" y="2" width="672.5" height="40">
+            <frame id="199:11344" name="Atoms / UI primitive / Label" x="0" y="10" width="63" height="20">
+              <text id="199:11345" name="Nazwa dnia" x="0" y="0" width="63" height="20" />
+              <frame id="199:11346" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+            </frame>
+            <frame id="199:11348" name="Input" x="71" y="0" width="601.5" height="40">
+              <instance id="199:11349" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+              <instance id="199:11350" name="Icon / interface / search" x="12" y="8" width="24" height="24" hidden="true" />
+              <instance id="199:11351" name="Input / Content" x="12" y="8" width="577.5" height="24" />
+              <instance id="199:11352" name="Input / Trailing options" x="412" y="7.4782609939575195" width="24" height="25.04347801208496" hidden="true" />
+            </frame>
+            <instance id="199:11353" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+          </frame>
+          <frame id="199:11354" name="Input" x="704.5" y="0" width="481.5" height="44">
+            <frame id="199:11355" name="Frame 1171276045" x="0" y="0" width="481.5" height="44">
+              <instance id="199:11356" name="Days" x="0" y="0" width="65.35713958740234" height="44" />
+              <instance id="199:11357" name="Days" x="69.35713958740234" y="0" width="65.35713958740234" height="44" />
+              <instance id="199:11358" name="Days" x="138.7142791748047" y="0" width="65.35713958740234" height="44" />
+              <instance id="199:11359" name="Days" x="208.0714111328125" y="0" width="65.35713958740234" height="44" />
+              <instance id="199:11360" name="Days" x="277.4285583496094" y="0" width="65.35713958740234" height="44" />
+              <instance id="199:11361" name="Days" x="346.78570556640625" y="0" width="65.35713195800781" height="44" />
+              <instance id="199:11362" name="Days" x="416.142822265625" y="0" width="65.35713195800781" height="44" />
+            </frame>
+            <instance id="199:11363" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+          </frame>
+          <instance id="199:11364" name="Icon / chevron-down" x="1218" y="10" width="24" height="24" />
+        </frame>
+        <frame id="199:11365" name="Input" x="318" y="24" width="110" height="64" hidden="true">
+          <frame id="199:11366" name="Atoms / UI primitive / Label" x="0" y="0" width="53" height="20">
+            <text id="199:11367" name="Godzina" x="0" y="0" width="53" height="20" />
+            <frame id="199:11368" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+          </frame>
+          <frame id="199:11370" name="Input" x="0" y="24" width="110" height="40">
+            <instance id="199:11371" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+            <frame id="199:11372" name="Icon / search" x="12" y="8" width="24" height="24">
+              <text id="199:11373" name="" x="4" y="0" width="16" height="24" />
+            </frame>
+            <instance id="199:11374" name="Input / Content" x="44" y="8" width="54" height="24" />
+            <instance id="199:11375" name="Input / Trailing options" x="412" y="7.4782609939575195" width="24" height="25.04347801208496" hidden="true" />
+          </frame>
+          <instance id="199:11376" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+        </frame>
+        <instance id="199:11377" name="Button" x="692" y="48" width="40" height="40" hidden="true" />
+        <instance id="199:11378" name="Divider" x="24" y="112" width="1242" height="0" hidden="true" />
+        <frame id="199:11379" name="Frame 1171276453" x="24" y="136" width="1242" height="384" hidden="true">
+          <frame id="199:11380" name="Frame 1171276454" x="0" y="0" width="307" height="24">
+            <instance id="199:11381" name="Icon / arrows / chevron-right" x="0" y="0" width="24" height="24" />
+            <text id="199:11382" name="Title" x="32" y="2" width="275" height="20" />
+          </frame>
+          <frame id="199:11383" name="Frame 1171276053" x="0" y="40" width="1242" height="344">
+            <frame id="199:11384" name="Kaloryczność" x="0" y="0" width="1242" height="296">
+              <frame id="199:11385" name="Table / Składniki" x="0" y="0" width="1242" height="296">
+                <frame id="199:11386" name="Typ posiłku" x="0" y="0" width="1242" height="64">
+                  <instance id="199:11387" name="Input" x="0" y="0" width="296" height="64" />
+                  <frame id="199:11388" name="Input" x="304" y="0" width="110" height="64">
+                    <frame id="199:11389" name="Atoms / UI primitive / Label" x="0" y="0" width="45" height="20">
+                      <text id="199:11390" name="Godzina" x="0" y="0" width="45" height="20" />
+                      <frame id="199:11391" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+                    </frame>
+                    <frame id="199:11393" name="Input" x="0" y="24" width="110" height="40">
+                      <instance id="199:11394" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                      <frame id="199:11395" name="Icon / search" x="12" y="8" width="24" height="24">
+                        <text id="199:11396" name="" x="4" y="0" width="16" height="24" />
+                      </frame>
+                      <instance id="199:11397" name="Input / Content" x="44" y="8" width="54" height="24" />
+                      <instance id="199:11398" name="Input / Trailing options" x="412" y="7.4782609939575195" width="24" height="25.04347801208496" hidden="true" />
+                    </frame>
+                    <instance id="199:11399" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+                  </frame>
+                  <instance id="199:11400" name="Input" x="422" y="0" width="148" height="64" />
+                  <instance id="199:11401" name="Input" x="578" y="0" width="148" height="64" />
+                  <instance id="199:11402" name="Input" x="734" y="0" width="148" height="64" />
+                  <instance id="199:11403" name="Input" x="890" y="0" width="148" height="64" />
+                  <instance id="199:11404" name="Input" x="1046" y="0" width="148" height="64" />
+                  <frame id="199:11405" name="Input" x="294" y="0" width="110" height="64" hidden="true">
+                    <frame id="199:11406" name="Atoms / UI primitive / Label" x="0" y="0" width="53" height="20">
+                      <text id="199:11407" name="Godzina" x="0" y="0" width="53" height="20" />
+                      <frame id="199:11408" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+                    </frame>
+                    <frame id="199:11410" name="Input" x="0" y="24" width="110" height="40">
+                      <instance id="199:11411" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                      <frame id="199:11412" name="Icon / search" x="12" y="8" width="24" height="24">
+                        <text id="199:11413" name="" x="4" y="0" width="16" height="24" />
+                      </frame>
+                      <instance id="199:11414" name="Input / Content" x="44" y="8" width="54" height="24" />
+                      <instance id="199:11415" name="Input / Trailing options" x="412" y="7.4782609939575195" width="24" height="25.04347801208496" hidden="true" />
+                    </frame>
+                    <instance id="199:11416" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+                  </frame>
+                  <instance id="199:11417" name="Button" x="668" y="24" width="40" height="40" hidden="true" />
+                  <instance id="199:11418" name="Button" x="1202" y="24" width="40" height="40" />
+                </frame>
+                <frame id="199:11419" name="Typ posiłku" x="0" y="80" width="1242" height="64">
+                  <instance id="199:11420" name="Input" x="0" y="0" width="296" height="64" />
+                  <frame id="199:11421" name="Input" x="304" y="0" width="110" height="64">
+                    <frame id="199:11422" name="Atoms / UI primitive / Label" x="0" y="0" width="45" height="20">
+                      <text id="199:11423" name="Godzina" x="0" y="0" width="45" height="20" />
+                      <frame id="199:11424" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+                    </frame>
+                    <frame id="199:11426" name="Input" x="0" y="24" width="110" height="40">
+                      <instance id="199:11427" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                      <frame id="199:11428" name="Icon / search" x="12" y="8" width="24" height="24">
+                        <text id="199:11429" name="" x="4" y="0" width="16" height="24" />
+                      </frame>
+                      <instance id="199:11430" name="Input / Content" x="44" y="8" width="54" height="24" />
+                      <instance id="199:11431" name="Input / Trailing options" x="412" y="7.4782609939575195" width="24" height="25.04347801208496" hidden="true" />
+                    </frame>
+                    <instance id="199:11432" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+                  </frame>
+                  <instance id="199:11433" name="Input" x="422" y="0" width="148" height="64" />
+                  <instance id="199:11434" name="Input" x="578" y="0" width="148" height="64" />
+                  <instance id="199:11435" name="Input" x="734" y="0" width="148" height="64" />
+                  <instance id="199:11436" name="Input" x="890" y="0" width="148" height="64" />
+                  <instance id="199:11437" name="Input" x="1046" y="0" width="148" height="64" />
+                  <frame id="199:11438" name="Input" x="294" y="0" width="110" height="64" hidden="true">
+                    <frame id="199:11439" name="Atoms / UI primitive / Label" x="0" y="0" width="53" height="20">
+                      <text id="199:11440" name="Godzina" x="0" y="0" width="53" height="20" />
+                      <frame id="199:11441" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+                    </frame>
+                    <frame id="199:11443" name="Input" x="0" y="24" width="110" height="40">
+                      <instance id="199:11444" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                      <frame id="199:11445" name="Icon / search" x="12" y="8" width="24" height="24">
+                        <text id="199:11446" name="" x="4" y="0" width="16" height="24" />
+                      </frame>
+                      <instance id="199:11447" name="Input / Content" x="44" y="8" width="54" height="24" />
+                      <instance id="199:11448" name="Input / Trailing options" x="412" y="7.4782609939575195" width="24" height="25.04347801208496" hidden="true" />
+                    </frame>
+                    <instance id="199:11449" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+                  </frame>
+                  <instance id="199:11450" name="Button" x="668" y="24" width="40" height="40" hidden="true" />
+                  <instance id="199:11451" name="Button" x="1202" y="24" width="40" height="40" />
+                </frame>
+                <frame id="199:11452" name="Typ posiłku" x="0" y="160" width="1242" height="64">
+                  <instance id="199:11453" name="Input" x="0" y="0" width="296" height="64" />
+                  <frame id="199:11454" name="Input" x="304" y="0" width="110" height="64">
+                    <frame id="199:11455" name="Atoms / UI primitive / Label" x="0" y="0" width="45" height="20">
+                      <text id="199:11456" name="Godzina" x="0" y="0" width="45" height="20" />
+                      <frame id="199:11457" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+                    </frame>
+                    <frame id="199:11459" name="Input" x="0" y="24" width="110" height="40">
+                      <instance id="199:11460" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                      <frame id="199:11461" name="Icon / search" x="12" y="8" width="24" height="24">
+                        <text id="199:11462" name="" x="4" y="0" width="16" height="24" />
+                      </frame>
+                      <instance id="199:11463" name="Input / Content" x="44" y="8" width="54" height="24" />
+                      <instance id="199:11464" name="Input / Trailing options" x="412" y="7.4782609939575195" width="24" height="25.04347801208496" hidden="true" />
+                    </frame>
+                    <instance id="199:11465" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+                  </frame>
+                  <instance id="199:11466" name="Input" x="422" y="0" width="148" height="64" />
+                  <instance id="199:11467" name="Input" x="578" y="0" width="148" height="64" />
+                  <instance id="199:11468" name="Input" x="734" y="0" width="148" height="64" />
+                  <instance id="199:11469" name="Input" x="890" y="0" width="148" height="64" />
+                  <instance id="199:11470" name="Input" x="1046" y="0" width="148" height="64" />
+                  <frame id="199:11471" name="Input" x="294" y="0" width="110" height="64" hidden="true">
+                    <frame id="199:11472" name="Atoms / UI primitive / Label" x="0" y="0" width="53" height="20">
+                      <text id="199:11473" name="Godzina" x="0" y="0" width="53" height="20" />
+                      <frame id="199:11474" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+                    </frame>
+                    <frame id="199:11476" name="Input" x="0" y="24" width="110" height="40">
+                      <instance id="199:11477" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                      <frame id="199:11478" name="Icon / search" x="12" y="8" width="24" height="24">
+                        <text id="199:11479" name="" x="4" y="0" width="16" height="24" />
+                      </frame>
+                      <instance id="199:11480" name="Input / Content" x="44" y="8" width="54" height="24" />
+                      <instance id="199:11481" name="Input / Trailing options" x="412" y="7.4782609939575195" width="24" height="25.04347801208496" hidden="true" />
+                    </frame>
+                    <instance id="199:11482" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+                  </frame>
+                  <instance id="199:11483" name="Button" x="668" y="24" width="40" height="40" hidden="true" />
+                  <instance id="199:11484" name="Button" x="1202" y="24" width="40" height="40" />
+                </frame>
+                <frame id="199:11485" name="Składnik" x="0" y="240" width="1242" height="56">
+                  <frame id="199:11486" name="Input" x="294" y="0" width="110" height="64" hidden="true">
+                    <frame id="199:11487" name="Atoms / UI primitive / Label" x="0" y="0" width="53" height="20">
+                      <text id="199:11488" name="Godzina" x="0" y="0" width="53" height="20" />
+                      <frame id="199:11489" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+                    </frame>
+                    <frame id="199:11491" name="Input" x="0" y="24" width="110" height="40">
+                      <instance id="199:11492" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                      <frame id="199:11493" name="Icon / search" x="12" y="8" width="24" height="24">
+                        <text id="199:11494" name="" x="4" y="0" width="16" height="24" />
+                      </frame>
+                      <instance id="199:11495" name="Input / Content" x="44" y="8" width="54" height="24" />
+                      <instance id="199:11496" name="Input / Trailing options" x="412" y="7.4782609939575195" width="24" height="25.04347801208496" hidden="true" />
+                    </frame>
+                    <instance id="199:11497" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+                  </frame>
+                  <frame id="199:11498" name="Frame 1171276452" x="16" y="8" width="398" height="40">
+                    <text id="199:11499" name="Title" x="0" y="8" width="48" height="24" />
+                    <frame id="199:11500" name="Banner" x="56" y="0" width="238" height="40">
+                      <instance id="199:11501" name="Icon / interface / external-link" x="8" y="8" width="24" height="24" />
+                      <frame id="199:11502" name="Frame 9056" x="40" y="8" width="190" height="24">
+                        <text id="199:11503" name="Założenia sumują się do 100%" x="0" y="0" width="190" height="24" />
+                      </frame>
+                    </frame>
+                  </frame>
+                  <frame id="199:11504" name="Input" x="422" y="8" width="148" height="40">
+                    <frame id="199:11505" name="Atoms / UI primitive / Label" x="0" y="0" width="29" height="20" hidden="true">
+                      <text id="199:11506" name="Kcal" x="0" y="0" width="23" height="20" />
+                      <frame id="199:11507" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+                    </frame>
+                    <frame id="199:11509" name="Input" x="0" y="0" width="148" height="40">
+                      <instance id="199:11510" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                      <instance id="199:11511" name="Input / Content" x="12" y="8" width="72" height="24" />
+                      <instance id="199:11512" name="Icon / status / tick in circle" x="92" y="8" width="24" height="24" />
+                      <instance id="199:11513" name="Input / Trailing options" x="124" y="8" width="12" height="24" />
+                    </frame>
+                    <instance id="199:11514" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+                  </frame>
+                  <instance id="199:11515" name="Input" x="578" y="8" width="148" height="40" />
+                  <instance id="199:11516" name="Input" x="734" y="8" width="148" height="40" />
+                  <instance id="199:11517" name="Input" x="890" y="8" width="148" height="40" />
+                  <instance id="199:11518" name="Input" x="1046" y="8" width="148" height="40" />
+                  <instance id="199:11519" name="Button" x="668" y="24" width="40" height="40" hidden="true" />
+                </frame>
+              </frame>
+            </frame>
+            <instance id="199:11520" name="Button" x="0" y="320" width="114" height="24" />
+          </frame>
+        </frame>
+        <frame id="199:11521" name="Frame 1171276641" x="20" y="16" width="1004" height="40">
+          <frame id="199:11522" name="Frame 2147223857" x="0" y="0" width="63" height="24">
+            <text id="199:11523" name="TYP DNIA" x="0" y="0" width="63" height="24" />
+          </frame>
+          <frame id="199:11524" name="Frame 2147223859" x="686" y="0" width="318" height="40">
+            <instance id="199:11525" name="Button" x="131" y="0" width="174" height="40" hidden="true" />
+            <instance id="199:11526" name="Button" x="0" y="0" width="40" height="40" />
+            <instance id="199:11527" name="Button" x="48" y="0" width="40" height="40" />
+            <instance id="199:11528" name="Button" x="96" y="0" width="40" height="40" />
+            <instance id="199:11529" name="Button" x="144" y="0" width="174" height="40" />
+          </frame>
+        </frame>
+        <frame id="199:11530" name="Frame 1171277154" x="20" y="56" width="1004" height="40">
+          <frame id="199:11531" name="Frame 2147223390" x="0" y="0" width="1004" height="40">
+            <frame id="199:11532" name="Input" x="0" y="0" width="280" height="40">
+              <frame id="199:11533" name="Atoms / UI primitive / Label" x="0" y="0" width="44" height="24" hidden="true">
+                <text id="199:11534" name="Nazwa" x="0" y="0" width="44" height="24" />
+                <frame id="199:11535" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+              </frame>
+              <frame id="199:11537" name="Input" x="0" y="0" width="280" height="40">
+                <frame id="199:11538" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true">
+                  <frame id="199:11539" name="Checkbox" x="0" y="0" width="24" height="24">
+                    <rounded-rectangle id="199:11540" name="Box" x="4" y="4" width="16" height="16" />
+                    <frame id="199:11541" name="Icons / check" x="4" y="4" width="16" height="16" />
+                  </frame>
+                  <text id="199:11545" name="Label" x="28" y="3" width="36" height="18" hidden="true" />
+                </frame>
+                <instance id="199:11546" name="Icon / status / tick in circle" x="8" y="8" width="24" height="24" />
+                <instance id="199:11547" name="Input / Content" x="40" y="8" width="232" height="24" />
+                <instance id="199:11548" name="Input / Trailing options" x="412" y="8" width="24" height="24" hidden="true" />
+              </frame>
+              <instance id="199:11549" name="Input / Helper text" x="0" y="44" width="242" height="20" hidden="true" />
+            </frame>
+            <frame id="199:11550" name="Frame 1171276488" x="288" y="0" width="248" height="39">
+              <instance id="199:11551" name="Button" x="283" y="0" width="72" height="24" hidden="true" />
+              <frame id="199:11552" name="Button" x="0" y="3.5" width="32" height="32">
+                <text id="199:11553" name="Pn" x="8" y="6" width="16" height="20" />
+                <text id="199:11554" name="Button" x="40" y="8" width="38" height="24" hidden="true" />
+                <instance id="199:11555" name="Icon / arrows / chevron-down" x="148" y="8" width="24" height="24" hidden="true" />
+              </frame>
+              <frame id="199:11556" name="Button" x="36" y="3.5" width="32" height="32">
+                <text id="199:11557" name="Wt" x="6.5" y="6" width="19" height="20" />
+                <text id="199:11558" name="Button" x="40" y="8" width="38" height="24" hidden="true" />
+                <instance id="199:11559" name="Icon / arrows / chevron-down" x="148" y="8" width="24" height="24" hidden="true" />
+              </frame>
+              <frame id="199:11560" name="Button" x="72" y="3.5" width="32" height="32">
+                <text id="199:11561" name="Śr" x="9" y="6" width="14" height="20" />
+                <text id="199:11562" name="Button" x="40" y="8" width="38" height="24" hidden="true" />
+                <instance id="199:11563" name="Icon / arrows / chevron-down" x="148" y="8" width="24" height="24" hidden="true" />
+              </frame>
+              <frame id="199:11564" name="Button" x="108" y="3.5" width="32" height="32">
+                <text id="199:11565" name="Cz" x="7.5" y="6" width="17" height="20" />
+                <text id="199:11566" name="Button" x="40" y="8" width="38" height="24" hidden="true" />
+                <instance id="199:11567" name="Icon / arrows / chevron-down" x="148" y="8" width="24" height="24" hidden="true" />
+              </frame>
+              <frame id="199:11568" name="Button" x="144" y="3.5" width="32" height="32">
+                <text id="199:11569" name="Pt" x="9" y="6" width="14" height="20" />
+                <text id="199:11570" name="Button" x="40" y="8" width="38" height="24" hidden="true" />
+                <instance id="199:11571" name="Icon / arrows / chevron-down" x="148" y="8" width="24" height="24" hidden="true" />
+              </frame>
+              <frame id="199:11572" name="Button" x="180" y="3.5" width="32" height="32">
+                <text id="199:11573" name="Sb" x="7.5" y="6" width="17" height="20" />
+                <text id="199:11574" name="Button" x="40" y="8" width="38" height="24" hidden="true" />
+                <instance id="199:11575" name="Icon / arrows / chevron-down" x="148" y="8" width="24" height="24" hidden="true" />
+              </frame>
+              <frame id="199:11576" name="Button" x="216" y="3.5" width="32" height="32">
+                <text id="199:11577" name="Nd" x="6" y="6" width="20" height="20" />
+                <text id="199:11578" name="Button" x="40" y="8" width="38" height="24" hidden="true" />
+                <instance id="199:11579" name="Icon / arrows / chevron-down" x="148" y="8" width="24" height="24" hidden="true" />
+              </frame>
+            </frame>
+            <instance id="199:11580" name="Input / Helper text" x="402" y="48" width="106" height="20" hidden="true" />
+            <instance id="199:11581" name="Input / Helper text" x="297" y="0" width="448" height="68" hidden="true" />
+          </frame>
+        </frame>
+      </frame>
+      <frame id="199:11582" name="Day" x="0" y="128" width="1044" height="256">
+        <frame id="199:11583" name="Frame 1171276279" x="24" y="24" width="1242" height="44" hidden="true">
+          <frame id="199:11584" name="Input" x="0" y="2" width="672.5" height="40">
+            <frame id="199:11585" name="Atoms / UI primitive / Label" x="0" y="10" width="63" height="20">
+              <text id="199:11586" name="Nazwa dnia" x="0" y="0" width="63" height="20" />
+              <frame id="199:11587" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+            </frame>
+            <frame id="199:11589" name="Input" x="71" y="0" width="601.5" height="40">
+              <instance id="199:11590" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+              <instance id="199:11591" name="Icon / interface / search" x="12" y="8" width="24" height="24" hidden="true" />
+              <instance id="199:11592" name="Input / Content" x="12" y="8" width="577.5" height="24" />
+              <instance id="199:11593" name="Input / Trailing options" x="412" y="7.4782609939575195" width="24" height="25.04347801208496" hidden="true" />
+            </frame>
+            <instance id="199:11594" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+          </frame>
+          <frame id="199:11595" name="Input" x="704.5" y="0" width="481.5" height="44">
+            <frame id="199:11596" name="Frame 1171276045" x="0" y="0" width="481.5" height="44">
+              <instance id="199:11597" name="Days" x="0" y="0" width="65.35713958740234" height="44" />
+              <instance id="199:11598" name="Days" x="69.35713958740234" y="0" width="65.35713958740234" height="44" />
+              <instance id="199:11599" name="Days" x="138.7142791748047" y="0" width="65.35713958740234" height="44" />
+              <instance id="199:11600" name="Days" x="208.0714111328125" y="0" width="65.35713958740234" height="44" />
+              <instance id="199:11601" name="Days" x="277.4285583496094" y="0" width="65.35713958740234" height="44" />
+              <instance id="199:11602" name="Days" x="346.78570556640625" y="0" width="65.35713195800781" height="44" />
+              <instance id="199:11603" name="Days" x="416.142822265625" y="0" width="65.35713195800781" height="44" />
+            </frame>
+            <instance id="199:11604" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+          </frame>
+          <instance id="199:11605" name="Icon / chevron-down" x="1218" y="10" width="24" height="24" />
+        </frame>
+        <frame id="199:11606" name="Input" x="318" y="24" width="110" height="64" hidden="true">
+          <frame id="199:11607" name="Atoms / UI primitive / Label" x="0" y="0" width="53" height="20">
+            <text id="199:11608" name="Godzina" x="0" y="0" width="53" height="20" />
+            <frame id="199:11609" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+          </frame>
+          <frame id="199:11611" name="Input" x="0" y="24" width="110" height="40">
+            <instance id="199:11612" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+            <frame id="199:11613" name="Icon / search" x="12" y="8" width="24" height="24">
+              <text id="199:11614" name="" x="4" y="0" width="16" height="24" />
+            </frame>
+            <instance id="199:11615" name="Input / Content" x="44" y="8" width="54" height="24" />
+            <instance id="199:11616" name="Input / Trailing options" x="412" y="7.4782609939575195" width="24" height="25.04347801208496" hidden="true" />
+          </frame>
+          <instance id="199:11617" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+        </frame>
+        <instance id="199:11618" name="Button" x="692" y="48" width="40" height="40" hidden="true" />
+        <instance id="199:11619" name="Divider" x="24" y="112" width="1242" height="0" hidden="true" />
+        <frame id="199:11620" name="Frame 1171276453" x="24" y="136" width="1242" height="384" hidden="true">
+          <frame id="199:11621" name="Frame 1171276454" x="0" y="0" width="307" height="24">
+            <instance id="199:11622" name="Icon / arrows / chevron-right" x="0" y="0" width="24" height="24" />
+            <text id="199:11623" name="Title" x="32" y="2" width="275" height="20" />
+          </frame>
+          <frame id="199:11624" name="Frame 1171276053" x="0" y="40" width="1242" height="344">
+            <frame id="199:11625" name="Kaloryczność" x="0" y="0" width="1242" height="296">
+              <frame id="199:11626" name="Table / Składniki" x="0" y="0" width="1242" height="296">
+                <frame id="199:11627" name="Typ posiłku" x="0" y="0" width="1242" height="64">
+                  <instance id="199:11628" name="Input" x="0" y="0" width="296" height="64" />
+                  <frame id="199:11629" name="Input" x="304" y="0" width="110" height="64">
+                    <frame id="199:11630" name="Atoms / UI primitive / Label" x="0" y="0" width="45" height="20">
+                      <text id="199:11631" name="Godzina" x="0" y="0" width="45" height="20" />
+                      <frame id="199:11632" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+                    </frame>
+                    <frame id="199:11634" name="Input" x="0" y="24" width="110" height="40">
+                      <instance id="199:11635" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                      <frame id="199:11636" name="Icon / search" x="12" y="8" width="24" height="24">
+                        <text id="199:11637" name="" x="4" y="0" width="16" height="24" />
+                      </frame>
+                      <instance id="199:11638" name="Input / Content" x="44" y="8" width="54" height="24" />
+                      <instance id="199:11639" name="Input / Trailing options" x="412" y="7.4782609939575195" width="24" height="25.04347801208496" hidden="true" />
+                    </frame>
+                    <instance id="199:11640" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+                  </frame>
+                  <instance id="199:11641" name="Input" x="422" y="0" width="148" height="64" />
+                  <instance id="199:11642" name="Input" x="578" y="0" width="148" height="64" />
+                  <instance id="199:11643" name="Input" x="734" y="0" width="148" height="64" />
+                  <instance id="199:11644" name="Input" x="890" y="0" width="148" height="64" />
+                  <instance id="199:11645" name="Input" x="1046" y="0" width="148" height="64" />
+                  <frame id="199:11646" name="Input" x="294" y="0" width="110" height="64" hidden="true">
+                    <frame id="199:11647" name="Atoms / UI primitive / Label" x="0" y="0" width="53" height="20">
+                      <text id="199:11648" name="Godzina" x="0" y="0" width="53" height="20" />
+                      <frame id="199:11649" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+                    </frame>
+                    <frame id="199:11651" name="Input" x="0" y="24" width="110" height="40">
+                      <instance id="199:11652" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                      <frame id="199:11653" name="Icon / search" x="12" y="8" width="24" height="24">
+                        <text id="199:11654" name="" x="4" y="0" width="16" height="24" />
+                      </frame>
+                      <instance id="199:11655" name="Input / Content" x="44" y="8" width="54" height="24" />
+                      <instance id="199:11656" name="Input / Trailing options" x="412" y="7.4782609939575195" width="24" height="25.04347801208496" hidden="true" />
+                    </frame>
+                    <instance id="199:11657" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+                  </frame>
+                  <instance id="199:11658" name="Button" x="668" y="24" width="40" height="40" hidden="true" />
+                  <instance id="199:11659" name="Button" x="1202" y="24" width="40" height="40" />
+                </frame>
+                <frame id="199:11660" name="Typ posiłku" x="0" y="80" width="1242" height="64">
+                  <instance id="199:11661" name="Input" x="0" y="0" width="296" height="64" />
+                  <frame id="199:11662" name="Input" x="304" y="0" width="110" height="64">
+                    <frame id="199:11663" name="Atoms / UI primitive / Label" x="0" y="0" width="45" height="20">
+                      <text id="199:11664" name="Godzina" x="0" y="0" width="45" height="20" />
+                      <frame id="199:11665" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+                    </frame>
+                    <frame id="199:11667" name="Input" x="0" y="24" width="110" height="40">
+                      <instance id="199:11668" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                      <frame id="199:11669" name="Icon / search" x="12" y="8" width="24" height="24">
+                        <text id="199:11670" name="" x="4" y="0" width="16" height="24" />
+                      </frame>
+                      <instance id="199:11671" name="Input / Content" x="44" y="8" width="54" height="24" />
+                      <instance id="199:11672" name="Input / Trailing options" x="412" y="7.4782609939575195" width="24" height="25.04347801208496" hidden="true" />
+                    </frame>
+                    <instance id="199:11673" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+                  </frame>
+                  <instance id="199:11674" name="Input" x="422" y="0" width="148" height="64" />
+                  <instance id="199:11675" name="Input" x="578" y="0" width="148" height="64" />
+                  <instance id="199:11676" name="Input" x="734" y="0" width="148" height="64" />
+                  <instance id="199:11677" name="Input" x="890" y="0" width="148" height="64" />
+                  <instance id="199:11678" name="Input" x="1046" y="0" width="148" height="64" />
+                  <frame id="199:11679" name="Input" x="294" y="0" width="110" height="64" hidden="true">
+                    <frame id="199:11680" name="Atoms / UI primitive / Label" x="0" y="0" width="53" height="20">
+                      <text id="199:11681" name="Godzina" x="0" y="0" width="53" height="20" />
+                      <frame id="199:11682" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+                    </frame>
+                    <frame id="199:11684" name="Input" x="0" y="24" width="110" height="40">
+                      <instance id="199:11685" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                      <frame id="199:11686" name="Icon / search" x="12" y="8" width="24" height="24">
+                        <text id="199:11687" name="" x="4" y="0" width="16" height="24" />
+                      </frame>
+                      <instance id="199:11688" name="Input / Content" x="44" y="8" width="54" height="24" />
+                      <instance id="199:11689" name="Input / Trailing options" x="412" y="7.4782609939575195" width="24" height="25.04347801208496" hidden="true" />
+                    </frame>
+                    <instance id="199:11690" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+                  </frame>
+                  <instance id="199:11691" name="Button" x="668" y="24" width="40" height="40" hidden="true" />
+                  <instance id="199:11692" name="Button" x="1202" y="24" width="40" height="40" />
+                </frame>
+                <frame id="199:11693" name="Typ posiłku" x="0" y="160" width="1242" height="64">
+                  <instance id="199:11694" name="Input" x="0" y="0" width="296" height="64" />
+                  <frame id="199:11695" name="Input" x="304" y="0" width="110" height="64">
+                    <frame id="199:11696" name="Atoms / UI primitive / Label" x="0" y="0" width="45" height="20">
+                      <text id="199:11697" name="Godzina" x="0" y="0" width="45" height="20" />
+                      <frame id="199:11698" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+                    </frame>
+                    <frame id="199:11700" name="Input" x="0" y="24" width="110" height="40">
+                      <instance id="199:11701" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                      <frame id="199:11702" name="Icon / search" x="12" y="8" width="24" height="24">
+                        <text id="199:11703" name="" x="4" y="0" width="16" height="24" />
+                      </frame>
+                      <instance id="199:11704" name="Input / Content" x="44" y="8" width="54" height="24" />
+                      <instance id="199:11705" name="Input / Trailing options" x="412" y="7.4782609939575195" width="24" height="25.04347801208496" hidden="true" />
+                    </frame>
+                    <instance id="199:11706" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+                  </frame>
+                  <instance id="199:11707" name="Input" x="422" y="0" width="148" height="64" />
+                  <instance id="199:11708" name="Input" x="578" y="0" width="148" height="64" />
+                  <instance id="199:11709" name="Input" x="734" y="0" width="148" height="64" />
+                  <instance id="199:11710" name="Input" x="890" y="0" width="148" height="64" />
+                  <instance id="199:11711" name="Input" x="1046" y="0" width="148" height="64" />
+                  <frame id="199:11712" name="Input" x="294" y="0" width="110" height="64" hidden="true">
+                    <frame id="199:11713" name="Atoms / UI primitive / Label" x="0" y="0" width="53" height="20">
+                      <text id="199:11714" name="Godzina" x="0" y="0" width="53" height="20" />
+                      <frame id="199:11715" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+                    </frame>
+                    <frame id="199:11717" name="Input" x="0" y="24" width="110" height="40">
+                      <instance id="199:11718" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                      <frame id="199:11719" name="Icon / search" x="12" y="8" width="24" height="24">
+                        <text id="199:11720" name="" x="4" y="0" width="16" height="24" />
+                      </frame>
+                      <instance id="199:11721" name="Input / Content" x="44" y="8" width="54" height="24" />
+                      <instance id="199:11722" name="Input / Trailing options" x="412" y="7.4782609939575195" width="24" height="25.04347801208496" hidden="true" />
+                    </frame>
+                    <instance id="199:11723" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+                  </frame>
+                  <instance id="199:11724" name="Button" x="668" y="24" width="40" height="40" hidden="true" />
+                  <instance id="199:11725" name="Button" x="1202" y="24" width="40" height="40" />
+                </frame>
+                <frame id="199:11726" name="Składnik" x="0" y="240" width="1242" height="56">
+                  <frame id="199:11727" name="Input" x="294" y="0" width="110" height="64" hidden="true">
+                    <frame id="199:11728" name="Atoms / UI primitive / Label" x="0" y="0" width="53" height="20">
+                      <text id="199:11729" name="Godzina" x="0" y="0" width="53" height="20" />
+                      <frame id="199:11730" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+                    </frame>
+                    <frame id="199:11732" name="Input" x="0" y="24" width="110" height="40">
+                      <instance id="199:11733" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                      <frame id="199:11734" name="Icon / search" x="12" y="8" width="24" height="24">
+                        <text id="199:11735" name="" x="4" y="0" width="16" height="24" />
+                      </frame>
+                      <instance id="199:11736" name="Input / Content" x="44" y="8" width="54" height="24" />
+                      <instance id="199:11737" name="Input / Trailing options" x="412" y="7.4782609939575195" width="24" height="25.04347801208496" hidden="true" />
+                    </frame>
+                    <instance id="199:11738" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+                  </frame>
+                  <frame id="199:11739" name="Frame 1171276452" x="16" y="8" width="398" height="40">
+                    <text id="199:11740" name="Title" x="0" y="8" width="48" height="24" />
+                    <frame id="199:11741" name="Banner" x="56" y="0" width="238" height="40">
+                      <instance id="199:11742" name="Icon / interface / external-link" x="8" y="8" width="24" height="24" />
+                      <frame id="199:11743" name="Frame 9056" x="40" y="8" width="190" height="24">
+                        <text id="199:11744" name="Założenia sumują się do 100%" x="0" y="0" width="190" height="24" />
+                      </frame>
+                    </frame>
+                  </frame>
+                  <frame id="199:11745" name="Input" x="422" y="8" width="148" height="40">
+                    <frame id="199:11746" name="Atoms / UI primitive / Label" x="0" y="0" width="29" height="20" hidden="true">
+                      <text id="199:11747" name="Kcal" x="0" y="0" width="23" height="20" />
+                      <frame id="199:11748" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+                    </frame>
+                    <frame id="199:11750" name="Input" x="0" y="0" width="148" height="40">
+                      <instance id="199:11751" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                      <instance id="199:11752" name="Input / Content" x="12" y="8" width="72" height="24" />
+                      <instance id="199:11753" name="Icon / status / tick in circle" x="92" y="8" width="24" height="24" />
+                      <instance id="199:11754" name="Input / Trailing options" x="124" y="8" width="12" height="24" />
+                    </frame>
+                    <instance id="199:11755" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+                  </frame>
+                  <instance id="199:11756" name="Input" x="578" y="8" width="148" height="40" />
+                  <instance id="199:11757" name="Input" x="734" y="8" width="148" height="40" />
+                  <instance id="199:11758" name="Input" x="890" y="8" width="148" height="40" />
+                  <instance id="199:11759" name="Input" x="1046" y="8" width="148" height="40" />
+                  <instance id="199:11760" name="Button" x="668" y="24" width="40" height="40" hidden="true" />
+                </frame>
+              </frame>
+            </frame>
+            <instance id="199:11761" name="Button" x="0" y="320" width="114" height="24" />
+          </frame>
+        </frame>
+        <frame id="199:11762" name="Frame 1171276552" x="20" y="20" width="1004" height="156">
+          <frame id="199:11763" name="Frame 1171276641" x="0" y="0" width="1004" height="28">
+            <frame id="199:11764" name="Frame 2147223857" x="0" y="0" width="536" height="28">
+              <text id="199:11765" name="ENERGETYCZNOŚĆ I MAKROSKŁADNIKI" x="0" y="2" width="265" height="24" />
+              <frame id="199:11766" name="Frame 2147223707" x="273" y="0" width="263" height="28">
+                <instance id="199:11767" name="Pills" x="0" y="0" width="84" height="28" />
+                <instance id="199:11768" name="Pills" x="84" y="0" width="79" height="28" />
+                <instance id="199:11769" name="Pills" x="163" y="0" width="100" height="28" />
+              </frame>
+            </frame>
+            <instance id="199:11770" name="Button" x="866" y="2" width="138" height="24" />
+          </frame>
+          <frame id="199:11771" name="Frame 1171276690" x="0" y="44" width="1004" height="112">
+            <frame id="199:11772" name="Frame 1171276553" x="0" y="0" width="1004" height="112">
+              <frame id="199:11773" name="Frame 1171276545" x="0" y="0" width="1004" height="112">
+                <frame id="199:11774" name="Frame 1171276544" x="0" y="0" width="1004" height="64">
+                  <instance id="199:11775" name="Input" x="0" y="0" width="280" height="64" />
+                  <frame id="199:11776" name="Frame 1171276693" x="304" y="0" width="700" height="64">
+                    <frame id="199:11777" name="Frame 1171276640" x="0" y="24" width="76" height="40" hidden="true">
+                      <frame id="199:11778" name="Tabs" x="0" y="0" width="76" height="40">
+                        <instance id="199:11779" name="Tab item" x="4" y="4" width="32" height="32" />
+                        <instance id="199:11780" name="Tab item" x="40" y="4" width="32" height="32" />
+                        <instance id="199:11781" name="Tab item" x="676" y="4" width="39" height="32" hidden="true" />
+                      </frame>
+                    </frame>
+                    <frame id="199:11782" name="Frame 1171276692" x="0" y="0" width="700" height="64">
+                      <frame id="199:11783" name="Frame 1171276596" x="0" y="0" width="217.3333282470703" height="64">
+                        <instance id="199:11784" name="Input" x="0" y="0" width="169.3333282470703" height="64" />
+                        <frame id="199:11785" name="Frame 1171276550" x="177.3333282470703" y="24" width="40" height="40">
+                          <instance id="199:11786" name="Button" x="0" y="0" width="40" height="40" />
+                        </frame>
+                      </frame>
+                      <frame id="199:11787" name="Frame 1171276597" x="241.3333282470703" y="0" width="217.33334350585938" height="64">
+                        <instance id="199:11788" name="Input" x="0" y="0" width="169.33334350585938" height="64" />
+                        <frame id="199:11789" name="Frame 1171276549" x="177.33334350585938" y="24" width="40" height="40">
+                          <instance id="199:11790" name="Button" x="0" y="0" width="40" height="40" />
+                        </frame>
+                      </frame>
+                      <frame id="199:11791" name="Frame 1171276598" x="482.66668701171875" y="0" width="217.33334350585938" height="64">
+                        <instance id="199:11792" name="Input" x="0" y="0" width="169.33334350585938" height="64" />
+                        <frame id="199:11793" name="Frame 1171276548" x="177.33334350585938" y="24" width="40" height="40">
+                          <instance id="199:11794" name="Button" x="0" y="0" width="40" height="40" />
+                        </frame>
+                      </frame>
+                    </frame>
+                  </frame>
+                </frame>
+                <frame id="199:11795" name="Typ posiłku" x="0" y="68" width="1004" height="44">
+                  <frame id="199:11796" name="Frame 22672" x="0" y="0" width="280" height="44">
+                    <instance id="199:11797" name="&lt;Slider&gt; | Horizontal" x="0" y="0" width="280" height="44" />
+                  </frame>
+                  <frame id="199:11798" name="Frame 1171276694" x="304" y="0" width="700" height="44">
+                    <frame id="199:11799" name="Frame 1171276691" x="0" y="0" width="700" height="44">
+                      <frame id="199:11800" name="Frame 1171276599" x="0" y="0" width="217.3333282470703" height="44">
+                        <frame id="199:11801" name="Frame 22673" x="0" y="0" width="217.3333282470703" height="44">
+                          <instance id="199:11802" name="&lt;Slider&gt; | Horizontal" x="0" y="0" width="217.3333282470703" height="44" />
+                        </frame>
+                      </frame>
+                      <frame id="199:11803" name="Frame 1171276600" x="241.3333282470703" y="0" width="217.33334350585938" height="44">
+                        <frame id="199:11804" name="Frame 22674" x="0" y="0" width="217.33334350585938" height="44">
+                          <instance id="199:11805" name="&lt;Slider&gt; | Horizontal" x="0" y="0" width="217.33334350585938" height="44" />
+                        </frame>
+                      </frame>
+                      <frame id="199:11806" name="Frame 22675" x="482.66668701171875" y="0" width="217.33334350585938" height="44">
+                        <instance id="199:11807" name="&lt;Slider&gt; | Horizontal" x="0" y="0" width="217.33334350585938" height="44" />
+                      </frame>
+                    </frame>
+                  </frame>
+                  <frame id="199:11808" name="Input" x="294" y="0" width="110" height="64" hidden="true">
+                    <frame id="199:11809" name="Atoms / UI primitive / Label" x="0" y="0" width="53" height="20">
+                      <text id="199:11810" name="Godzina" x="0" y="0" width="53" height="20" />
+                      <frame id="199:11811" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+                    </frame>
+                    <frame id="199:11813" name="Input" x="0" y="24" width="110" height="40">
+                      <instance id="199:11814" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                      <frame id="199:11815" name="Icon / search" x="12" y="8" width="24" height="24">
+                        <text id="199:11816" name="" x="4" y="0" width="16" height="24" />
+                      </frame>
+                      <instance id="199:11817" name="Input / Content" x="44" y="8" width="54" height="24" />
+                      <instance id="199:11818" name="Input / Trailing options" x="412" y="7.4782609939575195" width="24" height="25.04347801208496" hidden="true" />
+                    </frame>
+                    <instance id="199:11819" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+                  </frame>
+                  <instance id="199:11820" name="Button" x="668" y="24" width="40" height="40" hidden="true" />
+                </frame>
+              </frame>
+            </frame>
+          </frame>
+        </frame>
+        <frame id="199:12319" name="Input" x="20" y="200" width="478" height="48" hidden="true">
+          <frame id="199:12320" name="Atoms / UI primitive / Label" x="0" y="0" width="70" height="20">
+            <text id="199:12321" name="Nazwa sekcji" x="0" y="0" width="70" height="20" />
+            <frame id="199:12322" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+          </frame>
+          <text id="199:12324" name="Heading" x="0" y="24" width="478" height="24" />
+          <instance id="199:12325" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+        </frame>
+        <instance id="199:12326" name="Input / Helper text" x="20" y="200" width="365" height="36" />
+        <frame id="199:12327" name="Input" x="20" y="280" width="478" height="212" hidden="true">
+          <frame id="199:12328" name="Atoms / UI primitive / Label" x="0" y="0" width="59" height="20">
+            <text id="199:12329" name="Udostępnij" x="0" y="0" width="59" height="20" />
+            <frame id="199:12330" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+          </frame>
+          <frame id="199:12332" name="Answers" x="0" y="28" width="478" height="184">
+            <instance id="199:12333" name="Input" x="0" y="0" width="478" height="40" />
+            <instance id="199:12334" name="Input" x="0" y="48" width="478" height="40" />
+            <instance id="199:12335" name="Input" x="0" y="96" width="478" height="40" />
+            <instance id="199:12336" name="Input" x="0" y="144" width="478" height="40" />
+          </frame>
+          <instance id="199:12337" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+        </frame>
+        <frame id="199:12338" name="Summary" x="20" y="508" width="478" height="520" hidden="true">
+          <frame id="199:12339" name="Label &amp; value" x="0" y="0" width="478" height="112">
+            <frame id="199:12340" name="Atoms / UI primitive / Label" x="0" y="0" width="88" height="20">
+              <text id="199:12341" name="Energetyczność" x="0" y="0" width="88" height="20" />
+              <frame id="199:12342" name="Icons / info-circle, info" x="337" y="3" width="16" height="16" hidden="true" />
+            </frame>
+            <frame id="199:12344" name="Frame 1171276047" x="0" y="28" width="478" height="84">
+              <frame id="199:12345" name="Input" x="0" y="0" width="120" height="40">
+                <instance id="199:12346" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                <instance id="199:12347" name="Icon / interface / search" x="12" y="8" width="24" height="24" hidden="true" />
+                <instance id="199:12348" name="Input / Content" x="12" y="8" width="65" height="24" />
+                <instance id="199:12349" name="Input / Trailing options" x="85" y="8" width="23" height="24" />
+              </frame>
+              <instance id="199:12350" name="&lt;Slider&gt; | Horizontal" x="0" y="40" width="478" height="44" />
+            </frame>
+            <frame id="199:12351" name="Helper text" x="0" y="70" width="448" height="22" hidden="true">
+              <frame id="199:12352" name="Icons / exclamation-circle" x="0" y="3" width="16" height="16" />
+              <text id="199:12354" name="Helper text" x="20" y="0" width="75" height="22" />
+            </frame>
+          </frame>
+          <frame id="199:12355" name="Label &amp; value" x="0" y="136" width="478" height="112">
+            <frame id="199:12356" name="Atoms / UI primitive / Label" x="0" y="0" width="33" height="20">
+              <text id="199:12357" name="Białko" x="0" y="0" width="33" height="20" />
+              <frame id="199:12358" name="Icons / info-circle, info" x="337" y="3" width="16" height="16" hidden="true" />
+            </frame>
+            <frame id="199:12360" name="Frame 1171276047" x="0" y="28" width="478" height="84">
+              <frame id="199:12361" name="Frame 1171276379" x="0" y="0" width="478" height="40">
+                <frame id="199:12362" name="Input" x="0" y="0" width="227" height="40">
+                  <instance id="199:12363" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                  <instance id="199:12364" name="Icon / interface / search" x="12" y="8" width="24" height="24" hidden="true" />
+                  <instance id="199:12365" name="Input / Content" x="12" y="8" width="172" height="24" />
+                  <instance id="199:12366" name="Input / Trailing options" x="192" y="7.4782609939575195" width="23" height="25.04347801208496" />
+                </frame>
+                <text id="199:12367" name="–" x="235" y="8" width="8" height="24" />
+                <frame id="199:12368" name="Input" x="251" y="0" width="227" height="40">
+                  <instance id="199:12369" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                  <instance id="199:12370" name="Icon / interface / search" x="12" y="8" width="24" height="24" hidden="true" />
+                  <instance id="199:12371" name="Input / Content" x="12" y="8" width="172" height="24" />
+                  <instance id="199:12372" name="Input / Trailing options" x="192" y="7.4782609939575195" width="23" height="25.04347801208496" />
+                </frame>
+              </frame>
+              <frame id="199:12373" name="&lt;Slider&gt; | Horizontal" x="0" y="40" width="478" height="44">
+                <frame id="199:12374" name="Slider" x="0" y="0" width="478" height="44">
+                  <instance id="199:12375" name="SliderRail" x="0" y="20" width="478" height="4" />
+                  <instance id="199:12376" name="SliderTrack" x="50" y="19" width="188" height="6" />
+                  <instance id="199:12377" name="SliderThumb" x="38" y="12" width="20" height="20" />
+                  <instance id="199:12378" name="SliderThumb" x="228" y="12" width="20" height="20" />
+                  <instance id="199:12379" name="SliderLabel" x="28" y="-27" width="39" height="34" hidden="true" />
+                </frame>
+                <frame id="199:12380" name="Values" x="0" y="44" width="162" height="20" hidden="true">
+                  <instance id="199:12381" name="SliderValue Label" x="0" y="0" width="8" height="20" />
+                  <instance id="199:12382" name="SliderValue Label" x="141" y="0" width="21" height="20" />
+                </frame>
+              </frame>
+            </frame>
+            <frame id="199:12383" name="Helper text" x="0" y="70" width="448" height="22" hidden="true">
+              <frame id="199:12384" name="Icons / exclamation-circle" x="0" y="3" width="16" height="16" />
+              <text id="199:12386" name="Helper text" x="20" y="0" width="75" height="22" />
+            </frame>
+          </frame>
+          <frame id="199:12387" name="Label &amp; value" x="0" y="272" width="478" height="112">
+            <frame id="199:12388" name="Atoms / UI primitive / Label" x="0" y="0" width="48" height="20">
+              <text id="199:12389" name="Tłuszcze" x="0" y="0" width="48" height="20" />
+              <frame id="199:12390" name="Icons / info-circle, info" x="337" y="3" width="16" height="16" hidden="true" />
+            </frame>
+            <frame id="199:12392" name="Frame 1171276047" x="0" y="28" width="478" height="84">
+              <frame id="199:12393" name="Frame 1171276379" x="0" y="0" width="478" height="40">
+                <frame id="199:12394" name="Input" x="0" y="0" width="227" height="40">
+                  <instance id="199:12395" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                  <instance id="199:12396" name="Icon / interface / search" x="12" y="8" width="24" height="24" hidden="true" />
+                  <instance id="199:12397" name="Input / Content" x="12" y="8" width="172" height="24" />
+                  <instance id="199:12398" name="Input / Trailing options" x="192" y="7.4782609939575195" width="23" height="25.04347801208496" />
+                </frame>
+                <text id="199:12399" name="–" x="235" y="8" width="8" height="24" />
+                <frame id="199:12400" name="Input" x="251" y="0" width="227" height="40">
+                  <instance id="199:12401" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                  <instance id="199:12402" name="Icon / interface / search" x="12" y="8" width="24" height="24" hidden="true" />
+                  <instance id="199:12403" name="Input / Content" x="12" y="8" width="172" height="24" />
+                  <instance id="199:12404" name="Input / Trailing options" x="192" y="7.4782609939575195" width="23" height="25.04347801208496" />
+                </frame>
+              </frame>
+              <frame id="199:12405" name="&lt;Slider&gt; | Horizontal" x="0" y="40" width="478" height="44">
+                <frame id="199:12406" name="Slider" x="0" y="0" width="478" height="44">
+                  <instance id="199:12407" name="SliderRail" x="0" y="20" width="478" height="4" />
+                  <instance id="199:12408" name="SliderTrack" x="50" y="19" width="188" height="6" />
+                  <instance id="199:12409" name="SliderThumb" x="38" y="12" width="20" height="20" />
+                  <instance id="199:12410" name="SliderThumb" x="228" y="12" width="20" height="20" />
+                  <instance id="199:12411" name="SliderLabel" x="28" y="-27" width="39" height="34" hidden="true" />
+                </frame>
+                <frame id="199:12412" name="Values" x="0" y="44" width="162" height="20" hidden="true">
+                  <instance id="199:12413" name="SliderValue Label" x="0" y="0" width="8" height="20" />
+                  <instance id="199:12414" name="SliderValue Label" x="141" y="0" width="21" height="20" />
+                </frame>
+              </frame>
+            </frame>
+            <frame id="199:12415" name="Helper text" x="0" y="70" width="448" height="22" hidden="true">
+              <frame id="199:12416" name="Icons / exclamation-circle" x="0" y="3" width="16" height="16" />
+              <text id="199:12418" name="Helper text" x="20" y="0" width="75" height="22" />
+            </frame>
+          </frame>
+          <frame id="199:12419" name="Label &amp; value" x="0" y="408" width="478" height="112">
+            <frame id="199:12420" name="Atoms / UI primitive / Label" x="0" y="0" width="78" height="20">
+              <text id="199:12421" name="Węglowodany" x="0" y="0" width="78" height="20" />
+              <frame id="199:12422" name="Icons / info-circle, info" x="337" y="3" width="16" height="16" hidden="true" />
+            </frame>
+            <frame id="199:12424" name="Frame 1171276047" x="0" y="28" width="478" height="84">
+              <frame id="199:12425" name="Frame 1171276379" x="0" y="0" width="478" height="40">
+                <frame id="199:12426" name="Input" x="0" y="0" width="227" height="40">
+                  <instance id="199:12427" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                  <instance id="199:12428" name="Icon / interface / search" x="12" y="8" width="24" height="24" hidden="true" />
+                  <instance id="199:12429" name="Input / Content" x="12" y="8" width="172" height="24" />
+                  <instance id="199:12430" name="Input / Trailing options" x="192" y="7.4782609939575195" width="23" height="25.04347801208496" />
+                </frame>
+                <text id="199:12431" name="–" x="235" y="8" width="8" height="24" />
+                <frame id="199:12432" name="Input" x="251" y="0" width="227" height="40">
+                  <instance id="199:12433" name="Checkbox" x="40" y="8" width="24" height="24" hidden="true" />
+                  <instance id="199:12434" name="Icon / interface / search" x="12" y="8" width="24" height="24" hidden="true" />
+                  <instance id="199:12435" name="Input / Content" x="12" y="8" width="172" height="24" />
+                  <instance id="199:12436" name="Input / Trailing options" x="192" y="7.4782609939575195" width="23" height="25.04347801208496" />
+                </frame>
+              </frame>
+              <frame id="199:12437" name="&lt;Slider&gt; | Horizontal" x="0" y="40" width="478" height="44">
+                <frame id="199:12438" name="Slider" x="0" y="0" width="478" height="44">
+                  <instance id="199:12439" name="SliderRail" x="0" y="20" width="478" height="4" />
+                  <instance id="199:12440" name="SliderTrack" x="50" y="19" width="188" height="6" />
+                  <instance id="199:12441" name="SliderThumb" x="38" y="12" width="20" height="20" />
+                  <instance id="199:12442" name="SliderThumb" x="228" y="12" width="20" height="20" />
+                  <instance id="199:12443" name="SliderLabel" x="28" y="-27" width="39" height="34" hidden="true" />
+                </frame>
+                <frame id="199:12444" name="Values" x="0" y="44" width="162" height="20" hidden="true">
+                  <instance id="199:12445" name="SliderValue Label" x="0" y="0" width="8" height="20" />
+                  <instance id="199:12446" name="SliderValue Label" x="141" y="0" width="21" height="20" />
+                </frame>
+              </frame>
+            </frame>
+            <frame id="199:12447" name="Helper text" x="0" y="70" width="448" height="22" hidden="true">
+              <frame id="199:12448" name="Icons / exclamation-circle" x="0" y="3" width="16" height="16" />
+              <text id="199:12450" name="Helper text" x="20" y="0" width="75" height="22" />
+            </frame>
+          </frame>
+        </frame>
+        <frame id="199:12451" name="Input" x="20" y="440" width="478" height="180" hidden="true">
+          <frame id="199:12452" name="Atoms / UI primitive / Label" x="0" y="0" width="166" height="20">
+            <text id="199:12453" name="Wybierz sposób udostępnienia" x="0" y="0" width="166" height="20" />
+            <frame id="199:12454" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+          </frame>
+          <frame id="199:12456" name="Answers" x="0" y="28" width="478" height="152">
+            <frame id="199:12457" name="Atoms / UI primitive / Label" x="0" y="0" width="29" height="20" hidden="true">
+              <text id="199:12458" name="Rodzaj pytania" x="0" y="0" width="80" height="20" />
+              <frame id="199:12459" name="Icons / info-circle, info" x="41" y="3" width="16" height="16" hidden="true" />
+            </frame>
+            <frame id="199:12461" name="Input" x="0" y="0" width="478" height="82">
+              <instance id="199:12462" name="Radiobutton" x="12" y="8" width="24" height="24" />
+              <instance id="199:12463" name="Icon / interface / search" x="12" y="8" width="24" height="24" hidden="true" />
+              <frame id="199:12464" name="Frame 1171276430" x="44" y="8" width="422" height="66">
+                <instance id="199:12465" name="Input / Content" x="0" y="0" width="422" height="24" />
+                <text id="199:12466" name="Jeśli edytujesz bądź rozbudujesz kolekcję, nowe przepisy będą na bieżąco aktualizowane w aplikacji klienta." x="0" y="26" width="422" height="40" />
+              </frame>
+            </frame>
+            <frame id="199:12467" name="Input" x="0" y="90" width="478" height="62">
+              <instance id="199:12468" name="Radiobutton" x="12" y="8" width="24" height="24" />
+              <instance id="199:12469" name="Icon / interface / search" x="12" y="8" width="24" height="24" hidden="true" />
+              <frame id="199:12470" name="Frame 1171276430" x="44" y="8" width="422" height="46">
+                <instance id="199:12471" name="Input / Content" x="0" y="0" width="422" height="24" />
+                <text id="199:12472" name="Przepisy będą widoczne w aplikacji klienta w formie statycznej listy." x="0" y="26" width="422" height="20" />
+              </frame>
+            </frame>
+            <instance id="199:12473" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+          </frame>
+          <instance id="199:12474" name="Input / Helper text" x="0" y="68" width="448" height="20" hidden="true" />
+        </frame>
+      </frame>
+      <instance id="199:11821" name="Day" x="0" y="400" width="1044" height="424" />
+    </frame>
+  </frame>
+  <frame id="199:11223" name="Molecules / Window / Modal / Actions" x="0" y="926" width="1440" height="64">
+    <frame id="199:11224" name="Frame 2147223384" x="16" y="20" width="182" height="24">
+      <instance id="199:11225" name="Icon/ Interface / Saving" x="0" y="0" width="24" height="24" />
+      <text id="199:11226" name="Automatyczne zapisywanie" x="32" y="2" width="150" height="20" />
+    </frame>
+    <frame id="199:11227" name="Frame 2147223744" x="1159" y="12" width="265" height="40">
+      <instance id="199:11228" name="Button" x="0" y="0" width="139" height="40" />
+      <instance id="199:11229" name="Button" x="147" y="0" width="118" height="40" />
+    </frame>
+  </frame>
+</frame>

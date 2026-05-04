@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+@font-face { font-family: 'Figtree'; src: url('../fonts/Figtree-Regular.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Figtree'; src: url('../fonts/Figtree-Medium.ttf') format('truetype'); font-weight: 500; }
+@font-face { font-family: 'Figtree'; src: url('../fonts/Figtree-SemiBold.ttf') format('truetype'); font-weight: 600; }
+@font-face { font-family: 'Figtree'; src: url('../fonts/Figtree-Bold.ttf') format('truetype'); font-weight: 700; }
+</style>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Figtree', sans-serif; background: #F7F7FB; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+
+  .section-label { font-size: 11px; font-weight: 600; color: #4A4A5A; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .frame { background: #fff; border: 1px solid rgba(20,20,20,0.10); border-radius: 12px; overflow: visible; display: flex; height: 340px; position: relative; }
+  .frame-inner { display: flex; width: 100%; overflow: hidden; border-radius: 12px; }
+
+  /* ── Sidebar shared ── */
+  .sidebar {
+    background: #fff;
+    border-right: 1px solid rgba(20,20,20,0.10);
+    display: flex; flex-direction: column;
+    padding: 12px 8px;
+    gap: 2px;
+    flex-shrink: 0;
+    position: relative;
+    transition: width 200ms ease;
+  }
+  .sidebar.collapsed { width: 52px; align-items: center; }
+  .sidebar.expanded  { width: 220px; }
+
+  /* ── Collapse toggle button ── */
+  .collapse-btn {
+    position: absolute;
+    top: 50%;
+    right: -12px;
+    transform: translateY(-50%);
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid rgba(20,20,20,0.14);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: rgba(5,5,5,0.55);
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 150ms ease, background 150ms ease, color 150ms ease;
+    box-shadow: 0 1px 4px rgba(20,20,20,0.10);
+  }
+  .sidebar:hover .collapse-btn { opacity: 1; }
+  .collapse-btn:hover { background: #7448D0; border-color: #7448D0; color: #fff; }
+
+  /* ── Logo area ── */
+  .logo-mark { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .logo-full  { display: flex; align-items: center; padding: 4px 8px 10px; overflow: hidden; }
+  .sidebar.collapsed .logo-full { display: none; }
+  .sidebar.expanded  .logo-mark { display: none; }
+  .sidebar.collapsed .logo-mark { margin-bottom: 6px; display: flex; }
+
+  /* ── Divider ── */
+  .divider { height: 1px; background: rgba(20,20,20,0.08); margin: 4px 0; flex-shrink: 0; }
+  .sidebar.collapsed .divider { width: 36px; }
+  .sidebar.expanded  .divider { width: 100%; }
+
+  /* ── Collapsed icon-only nav ── */
+  .nav-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: background 150ms; color: rgba(5,5,5,0.45);
+    flex-shrink: 0;
+  }
+  .nav-icon:hover { background: rgba(116,72,208,0.07); color: rgba(5,5,5,0.75); }
+  .nav-icon.active { background: #F5F1FE; color: #7448D0; }
+  .sidebar.expanded .nav-icon { display: none; }
+
+  /* ── Expanded label nav ── */
+  .nav-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 0 8px; height: 36px; border-radius: 8px;
+    cursor: pointer; transition: background 150ms; color: rgba(5,5,5,0.55);
+    flex-shrink: 0; white-space: nowrap; overflow: hidden;
+  }
+  .nav-row:hover { background: rgba(116,72,208,0.06); color: rgba(5,5,5,0.85); }
+  .nav-row.active { background: #F5F1FE; color: #7448D0; }
+  .nav-row .icon { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .nav-row .nav-label { font-size: 13px; font-weight: 500; }
+  .nav-row.active .nav-label { font-weight: 600; }
+  .sidebar.collapsed .nav-row { display: none; }
+
+  .spacer { flex: 1; }
+
+  /* ── Topbar ── */
+  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .topbar { height: 56px; background: #fff; border-bottom: 1px solid rgba(20,20,20,0.10); display: flex; align-items: center; padding: 0 20px; gap: 10px; flex-shrink: 0; }
+  .topbar-title { font-size: 15px; font-weight: 600; color: #050505; flex: 1; }
+  .search { display: flex; align-items: center; gap: 7px; background: #fff; border: 1px solid rgba(20,20,20,0.12); border-radius: 8px; padding: 0 11px; height: 32px; width: 180px; }
+  .search input { border: none; outline: none; font-family: 'Figtree', sans-serif; font-size: 13px; color: #050505; background: transparent; width: 100%; }
+  .search input::placeholder { color: rgba(5,5,5,0.35); }
+  .topbar-btn { width: 32px; height: 32px; border-radius: 50%; background: #fff; border: 1px solid rgba(20,20,20,0.10); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; background: #7448D0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; }
+  .content { flex: 1; background: #F7F7FB; padding: 20px; }
+  .page-title { font-size: 18px; font-weight: 700; color: #050505; }
+  .page-sub { font-size: 12px; color: #4A4A5A; margin-top: 3px; }
+
+  /* Chevron icons flip based on state */
+  .chevron-collapse { display: block; }
+  .chevron-expand   { display: none; }
+  .sidebar.collapsed .chevron-collapse { display: none; }
+  .sidebar.collapsed .chevron-expand   { display: block; }
+</style>
+</head>
+<body>
+
+<!-- Reusable nav icons -->
+<svg width="0" height="0" style="display:none">
+  <symbol id="ic-dashboard" viewBox="0 0 18 18"><rect x="2" y="2" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="10" y="2" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="2" y="10" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="10" y="10" width="6" height="6" rx="1.5" fill="currentColor"/></symbol>
+  <symbol id="ic-people" viewBox="0 0 18 18"><circle cx="7" cy="6" r="2.5" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M2 15c0-2.761 2.239-4 5-4s5 1.239 5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/><circle cx="13" cy="7" r="2" stroke="currentColor" stroke-width="1.4" fill="none"/><path d="M13 12c1.657 0 3 .895 3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="ic-calendar" viewBox="0 0 18 18"><rect x="2" y="3.5" width="14" height="12.5" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M6 2v3M12 2v3M2 8.5h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="ic-finance" viewBox="0 0 18 18"><rect x="2" y="4" width="14" height="11" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M2 8h14" stroke="currentColor" stroke-width="1.5"/><path d="M6 12h2M10 12h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="ic-reports" viewBox="0 0 18 18"><rect x="3" y="2" width="9" height="14" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M6 6h6M6 9h6M6 12h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="ic-integrations" viewBox="0 0 18 18"><rect x="2" y="2" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="10" y="2" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="10" y="10" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5 8v1a2 2 0 002 2h1M13 8v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="ic-settings" viewBox="0 0 18 18"><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M9 2v1.5M9 14.5V16M2 9h1.5M14.5 9H16M3.636 3.636l1.06 1.06M13.304 13.304l1.06 1.06M3.636 14.364l1.06-1.06M13.304 4.696l1.06-1.06" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="logo-icon" viewBox="0 0 36 30"><path d="M16.327 14.205C15.8675 14.6431 15.8675 15.3549 16.3269 15.793L25.8574 24.8829C26.3186 25.3228 26.3191 26.0416 25.8221 26.4443C23.7743 28.1038 21.3097 29.2373 18.6615 29.7271C15.6253 30.2887 12.4832 29.9793 9.6304 28.8378C6.77756 27.6963 4.34126 25.7736 2.62774 23.3115C0.914225 20.8493 0 17.9577 0 15C0 12.0423 0.914225 9.15065 2.62774 6.68854C4.34126 4.22642 6.77756 2.30374 9.6304 1.16222C12.4832 0.0207016 15.6253 -0.288705 18.6615 0.272896C21.3097 0.762729 23.7742 1.89612 25.8221 3.55564C26.3191 3.9584 26.3185 4.6772 25.8572 5.1171L16.327 14.205Z" fill="#7448D0"/><path d="M36 14.5491C36 10.3399 32.884 7.36709 28.8294 6.65941C28.157 6.54205 27.4831 6.79312 26.9991 7.25471L19.7121 14.2049C19.2527 14.643 19.2527 15.3546 19.712 15.7928L26.8029 22.557C27.2586 22.9918 27.883 23.2408 28.5219 23.1652C30.7484 22.9016 32.8399 21.9679 34.4867 20.4865L31.6868 17.2096C30.4914 18.2412 28.945 18.8223 27.3351 18.845C26.4709 18.9179 25.6061 18.7125 24.878 18.2614C24.15 17.8102 23.6004 17.1393 23.3168 16.3551H35.9273C35.9636 15.5722 36 14.9927 36 14.5491ZM23.2827 13.388C23.4884 12.5982 23.9774 11.9026 24.6645 11.4223C25.3515 10.9421 26.193 10.7077 27.0423 10.7601C28.9969 10.7601 30.507 11.818 30.5818 13.388H23.2827Z" fill="#050505"/></symbol>
+</svg>
+
+<p class="section-label">Sidebar — hover to reveal collapse toggle</p>
+<div class="frame">
+  <div class="frame-inner" id="demoFrame">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar expanded" id="sidebar">
+
+      <!-- Collapse toggle button -->
+      <button class="collapse-btn" id="collapseBtn" title="Zwiń / Rozwiń">
+        <svg class="chevron-collapse" width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <path d="M6.5 2L3.5 5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <svg class="chevron-expand" width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <path d="M3.5 2L6.5 5l-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <!-- Logo: full wordmark (expanded) -->
+      <div class="logo-full">
+        <svg width="116" height="24" viewBox="0 0 129 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M83.4481 12.6718C83.0562 13.0625 83.0561 13.6972 83.448 14.088L91.577 22.1945C91.9704 22.5868 91.9708 23.2278 91.5469 23.587C89.8002 25.067 87.698 26.0778 85.4392 26.5146C82.8495 27.0155 80.1695 26.7395 77.7362 25.7215C75.3029 24.7035 73.2248 22.9888 71.7633 20.793C70.3018 18.5973 69.522 16.0184 69.522 13.3807C69.522 10.7431 70.3018 8.16423 71.7633 5.96847C73.2248 3.77272 75.3029 2.05805 77.7362 1.04002C80.1695 0.022002 82.8495 -0.253932 85.4392 0.246913C87.698 0.683753 89.8002 1.69453 91.5468 3.17451C91.9708 3.5337 91.9703 4.17474 91.5768 4.56705L83.4481 12.6718Z" fill="#7448D0"/>
+          <path d="M18.6076 18.6846V2.154C18.6076 1.959 18.6851 1.772 18.8231 1.634C18.961 1.496 19.148 1.418 19.343 1.418H22.525C22.72 1.418 22.908 1.496 23.046 1.634C23.184 1.772 23.261 1.959 23.261 2.154V20.671H20.594C20.07 20.671 19.568 20.464 19.197 20.089C18.826 19.714 18.608 19.205 18.608 18.685L18.6076 18.6846Z" fill="#2D1D51"/>
+          <path d="M25.1828 18.6846V2.154C25.1828 1.959 25.2603 1.772 25.3983 1.634C25.5362 1.496 25.723 1.418 25.918 1.418H29.1C29.296 1.418 29.483 1.496 29.621 1.634C29.759 1.772 29.836 1.959 29.836 2.154V20.671H27.17C26.646 20.671 26.143 20.463 25.772 20.089C25.4 19.715 25.183 19.206 25.183 18.685L25.1828 18.6846Z" fill="#2D1D51"/>
+          <path d="M31.6998 13.4809C31.6998 9.055 35.4726 6.125 39.6538 6.125C43.835 6.125 47.6397 9.055 47.6397 13.4809C47.6397 17.877 43.836 20.807 39.6538 20.807C35.4717 20.807 31.6998 17.877 31.6998 13.4809ZM42.8925 13.4809C42.893 11.995 41.847 10.761 40.395 10.393C38.943 10.025 37.424 10.604 36.592 11.83C35.76 13.056 35.823 14.672 36.744 15.831C37.665 16.99 39.214 17.454 40.635 17.005C42.056 16.556 42.9 15.281 42.893 13.481L42.8925 13.4809Z" fill="#2D1D51"/>
+          <path d="M64.6784 6.26422H69.0428L64.6182 20.6664H60.8618L58.3277 10.4655L55.9131 20.6664H52.1566L47.5835 6.26422H51.9479L54.2431 13.5902L56.5384 6.26422H60.0861L62.3813 13.5902L64.6784 6.26422Z" fill="#2D1D51"/>
+          <path d="M128.979 7.034L129 10.982H127.181V20.413H122.532V10.982H120.716V7.034H122.532V2.299C122.532 1.958 122.75 1.653 123.072 1.538L125.967 0.207C126.237 0.077 126.545 0.094 126.808 0.236C127.071 0.377 127.246 0.637 127.246 0.917V7.035L128.979 7.034Z" fill="#2D1D51"/>
+          <path d="M100.228 12.9785C100.228 9.225 97.5702 6.574 94.1118 5.942C93.5383 5.838 92.9635 6.062 92.5507 6.473L86.3352 12.672C85.9434 13.062 85.9434 13.697 86.3352 14.088L92.3833 20.12C92.7721 20.508 93.3046 20.73 93.8495 20.663C95.749 20.427 97.533 19.595 98.937 18.274L96.549 15.351C95.53 16.271 94.21 16.79 92.837 16.81C91.17 16.81 89.67 15.883 89.41 14.589H100.166C100.197 13.891 100.228 13.374 100.228 12.979V12.9785ZM89.3808 11.943C89.72 10.555 90.999 9.599 92.5875 9.599C94.2547 9.599 95.5427 10.543 95.6065 11.943H89.3808Z" fill="#2D1D51"/>
+          <path d="M11.664 6.131H16.313V20.752H11.664V18.564C11.106 19.251 10.4 19.803 9.6 20.182C8.8 20.56 7.926 20.755 7.041 20.752C2.921 20.752 0 17.731 0 13.396C0 9.031 2.892 6.131 7.074 6.131C7.938 6.104 8.797 6.267 9.59 6.609C10.384 6.952 11.092 7.464 11.665 8.111L11.664 6.131ZM11.507 13.396C11.414 11.896 10.475 10.582 9.086 10.066C7.697 9.55 6.137 9.876 5.076 10.91C4.015 11.944 3.673 13.501 4.194 14.879C4.715 16.257 5.993 17.195 7.453 17.301C8.913 17.407 10.314 16.662 11.023 15.378C11.387 14.737 11.539 13.989 11.507 13.396Z" fill="#2D1D51"/>
+          <path d="M113.777 6.131H118.426V20.752H113.777V18.565C113.219 19.251 112.513 19.803 111.713 20.182C110.913 20.56 110.039 20.755 109.154 20.752C105.036 20.752 102.113 17.731 102.113 13.396C102.113 9.031 105.006 6.131 109.188 6.131C110.051 6.104 110.91 6.267 111.704 6.61C112.497 6.952 113.205 7.464 113.778 8.111L113.777 6.131ZM113.621 13.396C113.528 11.897 112.589 10.583 111.2 10.067C109.811 9.551 108.251 9.877 107.19 10.911C106.129 11.945 105.787 13.502 106.308 14.88C106.829 16.258 108.107 17.196 109.567 17.302C111.027 17.408 112.428 16.663 113.137 15.379C113.501 14.738 113.653 13.99 113.621 13.396Z" fill="#2D1D51"/>
+        </svg>
+      </div>
+
+      <!-- Logo: icon only (collapsed) -->
+      <div class="logo-mark">
+        <svg width="34" height="28"><use href="#logo-icon"/></svg>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Collapsed icons -->
+      <div class="nav-icon active"><svg width="18" height="18"><use href="#ic-dashboard"/></svg></div>
+      <div class="nav-icon"><svg width="18" height="18"><use href="#ic-people"/></svg></div>
+      <div class="nav-icon"><svg width="18" height="18"><use href="#ic-calendar"/></svg></div>
+      <div class="nav-icon"><svg width="18" height="18"><use href="#ic-finance"/></svg></div>
+      <div class="divider"></div>
+      <div class="nav-icon"><svg width="18" height="18"><use href="#ic-reports"/></svg></div>
+      <div class="nav-icon"><svg width="18" height="18"><use href="#ic-integrations"/></svg></div>
+      <div class="spacer"></div>
+      <div class="nav-icon"><svg width="18" height="18"><use href="#ic-settings"/></svg></div>
+
+      <!-- Expanded rows -->
+      <div class="nav-row active"><span class="icon"><svg width="18" height="18"><use href="#ic-dashboard"/></svg></span><span class="nav-label">Pulpit</span></div>
+      <div class="nav-row"><span class="icon"><svg width="18" height="18"><use href="#ic-people"/></svg></span><span class="nav-label">Pracownicy</span></div>
+      <div class="nav-row"><span class="icon"><svg width="18" height="18"><use href="#ic-calendar"/></svg></span><span class="nav-label">Kalendarz</span></div>
+      <div class="nav-row"><span class="icon"><svg width="18" height="18"><use href="#ic-finance"/></svg></span><span class="nav-label">Finanse</span></div>
+      <div class="divider"></div>
+      <div class="nav-row"><span class="icon"><svg width="18" height="18"><use href="#ic-reports"/></svg></span><span class="nav-label">Raporty</span></div>
+      <div class="nav-row"><span class="icon"><svg width="18" height="18"><use href="#ic-integrations"/></svg></span><span class="nav-label">Integracje</span></div>
+      <div class="spacer"></div>
+      <div class="nav-row"><span class="icon"><svg width="18" height="18"><use href="#ic-settings"/></svg></span><span class="nav-label">Ustawienia</span></div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+      <div class="topbar">
+        <div class="topbar-title">Pulpit</div>
+        <div class="search">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="5.5" cy="5.5" r="4" stroke="#727272" stroke-width="1.3"/><path d="M9 9l2.5 2.5" stroke="#727272" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <input placeholder="Szukaj...">
+        </div>
+        <div class="topbar-btn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.5C5.067 1.5 3.5 3.067 3.5 5v2.5l-1 2h9l-1-2V5C10.5 3.067 8.933 1.5 7 1.5z" stroke="#050505" stroke-width="1.3" stroke-linejoin="round"/><path d="M5.5 9.5c0 .828.672 1.5 1.5 1.5s1.5-.672 1.5-1.5" stroke="#050505" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <div class="avatar">AK</div>
+      </div>
+      <div class="content">
+        <div class="page-title">Pulpit</div>
+        <div class="page-sub">Podsumowanie · kwiecień 2026</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const sidebar = document.getElementById('sidebar');
+  const btn = document.getElementById('collapseBtn');
+
+  btn.addEventListener('click', () => {
+    const isExpanded = sidebar.classList.contains('expanded');
+    sidebar.classList.toggle('expanded', !isExpanded);
+    sidebar.classList.toggle('collapsed', isExpanded);
+  });
+</script>
+</body>
+</html>

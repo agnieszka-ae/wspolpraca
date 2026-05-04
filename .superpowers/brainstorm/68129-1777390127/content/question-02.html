@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pytanie 2 / 3</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Figtree', system-ui, sans-serif; background: #F7F7FB; color: #050505; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 32px 16px; }
+
+  .card {
+    background: #fff;
+    border: 1px solid rgba(20,20,20,0.10);
+    border-radius: 16px;
+    padding: 40px 44px;
+    max-width: 820px;
+    width: 100%;
+  }
+
+  .step { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #7448D0; margin-bottom: 10px; }
+  h1 { font-size: 22px; font-weight: 700; color: #050505; margin-bottom: 8px; line-height: 1.25; }
+  .subtitle { font-size: 14px; color: rgba(5,5,5,0.50); margin-bottom: 32px; line-height: 1.6; }
+
+  .options { display: flex; gap: 16px; }
+
+  .option {
+    flex: 1;
+    border: 1.5px solid rgba(20,20,20,0.12);
+    border-radius: 12px;
+    padding: 24px 22px;
+    cursor: pointer;
+    transition: border-color 150ms, background 150ms, box-shadow 150ms;
+  }
+
+  .option:hover { border-color: #7448D0; background: #F5F1FE; }
+  .option.selected { border-color: #7448D0; background: #F5F1FE; box-shadow: 0 0 0 3px rgba(116,72,208,0.12); }
+
+  .option-letter {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(116,72,208,0.10); color: #7448D0;
+    font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+    transition: background 150ms;
+  }
+  .option.selected .option-letter { background: #7448D0; color: #fff; }
+
+  .option-title { font-size: 15px; font-weight: 600; color: #050505; margin-bottom: 8px; }
+  .option-desc { font-size: 13px; color: rgba(5,5,5,0.55); line-height: 1.65; }
+
+  /* Mock UI previews */
+  .mock {
+    margin-top: 16px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(20,20,20,0.10);
+    font-size: 11px;
+  }
+  .mock-topbar {
+    height: 28px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    gap: 6px;
+    border-bottom: 1px solid rgba(20,20,20,0.10);
+  }
+  .mock-topbar-dot { width: 6px; height: 6px; border-radius: 50%; }
+  .mock-topbar-title { font-size: 10px; font-weight: 600; margin-left: 2px; }
+  .mock-body { display: flex; height: 72px; }
+  .mock-sidebar { width: 18px; border-right: 1px solid rgba(20,20,20,0.10); display: flex; flex-direction: column; gap: 4px; align-items: center; padding: 6px 0; }
+  .mock-sidebar-dot { width: 8px; height: 8px; border-radius: 2px; }
+  .mock-content { flex: 1; padding: 8px 10px; display: flex; flex-direction: column; gap: 5px; }
+  .mock-row { height: 8px; border-radius: 3px; }
+  .mock-row-sm { height: 6px; border-radius: 3px; }
+
+  /* Light theme colors */
+  .light .mock { background: #F7F7FB; }
+  .light .mock-topbar { background: #fff; }
+  .light .mock-topbar-dot { background: #7448D0; }
+  .light .mock-topbar-title { color: #050505; }
+  .light .mock-sidebar { background: #fff; }
+  .light .mock-sidebar-dot { background: rgba(20,20,20,0.10); }
+  .light .mock-sidebar-dot.active { background: #7448D0; }
+  .light .mock-content { background: #F7F7FB; }
+  .light .mock-row { background: rgba(20,20,20,0.08); }
+  .light .mock-row-sm { background: rgba(20,20,20,0.05); }
+
+  /* Dark theme colors */
+  .dark-opt .mock { background: #1a1a2e; }
+  .dark-opt .mock-topbar { background: #16213e; border-bottom-color: rgba(255,255,255,0.08); }
+  .dark-opt .mock-topbar-dot { background: #7448D0; }
+  .dark-opt .mock-topbar-title { color: #e8e8f0; }
+  .dark-opt .mock-sidebar { background: #16213e; border-right-color: rgba(255,255,255,0.08); }
+  .dark-opt .mock-sidebar-dot { background: rgba(255,255,255,0.12); }
+  .dark-opt .mock-sidebar-dot.active { background: #7448D0; }
+  .dark-opt .mock-content { background: #1a1a2e; }
+  .dark-opt .mock-row { background: rgba(255,255,255,0.10); }
+  .dark-opt .mock-row-sm { background: rgba(255,255,255,0.06); }
+
+  /* Both */
+  .both-mocks { display: flex; gap: 8px; margin-top: 16px; }
+  .both-mocks .mock { flex: 1; }
+  .both-label { font-size: 10px; text-align: center; margin-top: 4px; color: rgba(5,5,5,0.35); font-weight: 500; }
+
+  .tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 8px; border-radius: 9999px;
+    font-size: 11px; font-weight: 600; margin-top: 12px;
+  }
+  .tag-green { background: #F0FDF4; color: #16A34A; }
+  .tag-purple { background: #F5F1FE; color: #7448D0; }
+  .tag-orange { background: #FFFBEB; color: #D97706; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="step">Pytanie 2 z 3</div>
+  <h1>Co robimy z trybem ciemnym?</h1>
+  <p class="subtitle">
+    Obecny <code style="font-size:12px;background:rgba(20,20,20,0.06);padding:1px 5px;border-radius:4px">prototype.html</code> obsługuje dark mode (przełącznik w topbarze). alloweat Design System jest zaprojektowany wyłącznie w jasnym motywie — brak ciemnych tokenów, brak ciemnych wariantów komponentów.
+  </p>
+
+  <div class="options">
+
+    <div class="option light" onclick="select(this,'A')">
+      <div class="option-letter">A</div>
+      <div class="option-title">Usuwam dark mode</div>
+      <div class="option-desc">Zostaje tylko jasny motyw, zgodny z DS. Czystszy kod, mniejszy zakres, pełna spójność z design systemem.</div>
+      <div class="mock">
+        <div class="mock-topbar">
+          <div class="mock-topbar-dot"></div>
+          <div class="mock-topbar-title">alloweat</div>
+        </div>
+        <div class="mock-body">
+          <div class="mock-sidebar">
+            <div class="mock-sidebar-dot active"></div>
+            <div class="mock-sidebar-dot"></div>
+            <div class="mock-sidebar-dot"></div>
+          </div>
+          <div class="mock-content">
+            <div class="mock-row" style="width:60%"></div>
+            <div class="mock-row-sm" style="width:85%"></div>
+            <div class="mock-row-sm" style="width:45%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="tag tag-green">Polecane — spójne z DS</div>
+    </div>
+
+    <div class="option dark-opt" onclick="select(this,'B')">
+      <div class="option-letter">B</div>
+      <div class="option-title">Zachowuję dark mode</div>
+      <div class="option-desc">Dodaję ciemne tokeny do DS i implementuję oba motywy. Więcej pracy, ale pełna funkcjonalność z obecnego prototypu.</div>
+      <div class="mock">
+        <div class="mock-topbar">
+          <div class="mock-topbar-dot"></div>
+          <div class="mock-topbar-title" style="color:#e8e8f0">alloweat</div>
+        </div>
+        <div class="mock-body">
+          <div class="mock-sidebar">
+            <div class="mock-sidebar-dot active"></div>
+            <div class="mock-sidebar-dot"></div>
+            <div class="mock-sidebar-dot"></div>
+          </div>
+          <div class="mock-content">
+            <div class="mock-row" style="width:60%"></div>
+            <div class="mock-row-sm" style="width:85%"></div>
+            <div class="mock-row-sm" style="width:45%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="tag tag-orange">Większy zakres — nowe tokeny dark</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function select(el, letter) {
+    document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+</script>
+</body>
+</html>

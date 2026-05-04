@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>alloweat — UI Kit</title>
+<style>
+@font-face { font-family: 'Figtree'; src: url('../../fonts/Figtree-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; }
+@font-face { font-family: 'Figtree'; src: url('../../fonts/Figtree-Medium.ttf') format('truetype'); font-weight: 500; font-style: normal; }
+@font-face { font-family: 'Figtree'; src: url('../../fonts/Figtree-SemiBold.ttf') format('truetype'); font-weight: 600; font-style: normal; }
+@font-face { font-family: 'Figtree'; src: url('../../fonts/Figtree-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; }
+@font-face { font-family: 'Figtree'; src: url('../../fonts/Figtree-ExtraBold.ttf') format('truetype'); font-weight: 800; font-style: normal; }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body, #root { height: 100%; overflow: hidden; }
+  body { font-family: 'Figtree', system-ui, sans-serif; background: #F7F7FB; color: #050505; }
+  .ae-app { display: flex; height: 100vh; overflow: hidden; }
+  .ae-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+  .ae-content { flex: 1; overflow: hidden; }
+  /* Shared styles needed by screens */
+  .ae-page-title { font-size: 22px; font-weight: 700; color: #050505; margin-bottom: 2px; }
+  .ae-page-sub { font-size: 13px; color: rgba(5,5,5,0.45); }
+  .ae-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600; }
+  .ae-badge-green { background: #F0FDF4; color: #16A34A; }
+  .ae-badge-red { background: #FEF2F2; color: #DC2626; }
+  .ae-badge-orange { background: #FFFBEB; color: #D97706; }
+  .ae-badge-purple { background: #F5F1FE; color: #7448D0; }
+  .ae-badge-gray { background: rgba(20,20,20,0.06); color: rgba(5,5,5,0.55); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="Sidebar.jsx"></script>
+<script type="text/babel" src="Topbar.jsx"></script>
+<script type="text/babel" src="Dashboard.jsx"></script>
+<script type="text/babel" src="Finance.jsx"></script>
+<script type="text/babel" src="DataServices.jsx"></script>
+
+<script type="text/babel">
+const SCREEN_META = {
+  dashboard:    { title: 'Pulpit',          action: true,  actionLabel: 'Dodaj kafelek' },
+  employees:    { title: 'Pracownicy',      action: true,  actionLabel: 'Dodaj pracownika' },
+  calendar:     { title: 'Kalendarz',       action: false },
+  finance:      { title: 'Finanse',         action: true,  actionLabel: 'Nowa faktura' },
+  meals:        { title: 'Posiłki',         action: true,  actionLabel: 'Dodaj posiłek' },
+  orders:       { title: 'Zamówienia',      action: true,  actionLabel: 'Nowe zamówienie' },
+  reports:      { title: 'Raporty',         action: false },
+  integrations: { title: 'Integracje',      action: true,  actionLabel: 'Połącz usługę' },
+  settings:     { title: 'Ustawienia',      action: false },
+};
+
+function EmptyScreen({ title }) {
+  return (
+    <div style={{
+      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+      height: '100%', gap: 14, color: 'rgba(5,5,5,0.35)'
+    }}>
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+        <rect x="8" y="8" width="32" height="32" rx="8" stroke="currentColor" strokeWidth="1.8"/>
+        <path d="M18 24h12M18 30h8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+        <rect x="18" y="16" width="12" height="4" rx="2" fill="currentColor" opacity="0.3"/>
+      </svg>
+      <div style={{fontSize:15,fontWeight:600,color:'rgba(5,5,5,0.45)'}}>{title}</div>
+      <div style={{fontSize:13,color:'rgba(5,5,5,0.3)'}}>Zawartość ekranu będzie tutaj</div>
+    </div>
+  );
+}
+
+function App() {
+  const [activeScreen, setActiveScreen] = React.useState('dashboard');
+  const meta = SCREEN_META[activeScreen] || { title: activeScreen };
+
+  function renderScreen() {
+    switch (activeScreen) {
+      case 'dashboard': return <Dashboard />;
+      case 'finance':   return <Finance />;
+      case 'employees': return <DataServices />;
+      default:          return <EmptyScreen title={meta.title} />;
+    }
+  }
+
+  return (
+    <div className="ae-app">
+      <Sidebar active={activeScreen} onNavigate={setActiveScreen} />
+      <div className="ae-main">
+        <Topbar
+          title={meta.title}
+          action={meta.action}
+          actionLabel={meta.actionLabel}
+          onAction={() => {}}
+        />
+        <div className="ae-content">
+          {renderScreen()}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+</script>
+</body>
+</html>

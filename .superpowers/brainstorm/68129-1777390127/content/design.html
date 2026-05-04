@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design — Shell Replacement</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Figtree', system-ui, sans-serif; background: #F7F7FB; color: #050505; padding: 40px 24px 80px; }
+
+  .page-header { max-width: 860px; margin: 0 auto 32px; }
+  .step { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #7448D0; margin-bottom: 8px; }
+  h1 { font-size: 24px; font-weight: 700; color: #050505; margin-bottom: 8px; }
+  .subtitle { font-size: 14px; color: rgba(5,5,5,0.50); line-height: 1.6; }
+
+  .sections { max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+
+  .section {
+    background: #fff;
+    border: 1px solid rgba(20,20,20,0.10);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .section-header {
+    padding: 20px 28px 18px;
+    border-bottom: 1px solid rgba(20,20,20,0.08);
+    display: flex; align-items: center; gap: 14px;
+  }
+  .section-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: #F5F1FE; color: #7448D0;
+    font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title { font-size: 15px; font-weight: 700; color: #050505; }
+  .section-sub { font-size: 13px; color: rgba(5,5,5,0.45); margin-top: 1px; }
+
+  .section-body { padding: 24px 28px; display: flex; flex-direction: column; gap: 20px; }
+
+  /* Token table */
+  .token-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .token-table th { text-align: left; font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: rgba(5,5,5,0.35); padding: 0 0 8px; border-bottom: 1px solid rgba(20,20,20,0.08); }
+  .token-table td { padding: 8px 0; border-bottom: 1px solid rgba(20,20,20,0.05); vertical-align: middle; }
+  .token-table td:first-child { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #7448D0; width: 200px; }
+  .swatch { width: 16px; height: 16px; border-radius: 4px; display: inline-block; border: 1px solid rgba(20,20,20,0.10); vertical-align: middle; margin-right: 8px; }
+  .from-badge { font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 4px; background: rgba(116,72,208,0.10); color: #7448D0; margin-left: 6px; }
+
+  /* Mock shell */
+  .shell-mock {
+    background: #F7F7FB;
+    border: 1px solid rgba(20,20,20,0.10);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    height: 220px;
+  }
+  .mock-sidebar {
+    width: 52px;
+    background: #fff;
+    border-right: 1px solid rgba(20,20,20,0.10);
+    display: flex; flex-direction: column; align-items: center;
+    padding: 10px 0 12px; gap: 6px;
+    flex-shrink: 0;
+  }
+  .mock-logo { width: 28px; height: 28px; background: #7448D0; border-radius: 6px; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; }
+  .mock-divider { width: 28px; height: 1px; background: rgba(20,20,20,0.10); margin: 2px 0; }
+  .mock-nav-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+  .mock-nav-icon.active { background: #F5F1FE; }
+  .mock-nav-dot { width: 14px; height: 14px; border-radius: 3px; background: rgba(20,20,20,0.12); }
+  .mock-nav-dot.active { background: #7448D0; }
+  .mock-spacer { flex: 1; }
+  .mock-main { flex: 1; display: flex; flex-direction: column; }
+  .mock-topbar {
+    height: 44px; background: #fff;
+    border-bottom: 1px solid rgba(20,20,20,0.10);
+    display: flex; align-items: center; padding: 0 16px; gap: 10px; flex-shrink: 0;
+  }
+  .mock-topbar-title { font-size: 13px; font-weight: 600; color: #050505; flex: 1; }
+  .mock-search { height: 26px; width: 120px; border: 1px solid rgba(20,20,20,0.12); border-radius: 6px; background: #fff; }
+  .mock-btn { height: 26px; width: 70px; background: #7448D0; border-radius: 6px; }
+  .mock-avatar { width: 26px; height: 26px; border-radius: 50%; background: #7448D0; font-size: 9px; font-weight: 700; color: #fff; display: flex; align-items: center; justify-content: center; }
+  .mock-content { flex: 1; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+  .mock-card { background: #fff; border: 1px solid rgba(20,20,20,0.10); border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+  .mock-line { height: 8px; border-radius: 3px; background: rgba(20,20,20,0.08); }
+  .mock-line-sm { height: 6px; border-radius: 3px; background: rgba(20,20,20,0.05); }
+
+  /* Dark mock */
+  .shell-mock.dark-preview { background: #13131f; }
+  .dark-preview .mock-sidebar { background: #1c1c2e; border-right-color: rgba(255,255,255,0.08); }
+  .dark-preview .mock-divider { background: rgba(255,255,255,0.08); }
+  .dark-preview .mock-nav-dot { background: rgba(255,255,255,0.15); }
+  .dark-preview .mock-topbar { background: #1c1c2e; border-bottom-color: rgba(255,255,255,0.08); }
+  .dark-preview .mock-topbar-title { color: #f0f0f8; }
+  .dark-preview .mock-search { border-color: rgba(255,255,255,0.10); background: rgba(255,255,255,0.05); }
+  .dark-preview .mock-card { background: #1c1c2e; border-color: rgba(255,255,255,0.08); }
+  .dark-preview .mock-line { background: rgba(255,255,255,0.10); }
+  .dark-preview .mock-line-sm { background: rgba(255,255,255,0.06); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .col-label { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(5,5,5,0.35); margin-bottom: 10px; }
+
+  /* Component chips */
+  .chip-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    font-size: 12px; font-weight: 600;
+    padding: 5px 12px; border-radius: 8px;
+    border: 1px solid rgba(20,20,20,0.12);
+    color: rgba(5,5,5,0.55); background: #fff;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .chip.changed { border-color: #BBF7D0; background: #F0FDF4; color: #16A34A; }
+  .chip.changed::before { content: '↻'; font-size: 11px; }
+  .chip.new { border-color: #c4b5fd; background: #F5F1FE; color: #7448D0; }
+  .chip.new::before { content: '★'; font-size: 11px; }
+  .chip.kept { border-color: rgba(20,20,20,0.08); color: rgba(5,5,5,0.35); }
+  .chip.kept::before { content: '✓'; font-size: 11px; color: rgba(5,5,5,0.25); }
+
+  .legend { display: flex; gap: 16px; margin-bottom: 14px; font-size: 12px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+
+  .note { background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #92400E; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="step">Design — podejście 2</div>
+  <h1>Shell Replacement — plan wdrożenia</h1>
+  <p class="subtitle">Nowy prototype.html: te same przepływy, nowy szkielet DS. Poniżej każda sekcja zmiany — potwierdź każdą zanim przejdziemy dalej.</p>
+</div>
+
+<div class="sections">
+
+  <!-- Section 1: Tokens -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div>
+        <div class="section-title">System tokenów</div>
+        <div class="section-sub">Zunifikowane CSS variables — DS tokens + rozszerzone dark mode</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p style="font-size:13px;color:rgba(5,5,5,0.55);line-height:1.6">Obecny <code style="font-size:12px;background:rgba(20,20,20,0.06);padding:1px 4px;border-radius:3px">prototype.html</code> ma własne Tailwind config. Zastępuję wartości tokenami z alloweat DS (<code style="font-size:11px;background:rgba(20,20,20,0.06);padding:1px 4px;border-radius:3px">colors_and_type.css</code>). Tokeny dark mode wyprowadzam z tego samego systemu.</p>
+      <table class="token-table">
+        <thead><tr><th>Token</th><th>Jasny</th><th>Ciemny</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>--brand</td>
+            <td><span class="swatch" style="background:#7448D0"></span>#7448D0 <span class="from-badge">DS</span></td>
+            <td><span class="swatch" style="background:#9B6FE8"></span>#9B6FE8</td>
+          </tr>
+          <tr>
+            <td>--bg</td>
+            <td><span class="swatch" style="background:#F7F7FB"></span>#F7F7FB <span class="from-badge">DS</span></td>
+            <td><span class="swatch" style="background:#13131f"></span>#13131F</td>
+          </tr>
+          <tr>
+            <td>--surface</td>
+            <td><span class="swatch" style="background:#fff"></span>#FFFFFF <span class="from-badge">DS</span></td>
+            <td><span class="swatch" style="background:#1c1c2e"></span>#1C1C2E</td>
+          </tr>
+          <tr>
+            <td>--border</td>
+            <td><span class="swatch" style="background:rgba(20,20,20,0.10)"></span>rgba(20,20,20,.10) <span class="from-badge">DS</span></td>
+            <td><span class="swatch" style="background:rgba(255,255,255,0.09)"></span>rgba(255,255,255,.09)</td>
+          </tr>
+          <tr>
+            <td>--ink</td>
+            <td><span class="swatch" style="background:#050505"></span>#050505 <span class="from-badge">DS</span></td>
+            <td><span class="swatch" style="background:#F0F0F8"></span>#F0F0F8</td>
+          </tr>
+          <tr>
+            <td>--ink-secondary</td>
+            <td><span class="swatch" style="background:rgba(5,5,5,0.55)"></span>rgba(5,5,5,.55) <span class="from-badge">DS</span></td>
+            <td><span class="swatch" style="background:rgba(240,240,248,0.55)"></span>rgba(240,240,248,.55)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Section 2: Shell -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div>
+        <div class="section-title">Sidebar + Topbar (szkielet DS)</div>
+        <div class="section-sub">Komponenty przeniesione 1:1 z ui_kits/app/ do prototype.html</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p style="font-size:13px;color:rgba(5,5,5,0.55);line-height:1.6">CSS i JSX z <code style="font-size:11px;background:rgba(20,20,20,0.06);padding:1px 4px;border-radius:3px">Sidebar.jsx</code> i <code style="font-size:11px;background:rgba(20,20,20,0.06);padding:1px 4px;border-radius:3px">Topbar.jsx</code> wbudowane bezpośrednio w prototype.html. Nawigacja Sidebara dostosowana do ekranów dietetyka (Dashboard, Programy, Klienci, Jadłospisy…).</p>
+      <div class="two-col">
+        <div>
+          <div class="col-label">Jasny motyw</div>
+          <div class="shell-mock">
+            <div class="mock-sidebar">
+              <div class="mock-logo"><svg width="14" height="12" viewBox="0 0 36 30" fill="none"><path d="M16.327 14.205C15.8675 14.6431 15.8675 15.3549 16.3269 15.793L25.8574 24.8829C26.3186 25.3228 26.3191 26.0416 25.8221 26.4443C23.7743 28.1038 21.3097 29.2373 18.6615 29.7271C15.6253 30.2887 12.4832 29.9793 9.6304 28.8378C6.77756 27.6963 4.34126 25.7736 2.62774 23.3115C0.914225 20.8493 0 17.9577 0 15C0 12.0423 0.914225 9.15065 2.62774 6.68854C4.34126 4.22642 6.77756 2.30374 9.6304 1.16222C12.4832 0.0207016 15.6253 -0.288705 18.6615 0.272896C21.3097 0.762729 23.7742 1.89612 25.8221 3.55564C26.3191 3.9584 26.3185 4.6772 25.8572 5.1171L16.327 14.205Z" fill="#fff"/></svg></div>
+              <div class="mock-divider"></div>
+              <div class="mock-nav-icon active"><div class="mock-nav-dot active"></div></div>
+              <div class="mock-nav-icon"><div class="mock-nav-dot"></div></div>
+              <div class="mock-nav-icon"><div class="mock-nav-dot"></div></div>
+              <div class="mock-nav-icon"><div class="mock-nav-dot"></div></div>
+              <div class="mock-divider"></div>
+              <div class="mock-nav-icon"><div class="mock-nav-dot"></div></div>
+              <div class="mock-spacer"></div>
+              <div class="mock-nav-icon"><div class="mock-nav-dot"></div></div>
+            </div>
+            <div class="mock-main">
+              <div class="mock-topbar">
+                <div class="mock-topbar-title">Pulpit</div>
+                <div class="mock-search"></div>
+                <div class="mock-btn"></div>
+                <div class="mock-avatar">AK</div>
+              </div>
+              <div class="mock-content">
+                <div class="mock-card">
+                  <div class="mock-line" style="width:50%"></div>
+                  <div class="mock-line-sm" style="width:80%"></div>
+                </div>
+                <div class="mock-card">
+                  <div class="mock-line" style="width:65%"></div>
+                  <div class="mock-line-sm" style="width:90%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="col-label">Ciemny motyw</div>
+          <div class="shell-mock dark-preview">
+            <div class="mock-sidebar">
+              <div class="mock-logo"><svg width="14" height="12" viewBox="0 0 36 30" fill="none"><path d="M16.327 14.205C15.8675 14.6431 15.8675 15.3549 16.3269 15.793L25.8574 24.8829C26.3186 25.3228 26.3191 26.0416 25.8221 26.4443C23.7743 28.1038 21.3097 29.2373 18.6615 29.7271C15.6253 30.2887 12.4832 29.9793 9.6304 28.8378C6.77756 27.6963 4.34126 25.7736 2.62774 23.3115C0.914225 20.8493 0 17.9577 0 15C0 12.0423 0.914225 9.15065 2.62774 6.68854C4.34126 4.22642 6.77756 2.30374 9.6304 1.16222C12.4832 0.0207016 15.6253 -0.288705 18.6615 0.272896C21.3097 0.762729 23.7742 1.89612 25.8221 3.55564C26.3191 3.9584 26.3185 4.6772 25.8572 5.1171L16.327 14.205Z" fill="#fff"/></svg></div>
+              <div class="mock-divider"></div>
+              <div class="mock-nav-icon active"><div class="mock-nav-dot active"></div></div>
+              <div class="mock-nav-icon"><div class="mock-nav-dot"></div></div>
+              <div class="mock-nav-icon"><div class="mock-nav-dot"></div></div>
+              <div class="mock-nav-icon"><div class="mock-nav-dot"></div></div>
+              <div class="mock-divider"></div>
+              <div class="mock-nav-icon"><div class="mock-nav-dot"></div></div>
+              <div class="mock-spacer"></div>
+              <div class="mock-nav-icon"><div class="mock-nav-dot"></div></div>
+            </div>
+            <div class="mock-main">
+              <div class="mock-topbar">
+                <div class="mock-topbar-title">Pulpit</div>
+                <div class="mock-search"></div>
+                <div class="mock-btn"></div>
+                <div class="mock-avatar">AK</div>
+              </div>
+              <div class="mock-content">
+                <div class="mock-card">
+                  <div class="mock-line" style="width:50%"></div>
+                  <div class="mock-line-sm" style="width:80%"></div>
+                </div>
+                <div class="mock-card">
+                  <div class="mock-line" style="width:65%"></div>
+                  <div class="mock-line-sm" style="width:90%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: Components -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div>
+        <div class="section-title">Restyling komponentów</div>
+        <div class="section-sub">Co się zmienia, co zostaje</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#16A34A"></div><span style="font-size:12px;color:rgba(5,5,5,0.55)">Restyling DS tokens</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:#7448D0"></div><span style="font-size:12px;color:rgba(5,5,5,0.55)">Nowy komponent z DS</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(20,20,20,0.12)"></div><span style="font-size:12px;color:rgba(5,5,5,0.55)">Bez zmian (logika)</span></div>
+      </div>
+      <div class="chip-grid">
+        <div class="chip new">Sidebar</div>
+        <div class="chip new">Topbar</div>
+        <div class="chip changed">Button (primary/ghost)</div>
+        <div class="chip changed">Input / Select</div>
+        <div class="chip changed">Badge / Chip</div>
+        <div class="chip changed">Card shell</div>
+        <div class="chip changed">Modal backdrop + panel</div>
+        <div class="chip changed">Avatar</div>
+        <div class="chip changed">Tabs</div>
+        <div class="chip kept">MealRow (logika)</div>
+        <div class="chip kept">AddRecipesSidePanel (logika)</div>
+        <div class="chip kept">DayTypeEditor (logika)</div>
+        <div class="chip kept">ShoppingListPanel (logika)</div>
+        <div class="chip kept">Wizard steps (logika)</div>
+        <div class="chip kept">NamingContext</div>
+        <div class="chip kept">Wszystkie modale (logika)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4: Dark mode -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div>
+        <div class="section-title">Dark mode</div>
+        <div class="section-sub">Tailwind darkMode: 'class' — przełącznik w Topbarze</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p style="font-size:13px;color:rgba(5,5,5,0.55);line-height:1.6">Ciemne tokeny wyprowadzone z DS jako drugorzędny zestaw CSS variables aktywowany przez klasę <code style="font-size:11px;background:rgba(20,20,20,0.06);padding:1px 4px;border-radius:3px">.dark</code> na <code style="font-size:11px;background:rgba(20,20,20,0.06);padding:1px 4px;border-radius:3px">&lt;html&gt;</code>. Przełącznik w Topbarze — ikona księżyca/słońca, jak w obecnym prototype.html.</p>
+      <div class="note">Obecny prototype.html ma już zaimplementowany mechanizm przełączania — zachowuję tę logikę, tylko aktualizuję klasy CSS do nowych tokenów.</div>
+    </div>
+  </div>
+
+</div>
+
+<div style="max-width:860px;margin:28px auto 0;padding:20px 28px;background:#fff;border:1.5px solid #7448D0;border-radius:14px;display:flex;align-items:center;gap:16px;">
+  <div style="font-size:22px">✅</div>
+  <div>
+    <div style="font-size:15px;font-weight:700;color:#050505;margin-bottom:3px">Czy ten design wygląda dobrze?</div>
+    <div style="font-size:13px;color:rgba(5,5,5,0.50);line-height:1.5">Jeśli tak — napiszę spec doc i przejdziemy do implementacji. Jeśli chcesz coś zmienić w którymś dziale — powiedz.</div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,274 @@
+/* ============================================================
+   alloweat Design System — Colors & Typography
+   Source: screen SVGs + brand notes
+   Font: Figtree (Google Fonts)
+   ============================================================ */
+
+/* Figtree — self-hosted brand font */
+@font-face { font-family: 'Figtree'; src: url('fonts/Figtree-Light.ttf') format('truetype'); font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Figtree'; src: url('fonts/Figtree-LightItalic.ttf') format('truetype'); font-weight: 300; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Figtree'; src: url('fonts/Figtree-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Figtree'; src: url('fonts/Figtree-Italic.ttf') format('truetype'); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Figtree'; src: url('fonts/Figtree-Medium.ttf') format('truetype'); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Figtree'; src: url('fonts/Figtree-MediumItalic.ttf') format('truetype'); font-weight: 500; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Figtree'; src: url('fonts/Figtree-SemiBold.ttf') format('truetype'); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Figtree'; src: url('fonts/Figtree-SemiBoldItalic.ttf') format('truetype'); font-weight: 600; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Figtree'; src: url('fonts/Figtree-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Figtree'; src: url('fonts/Figtree-BoldItalic.ttf') format('truetype'); font-weight: 700; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Figtree'; src: url('fonts/Figtree-ExtraBold.ttf') format('truetype'); font-weight: 800; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Figtree'; src: url('fonts/Figtree-ExtraBoldItalic.ttf') format('truetype'); font-weight: 800; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Figtree'; src: url('fonts/Figtree-BlackItalic.ttf') format('truetype'); font-weight: 900; font-style: italic; font-display: swap; }
+
+/* ============================================================
+   COLOR TOKENS — Base Palette
+   ============================================================ */
+:root {
+  /* Brand purple */
+  --color-primary-50:  #F5F1FE;
+  --color-primary-100: #EBE3FD;
+  --color-primary-200: #D5C5FB;
+  --color-primary-300: #B99AF6;
+  --color-primary-400: #9A6EEF;
+  --color-primary-500: #7448D0;  /* ← BRAND PRIMARY */
+  --color-primary-600: #59379E;  /* ← BRAND DEEP */
+  --color-primary-700: #442B7A;
+  --color-primary-800: #2D1D51;  /* ← WORDMARK DARK */
+  --color-primary-900: #1A1030;
+
+  /* Neutrals */
+  --color-neutral-0:   #FFFFFF;
+  --color-neutral-50:  #F7F7FB;  /* ← APP BACKGROUND */
+  --color-neutral-100: #EDEDF4;
+  --color-neutral-200: #E0E0EB;
+  --color-neutral-300: #CACAD8;
+  --color-neutral-400: #A0A0B8;
+  --color-neutral-500: #727272;  /* ← search icon color */
+  --color-neutral-600: #4A4A5A;
+  --color-neutral-700: #2D2D3A;
+  --color-neutral-800: #141414;  /* ← border color base */
+  --color-neutral-900: #050505;  /* ← primary ink */
+
+  /* Semantic */
+  --color-success-50:  #F0FDF4;
+  --color-success-500: #16A34A;
+  --color-success-700: #15803D;
+  --color-danger-50:   #FEF2F2;
+  --color-danger-500:  #DC2626;
+  --color-danger-700:  #B91C1C;
+  --color-warning-50:  #FFFBEB;
+  --color-warning-500: #D97706;
+  --color-warning-700: #B45309;
+  --color-info-50:     #EFF6FF;
+  --color-info-500:    #2563EB;
+  --color-info-700:    #1D4ED8;
+}
+
+/* ============================================================
+   SEMANTIC TOKENS — Usage-mapped aliases
+   ============================================================ */
+:root {
+  /* Core brand */
+  --color-primary:         var(--color-primary-500);
+  --color-primary-hover:   var(--color-primary-600);
+  --color-primary-tint:    var(--color-primary-50);
+  --color-primary-deep:    var(--color-primary-800);
+
+  /* Surfaces */
+  --color-bg:              var(--color-neutral-50);
+  --color-surface:         var(--color-neutral-0);
+  --color-surface-raised:  var(--color-neutral-0);
+  --color-surface-sunken:  var(--color-neutral-100);
+
+  /* Text */
+  --color-ink:             var(--color-neutral-900);
+  --color-ink-secondary:   rgba(5, 5, 5, 0.65);
+  --color-ink-tertiary:    rgba(5, 5, 5, 0.40);
+  --color-ink-disabled:    rgba(5, 5, 5, 0.25);
+  --color-ink-on-primary:  #FFFFFF;
+
+  /* Borders */
+  --color-border:          rgba(20, 20, 20, 0.10);
+  --color-border-strong:   rgba(20, 20, 20, 0.20);
+  --color-border-focus:    var(--color-primary-500);
+
+  /* Interactive states */
+  --color-hover-bg:        rgba(116, 72, 208, 0.06);
+  --color-active-bg:       var(--color-primary-50);
+  --color-selected-bg:     var(--color-primary-50);
+
+  /* Feedback */
+  --color-success:         var(--color-success-500);
+  --color-success-bg:      var(--color-success-50);
+  --color-danger:          var(--color-danger-500);
+  --color-danger-bg:       var(--color-danger-50);
+  --color-warning:         var(--color-warning-500);
+  --color-warning-bg:      var(--color-warning-50);
+  --color-info:            var(--color-info-500);
+  --color-info-bg:         var(--color-info-50);
+}
+
+/* ============================================================
+   TYPOGRAPHY — Base
+   ============================================================ */
+:root {
+  --font-sans: 'Figtree', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+
+  /* Weights */
+  --font-regular:   400;
+  --font-medium:    500;
+  --font-semibold:  600;
+  --font-bold:      700;
+
+  /* Scale */
+  --text-xs:   12px;
+  --text-sm:   13px;
+  --text-base: 14px;
+  --text-md:   15px;
+  --text-lg:   18px;
+  --text-xl:   20px;
+  --text-2xl:  24px;
+  --text-3xl:  28px;
+  --text-4xl:  32px;
+
+  /* Line heights */
+  --leading-tight:   1.25;
+  --leading-snug:    1.375;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.625;
+
+  /* Letter spacing */
+  --tracking-tight:  -0.015em;
+  --tracking-normal:  0em;
+  --tracking-wide:    0.015em;
+  --tracking-wider:   0.05em;
+}
+
+/* ============================================================
+   TYPOGRAPHY — Semantic classes
+   ============================================================ */
+.text-display {
+  font-family: var(--font-sans);
+  font-size: var(--text-4xl);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-ink);
+}
+
+.text-h1 {
+  font-family: var(--font-sans);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-ink);
+}
+
+.text-h2 {
+  font-family: var(--font-sans);
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-snug);
+  color: var(--color-ink);
+}
+
+.text-h3 {
+  font-family: var(--font-sans);
+  font-size: var(--text-md);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-snug);
+  color: var(--color-ink);
+}
+
+.text-body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: var(--font-regular);
+  line-height: var(--leading-normal);
+  color: var(--color-ink);
+}
+
+.text-body-medium {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+  line-height: var(--leading-normal);
+  color: var(--color-ink);
+}
+
+.text-small {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--font-regular);
+  line-height: var(--leading-normal);
+  color: var(--color-ink-secondary);
+}
+
+.text-micro {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: var(--font-regular);
+  line-height: var(--leading-normal);
+  color: var(--color-ink-tertiary);
+  letter-spacing: var(--tracking-wide);
+}
+
+.text-label {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--color-ink-secondary);
+}
+
+.text-mono {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: var(--font-regular);
+  line-height: var(--leading-normal);
+  color: var(--color-ink);
+}
+
+/* ============================================================
+   SPACING & RADIUS TOKENS
+   ============================================================ */
+:root {
+  /* Spacing scale (4px base) */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Radius */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-2xl:  20px;
+  --radius-full: 9999px;
+
+  /* Layout */
+  --sidebar-width:   52px;
+  --topbar-height:   56px;
+  --nav-icon-size:   36px;
+
+  /* Shadows */
+  --shadow-sm:  0 1px 2px rgba(20, 20, 20, 0.06), 0 1px 3px rgba(20, 20, 20, 0.04);
+  --shadow-md:  0 4px 6px rgba(20, 20, 20, 0.07), 0 2px 4px rgba(20, 20, 20, 0.05);
+  --shadow-lg:  0 10px 15px rgba(20, 20, 20, 0.08), 0 4px 6px rgba(20, 20, 20, 0.04);
+  --shadow-xl:  0 20px 25px rgba(20, 20, 20, 0.10), 0 8px 10px rgba(20, 20, 20, 0.05);
+
+  /* Transitions */
+  --transition-fast:   150ms ease;
+  --transition-normal: 200ms ease;
+  --transition-slow:   300ms ease;
+}
